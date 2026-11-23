@@ -1,0 +1,10 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+coverage
+
+# Local-only files
+*.local
+.DS_Store
