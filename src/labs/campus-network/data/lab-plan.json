@@ -1,0 +1,285 @@
+{
+  "organization": "Halcyon Ridge University (fictional)",
+  "domain": "hru.test",
+  "native_vlan": 999,
+  "parking_vlan": 998,
+  "trunk_allowed_vlans": [10, 20, 30, 50, 99],
+  "management_vlan": 99,
+  "management_acl": "10",
+  "vlans": [
+    {
+      "id": 10,
+      "name": "FACULTY",
+      "purpose": "Faculty and staff computers and the department printer",
+      "subnet": "10.10.10.0/24",
+      "gateway": "10.10.10.1",
+      "dhcp": true,
+      "dhcp_excluded": ["10.10.10.1", "10.10.10.20"]
+    },
+    {
+      "id": 20,
+      "name": "STUDENTS",
+      "purpose": "Student lab and library computers",
+      "subnet": "10.10.20.0/24",
+      "gateway": "10.10.20.1",
+      "dhcp": true,
+      "dhcp_excluded": ["10.10.20.1", "10.10.20.20"]
+    },
+    {
+      "id": 30,
+      "name": "SERVERS",
+      "purpose": "Campus web and DNS server",
+      "subnet": "10.10.30.0/24",
+      "gateway": "10.10.30.1",
+      "dhcp": false
+    },
+    {
+      "id": 50,
+      "name": "VOICE",
+      "purpose": "IP phones (voice VLAN on faculty ports)",
+      "subnet": "10.10.50.0/24",
+      "gateway": "10.10.50.1",
+      "dhcp": true,
+      "dhcp_excluded": ["10.10.50.1", "10.10.50.20"]
+    },
+    {
+      "id": 99,
+      "name": "MGMT",
+      "purpose": "Switch management addresses and the IT admin workstation",
+      "subnet": "10.10.99.0/24",
+      "gateway": "10.10.99.1",
+      "dhcp": false
+    },
+    {
+      "id": 998,
+      "name": "PARKING",
+      "purpose": "Unused ports, administratively shut down",
+      "subnet": null
+    },
+    {
+      "id": 999,
+      "name": "NATIVE",
+      "purpose": "Native VLAN on trunks; carries no user traffic",
+      "subnet": null
+    }
+  ],
+  "dns_server": "10.10.30.10",
+  "devices": [
+    {
+      "name": "R1",
+      "model": "ISR4331",
+      "role": "router",
+      "config": "configs/R1.txt",
+      "management_ip": "10.10.99.1",
+      "vty_lines": "0 4"
+    },
+    {
+      "name": "CORE-SW1",
+      "model": "2960-24TT",
+      "role": "core switch",
+      "config": "configs/CORE-SW1.txt",
+      "management_ip": "10.10.99.2",
+      "vty_lines": "0 15",
+      "stp_root": true
+    },
+    {
+      "name": "ACC-SW1",
+      "model": "2960-24TT",
+      "role": "access switch, Hartley Hall (academic building)",
+      "config": "configs/ACC-SW1.txt",
+      "management_ip": "10.10.99.3",
+      "vty_lines": "0 15"
+    },
+    {
+      "name": "ACC-SW2",
+      "model": "2960-24TT",
+      "role": "access switch, Library",
+      "config": "configs/ACC-SW2.txt",
+      "management_ip": "10.10.99.4",
+      "vty_lines": "0 15"
+    }
+  ],
+  "links": [
+    {
+      "a": { "device": "R1", "port": "GigabitEthernet0/0/0" },
+      "b": { "device": "CORE-SW1", "port": "GigabitEthernet0/1" },
+      "type": "trunk",
+      "cable": "Copper Straight-Through"
+    },
+    {
+      "a": { "device": "CORE-SW1", "port": "FastEthernet0/1" },
+      "b": { "device": "ACC-SW1", "port": "GigabitEthernet0/1" },
+      "type": "trunk",
+      "cable": "Copper Cross-Over"
+    },
+    {
+      "a": { "device": "CORE-SW1", "port": "FastEthernet0/2" },
+      "b": { "device": "ACC-SW2", "port": "GigabitEthernet0/1" },
+      "type": "trunk",
+      "cable": "Copper Cross-Over"
+    }
+  ],
+  "hosts": [
+    {
+      "name": "SRV-WEB-DNS",
+      "type": "Server-PT",
+      "switch": "CORE-SW1",
+      "port": "FastEthernet0/10",
+      "vlan": 30,
+      "addressing": "static",
+      "ip": "10.10.30.10"
+    },
+    {
+      "name": "FAC-PHONE1",
+      "type": "IP Phone 7960",
+      "switch": "ACC-SW1",
+      "port": "FastEthernet0/1",
+      "vlan": 50,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "FAC-PC1",
+      "type": "PC-PT",
+      "switch": "ACC-SW1",
+      "port": "FastEthernet0/1",
+      "via": "FAC-PHONE1 PC port",
+      "vlan": 10,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "FAC-PC2",
+      "type": "PC-PT",
+      "switch": "ACC-SW1",
+      "port": "FastEthernet0/2",
+      "vlan": 10,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "FAC-PRINTER",
+      "type": "Printer-PT",
+      "switch": "ACC-SW1",
+      "port": "FastEthernet0/10",
+      "vlan": 10,
+      "addressing": "static",
+      "ip": "10.10.10.10"
+    },
+    {
+      "name": "STU-PC1",
+      "type": "PC-PT",
+      "switch": "ACC-SW1",
+      "port": "FastEthernet0/11",
+      "vlan": 20,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "STU-PC2",
+      "type": "PC-PT",
+      "switch": "ACC-SW1",
+      "port": "FastEthernet0/12",
+      "vlan": 20,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "IT-ADMIN-PC",
+      "type": "PC-PT",
+      "switch": "ACC-SW1",
+      "port": "FastEthernet0/21",
+      "vlan": 99,
+      "addressing": "static",
+      "ip": "10.10.99.50"
+    },
+    {
+      "name": "LIB-PHONE1",
+      "type": "IP Phone 7960",
+      "switch": "ACC-SW2",
+      "port": "FastEthernet0/1",
+      "vlan": 50,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "LIB-PC1",
+      "type": "PC-PT",
+      "switch": "ACC-SW2",
+      "port": "FastEthernet0/1",
+      "via": "LIB-PHONE1 PC port",
+      "vlan": 10,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "STU-PC3",
+      "type": "PC-PT",
+      "switch": "ACC-SW2",
+      "port": "FastEthernet0/5",
+      "vlan": 20,
+      "addressing": "dhcp"
+    },
+    {
+      "name": "STU-PC4",
+      "type": "PC-PT",
+      "switch": "ACC-SW2",
+      "port": "FastEthernet0/6",
+      "vlan": 20,
+      "addressing": "dhcp"
+    }
+  ],
+  "switch_port_roles": {
+    "CORE-SW1": [
+      { "ports": "GigabitEthernet0/1", "role": "trunk" },
+      { "ports": "FastEthernet0/1-2", "role": "trunk" },
+      { "ports": "FastEthernet0/10", "role": "access", "vlan": 30 },
+      { "ports": "FastEthernet0/3-9,FastEthernet0/11-24,GigabitEthernet0/2", "role": "parked" }
+    ],
+    "ACC-SW1": [
+      { "ports": "GigabitEthernet0/1", "role": "trunk" },
+      { "ports": "FastEthernet0/1-9", "role": "access", "vlan": 10, "voice_vlan": 50 },
+      { "ports": "FastEthernet0/10", "role": "access", "vlan": 10 },
+      { "ports": "FastEthernet0/11-20", "role": "access", "vlan": 20, "port_security": true },
+      { "ports": "FastEthernet0/21-22", "role": "access", "vlan": 99 },
+      { "ports": "FastEthernet0/23-24,GigabitEthernet0/2", "role": "parked" }
+    ],
+    "ACC-SW2": [
+      { "ports": "GigabitEthernet0/1", "role": "trunk" },
+      { "ports": "FastEthernet0/1-4", "role": "access", "vlan": 10, "voice_vlan": 50 },
+      { "ports": "FastEthernet0/5-20", "role": "access", "vlan": 20, "port_security": true },
+      { "ports": "FastEthernet0/21-24,GigabitEthernet0/2", "role": "parked" }
+    ]
+  },
+  "router_acls": {
+    "GigabitEthernet0/0/0.20": { "in": "STUDENT-IN" },
+    "GigabitEthernet0/0/0.30": { "out": "SERVERS-OUT" }
+  },
+  "policy_tests": [
+    { "id": "P01", "desc": "Student PC gets a DHCP lease (DHCPDISCOVER broadcast to R1)", "from_vlan": 20, "src": "0.0.0.0", "dst": "255.255.255.255", "proto": "udp", "sport": 68, "dport": 67, "expect": "permit" },
+    { "id": "P02", "desc": "Student pings its own default gateway", "src": "10.10.20.21", "dst": "10.10.20.1", "proto": "icmp", "icmp": "echo", "expect": "permit" },
+    { "id": "P03", "desc": "Student opens the campus website (HTTP)", "src": "10.10.20.21", "dst": "10.10.30.10", "proto": "tcp", "dport": 80, "expect": "permit" },
+    { "id": "P04", "desc": "Student opens the campus website (HTTPS)", "src": "10.10.20.21", "dst": "10.10.30.10", "proto": "tcp", "dport": 443, "expect": "permit" },
+    { "id": "P05", "desc": "Student resolves a name with campus DNS", "src": "10.10.20.21", "dst": "10.10.30.10", "proto": "udp", "dport": 53, "expect": "permit" },
+    { "id": "P06", "desc": "Student pings the campus server", "src": "10.10.20.21", "dst": "10.10.30.10", "proto": "icmp", "icmp": "echo", "expect": "permit" },
+    { "id": "P07", "desc": "Student tries FTP on the server", "src": "10.10.20.21", "dst": "10.10.30.10", "proto": "tcp", "dport": 21, "expect": "deny" },
+    { "id": "P08", "desc": "Student tries SSH to the server", "src": "10.10.20.21", "dst": "10.10.30.10", "proto": "tcp", "dport": 22, "expect": "deny" },
+    { "id": "P09", "desc": "Student pings a faculty PC", "src": "10.10.20.21", "dst": "10.10.10.21", "proto": "icmp", "icmp": "echo", "expect": "deny" },
+    { "id": "P10", "desc": "Student pings the department printer", "src": "10.10.20.21", "dst": "10.10.10.10", "proto": "icmp", "icmp": "echo", "expect": "deny" },
+    { "id": "P11", "desc": "Student pings an IP phone", "src": "10.10.20.21", "dst": "10.10.50.21", "proto": "icmp", "icmp": "echo", "expect": "deny" },
+    { "id": "P12", "desc": "Student pings the IT admin PC", "src": "10.10.20.21", "dst": "10.10.99.50", "proto": "icmp", "icmp": "echo", "expect": "deny" },
+    { "id": "P13", "desc": "Student tries SSH to a switch management address", "src": "10.10.20.21", "dst": "10.10.99.2", "proto": "tcp", "dport": 22, "expect": "deny" },
+    { "id": "P14", "desc": "Student reaches R1's own gateway address with SSH (network allows it; R1's VTY ACL must refuse it)", "src": "10.10.20.21", "dst": "10.10.20.1", "proto": "tcp", "dport": 22, "expect": "deny", "layer": "management" },
+    { "id": "P15", "desc": "Faculty PC pings a student PC (request)", "src": "10.10.10.21", "dst": "10.10.20.21", "proto": "icmp", "icmp": "echo", "expect": "permit" },
+    { "id": "P16", "desc": "Student PC replies to that ping (echo-reply)", "src": "10.10.20.21", "dst": "10.10.10.21", "proto": "icmp", "icmp": "echo-reply", "expect": "permit" },
+    { "id": "P17", "desc": "Faculty PC opens the campus website", "src": "10.10.10.21", "dst": "10.10.30.10", "proto": "tcp", "dport": 80, "expect": "permit" },
+    { "id": "P18", "desc": "Faculty PC uses campus DNS", "src": "10.10.10.21", "dst": "10.10.30.10", "proto": "udp", "dport": 53, "expect": "permit" },
+    { "id": "P19", "desc": "Faculty PC tries FTP on the server", "src": "10.10.10.21", "dst": "10.10.30.10", "proto": "tcp", "dport": 21, "expect": "deny" },
+    { "id": "P20", "desc": "Faculty PC tries SSH to the server", "src": "10.10.10.21", "dst": "10.10.30.10", "proto": "tcp", "dport": 22, "expect": "deny" },
+    { "id": "P21", "desc": "Faculty PC prints to the department printer (same VLAN)", "src": "10.10.10.21", "dst": "10.10.10.10", "proto": "tcp", "dport": 9100, "expect": "permit" },
+    { "id": "P22", "desc": "Faculty PC tries SSH to CORE-SW1 (routed into VLAN 99; the switch's VTY ACL must refuse it)", "src": "10.10.10.21", "dst": "10.10.99.2", "proto": "tcp", "dport": 22, "expect": "deny", "layer": "management" },
+    { "id": "P23", "desc": "IT admin PC opens SSH to CORE-SW1 (same VLAN)", "src": "10.10.99.50", "dst": "10.10.99.2", "proto": "tcp", "dport": 22, "expect": "permit", "layer": "management" },
+    { "id": "P24", "desc": "IT admin PC opens SSH to ACC-SW2", "src": "10.10.99.50", "dst": "10.10.99.4", "proto": "tcp", "dport": 22, "expect": "permit", "layer": "management" },
+    { "id": "P25", "desc": "IT admin PC opens SSH to R1", "src": "10.10.99.50", "dst": "10.10.99.1", "proto": "tcp", "dport": 22, "expect": "permit", "layer": "management" },
+    { "id": "P26", "desc": "IT admin PC logs in to the server's FTP service for administration", "src": "10.10.99.50", "dst": "10.10.30.10", "proto": "tcp", "dport": 21, "expect": "permit" },
+    { "id": "P27", "desc": "IT admin PC pings a student PC (request)", "src": "10.10.99.50", "dst": "10.10.20.21", "proto": "icmp", "icmp": "echo", "expect": "permit" },
+    { "id": "P28", "desc": "Server's web reply returns to a student PC", "src": "10.10.30.10", "dst": "10.10.20.21", "proto": "tcp", "sport": 80, "dport": 49152, "expect": "permit" },
+    { "id": "P29", "desc": "IP phone gets a DHCP lease in the voice VLAN", "from_vlan": 50, "src": "0.0.0.0", "dst": "255.255.255.255", "proto": "udp", "sport": 68, "dport": 67, "expect": "permit" },
+    { "id": "P30", "desc": "Faculty PC gets a DHCP lease", "from_vlan": 10, "src": "0.0.0.0", "dst": "255.255.255.255", "proto": "udp", "sport": 68, "dport": 67, "expect": "permit" },
+    { "id": "P31", "desc": "Faculty PC answers a ping sent by the server (echo-reply into VLAN 30)", "src": "10.10.10.21", "dst": "10.10.30.10", "proto": "icmp", "icmp": "echo-reply", "expect": "permit" },
+    { "id": "P32", "desc": "Student PC answers a ping sent by the server", "src": "10.10.20.21", "dst": "10.10.30.10", "proto": "icmp", "icmp": "echo-reply", "expect": "permit" }
+  ]
+}
