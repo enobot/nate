@@ -1,6 +1,6 @@
 # Deployment notes
 
-**Status: not deployed.** Everything below about hosting providers is a plan, not something that has been tried. The Dockerfile has not been built yet because Docker was not installed on the development machine.
+**Status: deployed on Render** at https://movie-theater-ticket-system.onrender.com, using the repository root's `render.yaml` Blueprint. The other hosting options below were not tried. Docker isn't installed on the development machine, so Render's build was the first build of the image.
 
 ## What was verified locally
 
@@ -98,7 +98,7 @@ Typical steps on a Dockerfile-based host:
 
 ## Render
 
-The owner chose Render's free plan. This has **not been deployed or tested on Render yet**. Check Render's own documentation for current free-plan limits (for example idle spin-down and disk behavior) before sharing the link.
+The owner chose Render's free plan. It's deployed at https://movie-theater-ticket-system.onrender.com: `/healthz` returns `Healthy`, the home page picks the right day with `Theater__TimeZone=America/Los_Angeles`, and live seat updates work. Render's free plan puts the service to sleep after 15 minutes idle, the first visit after that takes about 50 seconds, and the demo data resets on every restart.
 
 Service settings:
 
@@ -143,6 +143,6 @@ The app does not assume it is at the repository root. Everything it needs (`glob
 ## Linking the project from the portfolio site
 
 - Link to the folder on GitHub, for example `https://github.com/enobot/nate/tree/main/apps/movie-theater-ticket-system`, so the README is the first thing a reviewer sees.
-- Until a live demo exists, label the link as "Source code and local demo instructions", not "Live demo".
+- The portfolio's project page links to the live demo, this folder's source code, and the walkthrough.
 - Add screenshots from `docs/screenshots/` and, if recorded, the demo video.
 - Describe it as an expanded portfolio rebuild of the academic C# desktop project, not the original coursework.

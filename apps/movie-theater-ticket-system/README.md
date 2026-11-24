@@ -358,11 +358,11 @@ Production client build: 419.9 kB JavaScript (124.1 kB gzipped) and 48.5 kB CSS 
 
 ## Hosting
 
-**The live demo has not been deployed.** This section explains the options; none of them have been tried yet.
+**Live demo:** https://movie-theater-ticket-system.onrender.com, on Render, deployed with the repository root's `render.yaml` Blueprint. Render's free plan puts the service to sleep after 15 minutes idle, the first visit after that takes about 50 seconds, and the demo data resets on every restart. The other options below were not tried.
 
 **Why GitHub Pages can't host this app:** GitHub Pages only serves static files (HTML, CSS, JavaScript). This app needs a server that runs ASP.NET Core, keeps a SQLite database, and holds open SignalR connections. The React part could be served from Pages, but without the API it can't show showtimes or take orders.
 
-**Docker (UNVERIFIED):** the `Dockerfile` in this folder builds the React client with Node 26.13.0, publishes the API with the .NET 10.0.404 SDK, and runs it on the ASP.NET Core 10.0.15 runtime image as a non-root user. Docker wasn't available on the machine this was built on, so the image build hasn't been tested. To test it on a machine with Docker:
+**Docker:** the `Dockerfile` in this folder builds the React client with Node 26.13.0, publishes the API with the .NET 10.0.404 SDK, and runs it on the ASP.NET Core 10.0.15 runtime image as a non-root user. Docker wasn't available on the machine this was built on, so Render's build was the first build of the image; it now runs the live demo. To test it on a machine with Docker:
 
 ```bash
 docker build -t movie-theater-ticket-system .
@@ -378,13 +378,13 @@ How the app behaves when hosted (this part was tested locally with a Release bui
 - **Admin password:** must come from configuration, for example the `DemoAdmin__Password` environment variable or the host's secret settings. Without it, admin sign-in is off. No password is built into the image.
 - **Behind a proxy:** most hosts terminate HTTPS at a proxy. Setting `ASPNETCORE_FORWARDEDHEADERS_ENABLED=true` makes the app trust the proxy's `X-Forwarded-For`/`X-Forwarded-Proto` headers. Only set it when the app really is behind the host's proxy, because those headers can be faked otherwise, which would also weaken the per-IP rate limits.
 
-Realistic options (all **not done, unverified**; check each provider's current pricing, limits, WebSocket support, and persistent disk options before choosing):
+Realistic options (only Render has been used, as described below; check each provider's current pricing, limits, WebSocket support, and persistent disk options before choosing another):
 
 - A container platform that builds from a Dockerfile, such as Render, Railway, Fly.io, Google Cloud Run, or Azure Container Apps.
 - Azure App Service (Linux) with the Docker image or a direct .NET publish.
 - A small virtual machine running the Docker image behind a reverse proxy.
 
-**Render (the chosen host, not deployed yet):** the repository root's `render.yaml` Blueprint sets this up. It builds the Dockerfile, uses `/healthz` as the health check, and sets `Theater__TimeZone=America/Los_Angeles`, `ASPNETCORE_FORWARDEDHEADERS_ENABLED=true`, and `PORT=10000` (Render's default port). Render asks for `DemoAdmin__Password` (a secret you choose) when the Blueprint is created. The full list, with what each one does, is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#render).
+**Render (the chosen host, deployed):** the repository root's `render.yaml` Blueprint sets this up. It builds the Dockerfile, uses `/healthz` as the health check, and sets `Theater__TimeZone=America/Los_Angeles`, `ASPNETCORE_FORWARDEDHEADERS_ENABLED=true`, and `PORT=10000` (Render's default port). Render asks for `DemoAdmin__Password` (a secret you choose) when the Blueprint is created. The full list, with what each one does, is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#render).
 
 More detail, including how this folder works inside a larger repository, is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
@@ -404,7 +404,7 @@ apps/movie-theater-ticket-system/
 │   └── src/                     api/, components/, pages/, state/, hooks/
 ├── scripts/smoke-test.ps1       HTTP check of a running app
 ├── docs/                        Walkthrough, deployment notes, screenshot list
-└── Dockerfile                   Container build (unverified)
+└── Dockerfile                   Container build (runs the live demo on Render)
 ```
 
 The app lives in `apps/movie-theater-ticket-system/` of the [enobot/nate](https://github.com/enobot/nate) repository. Its CI workflow is at the repository root in [`.github/workflows/movie-theater-ci.yml`](../../.github/workflows/movie-theater-ci.yml), and the repository root's [`render.yaml`](../../render.yaml) Blueprint describes its Render service.
