@@ -262,21 +262,11 @@ export const profile = {
 
   // Resume downloads. Files live in public/resume/. `primary: true` is the one
   // the "Download Resume" button in the hero links to.
-  resumes: [
-    {
-      id: "network",
-      label: "Network Technician resume",
-      description: "Leads with switch port activation, VLAN assignment, and campus jack work.",
-      file: "resume/Nathanael_Haig_Resume_Network.pdf",
-      primary: true,
-    },
-    {
-      id: "it-support",
-      label: "IT Support resume",
-      description: "Leads with ServiceNow tickets, connectivity diagnostics, and asset records.",
-      file: "resume/Nathanael_Haig_Resume_IT_Support.pdf",
-    },
-  ],
+  // Empty on purpose: the previous PDFs showed a phone number, so they were taken
+  // down. Add the phone-free PDFs back here (label, description, file, primary)
+  // and the download buttons reappear. While this list is empty, the Resume
+  // section points visitors to LinkedIn and email instead.
+  resumes: [],
 };
 
 export default profile;

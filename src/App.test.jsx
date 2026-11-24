@@ -60,15 +60,23 @@ describe("App rendering", () => {
       "href",
       `${import.meta.env.BASE_URL}#projects`,
     );
-    expect(within(home).getByRole("link", { name: /download resume/i })).toBeInTheDocument();
+    // The hero offers a resume download exactly when a resume PDF is published.
+    expect(within(home).queryAllByRole("link", { name: /download resume/i })).toHaveLength(
+      profile.resumes.length ? 1 : 0,
+    );
   });
 
-  it("keeps a resume download in the navigation bar", () => {
+  it("keeps a resume download in the navigation bar whenever a resume is published", () => {
     render(<App />);
     const header = screen.getByRole("banner");
-    const resume = within(header).getByRole("link", { name: "Resume (PDF download)" });
-    expect(resume).toHaveAttribute("href", assetUrl(profile.resumes.find((item) => item.primary).file));
-    expect(resume).toHaveAttribute("download");
+    const links = within(header).queryAllByRole("link", { name: "Resume (PDF download)" });
+    if (profile.resumes.length === 0) {
+      expect(links).toHaveLength(0);
+      return;
+    }
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveAttribute("href", assetUrl(profile.resumes.find((item) => item.primary).file));
+    expect(links[0]).toHaveAttribute("download");
   });
 
   it("credits Nathanael Haig and Tracy Tran in the footer", () => {
@@ -132,6 +140,19 @@ describe("App rendering", () => {
       expect(link.getAttribute("href").startsWith(import.meta.env.BASE_URL)).toBe(true);
       expect(link).toHaveAttribute("download");
       expect(link).toHaveAttribute("target", "_blank");
+    }
+    if (profile.resumes.length === 0) {
+      // No PDFs published: the section must still give a way to get the resume.
+      expect(within(resumeSection).getByRole("link", { name: /View LinkedIn profile/ })).toHaveAttribute(
+        "href",
+        profile.linkedin,
+      );
+      expect(within(resumeSection).getByRole("link", { name: "Email me" })).toHaveAttribute(
+        "href",
+        `mailto:${profile.email}`,
+      );
+      expect(within(resumeSection).queryAllByRole("link", { name: /Download PDF/ })).toHaveLength(0);
+      return;
     }
     const heroDownload = within(document.getElementById("home")).getByRole("link", { name: /download resume/i });
     expect(heroDownload).toHaveAttribute("href", assetUrl(profile.resumes.find((resume) => resume.primary).file));
