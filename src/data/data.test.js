@@ -36,7 +36,7 @@ describe("projects data", () => {
 
   it.each(projects)("$title only uses known link types with https URLs", (project) => {
     for (const [key, url] of Object.entries(project.links ?? {})) {
-      expect(["source", "demo", "docs", "video"], `${project.id}.links.${key}`).toContain(key);
+      expect(["source", "demo", "docs", "video", "release"], `${project.id}.links.${key}`).toContain(key);
       if (url) expect(url, `${project.id}.links.${key}`).toMatch(/^https:\/\/\S+$/);
     }
   });
