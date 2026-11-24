@@ -1,0 +1,21 @@
+# Keep the build context small and free of local data.
+**/bin/
+**/obj/
+**/node_modules/
+**/App_Data/
+**/*.db
+**/*.db-shm
+**/*.db-wal
+src/MovieTheater.Api/wwwroot/
+tests/
+docs/
+.github/
+.vs/
+.vscode/
+.idea/
+**/*.user
+**/.env
+**/.env.*
+**/coverage/
+**/TestResults/
+*.md

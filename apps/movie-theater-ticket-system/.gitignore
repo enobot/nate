@@ -1,0 +1,34 @@
+# .NET build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+
+# Local runtime data: SQLite database and data protection keys
+src/MovieTheater.Api/App_Data/
+*.db
+*.db-shm
+*.db-wal
+
+# React build output (rebuilt by `npm run build` or the first `dotnet run`)
+src/MovieTheater.Api/wwwroot/
+client/dist/
+
+# Node
+node_modules/
+client/coverage/
+npm-debug.log*
+
+# Editors and OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Secrets and local overrides
+.env
+.env.*
+appsettings.*.local.json

@@ -1,0 +1,96 @@
+# CI for the Movie Theater Ticket System.
+#
+# GitHub only runs workflow files from the repository root's .github/workflows folder.
+# - In a larger repo where this app lives at apps/movie-theater-ticket-system/, copy this file to
+#   <repo root>/.github/workflows/movie-theater-ci.yml. APP_DIR and the path filters below already
+#   point at that folder.
+# - If this folder is its own repository, set APP_DIR to "." and delete the two `paths:` lists.
+
+name: Movie Theater Ticket System CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/movie-theater-ticket-system/**'
+      - '.github/workflows/movie-theater-ci.yml'
+  pull_request:
+    paths:
+      - 'apps/movie-theater-ticket-system/**'
+      - '.github/workflows/movie-theater-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: movie-theater-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  APP_DIR: apps/movie-theater-ticket-system
+  DOTNET_NOLOGO: 'true'
+  DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+
+jobs:
+  backend:
+    name: Backend (.NET build and tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@v6.1.0
+        with:
+          global-json-file: ${{ env.APP_DIR }}/global.json
+
+      - name: Restore
+        working-directory: ${{ env.APP_DIR }}
+        run: dotnet restore MovieTheater.slnx
+
+      - name: Build (warnings are errors)
+        working-directory: ${{ env.APP_DIR }}
+        run: dotnet build MovieTheater.slnx --no-restore -c Release
+
+      - name: Test (unit + integration against real SQLite)
+        working-directory: ${{ env.APP_DIR }}
+        run: >
+          dotnet test MovieTheater.slnx --no-build -c Release
+          --settings tests/coverage.runsettings
+          --collect "XPlat Code Coverage"
+          --results-directory TestResults
+
+  frontend:
+    name: Frontend (lint, typecheck, tests, build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '26.13.0'
+          cache: npm
+          cache-dependency-path: ${{ env.APP_DIR }}/client/package-lock.json
+
+      - name: Install
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm ci
+
+      - name: Lint
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm run lint
+
+      - name: Typecheck
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm run typecheck
+
+      - name: Test
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm test
+
+      - name: Production build
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm run build

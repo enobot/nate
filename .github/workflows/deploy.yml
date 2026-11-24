@@ -13,6 +13,8 @@ on:
       - ".github/workflows/toolkit.yml"
       - ".github/workflows/toolkit-publish.yml"
       - ".github/workflows/asset-tracker.yml"
+      - ".github/workflows/movie-theater-ci.yml"
+      - "render.yaml"
   pull_request:
     branches: [main]
     paths-ignore:
@@ -21,6 +23,8 @@ on:
       - ".github/workflows/toolkit.yml"
       - ".github/workflows/toolkit-publish.yml"
       - ".github/workflows/asset-tracker.yml"
+      - ".github/workflows/movie-theater-ci.yml"
+      - "render.yaml"
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,263 @@
+@import 'tailwindcss';
+
+/* Design tokens. Tailwind v4 turns these into utilities like bg-ink-900 and text-marquee-400. */
+@theme {
+  --color-ink-950: #07070b;
+  --color-ink-900: #0d0d14;
+  --color-ink-850: #11111a;
+  --color-ink-800: #161621;
+  --color-ink-700: #20202d;
+  --color-ink-600: #2c2c3c;
+  --color-ink-500: #45455a;
+  --color-ink-400: #75758c;
+  --color-ink-300: #a3a3b8;
+  --color-ink-200: #c9c9d8;
+  --color-ink-100: #ececf3;
+
+  --color-marquee-300: #fcd57a;
+  --color-marquee-400: #fbbf3a;
+  --color-marquee-500: #f59e0b;
+  --color-marquee-600: #d97706;
+
+  --color-velvet-400: #f06a7e;
+  --color-velvet-500: #e1334d;
+  --color-velvet-600: #be1e37;
+  --color-velvet-900: #4a0d18;
+  --color-velvet-950: #2a0710;
+
+  --color-screen: #dfe8ff;
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Condensed system fonts give a marquee feel without downloading web fonts. */
+  --font-display: 'Bahnschrift', 'DIN Alternate', 'Roboto Condensed', 'Arial Narrow', system-ui, sans-serif;
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-toast-in: toast-in 0.25s ease-out both;
+  --animate-seat-pop: seat-pop 0.28s ease-out;
+  --animate-screen-glow: screen-glow 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes seat-pop {
+    0% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.18);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes screen-glow {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-ink-950);
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--color-ink-950);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgb(225 51 77 / 0.16), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgb(251 191 58 / 0.07), transparent 70%);
+    background-attachment: fixed;
+    color: var(--color-ink-100);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-marquee-400);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: rgb(251 191 58 / 0.35);
+  }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.625rem 1.125rem;
+    font-weight: 600;
+    font-size: 0.925rem;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .btn-primary {
+    background: var(--color-marquee-400);
+    color: var(--color-ink-950);
+    box-shadow: 0 8px 24px -10px rgb(251 191 58 / 0.6);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-marquee-300);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--color-ink-700);
+    color: var(--color-ink-100);
+    border: 1px solid var(--color-ink-600);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--color-ink-600);
+  }
+
+  .btn-danger {
+    background: var(--color-velvet-600);
+    color: white;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    background: var(--color-velvet-500);
+  }
+
+  .btn-ghost {
+    color: var(--color-ink-200);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--color-ink-800);
+    color: white;
+  }
+
+  .card {
+    border-radius: 1.25rem;
+    border: 1px solid rgb(255 255 255 / 0.07);
+    background: linear-gradient(180deg, rgb(22 22 33 / 0.92), rgb(13 13 20 / 0.92));
+    box-shadow: 0 20px 60px -30px rgb(0 0 0 / 0.8);
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-ink-200);
+    margin-bottom: 0.35rem;
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 0.65rem;
+    border: 1px solid var(--color-ink-600);
+    background: var(--color-ink-900);
+    padding: 0.6rem 0.8rem;
+    color: var(--color-ink-100);
+    transition: border-color 0.15s ease;
+  }
+
+  .field:hover {
+    border-color: var(--color-ink-500);
+  }
+
+  .field:focus-visible {
+    outline: 2px solid var(--color-marquee-400);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+
+  .field[aria-invalid='true'] {
+    border-color: var(--color-velvet-500);
+  }
+
+  .field-error {
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--color-velvet-400);
+  }
+
+  .skeleton {
+    border-radius: 0.75rem;
+    background: linear-gradient(90deg, var(--color-ink-800) 25%, var(--color-ink-700) 50%, var(--color-ink-800) 75%);
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+  }
+
+  /* Seats held by other customers get stripes so the state is not shown by color alone. */
+  .seat-held-pattern {
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgb(255 255 255 / 0.18) 0 3px,
+      transparent 3px 7px
+    );
+  }
+}
+
+/* Respect the operating system's reduced-motion setting everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
