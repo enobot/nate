@@ -172,11 +172,13 @@ describe("mobile menu", () => {
     expect(toggle).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("offers the resume download next to the section links", async () => {
+  it("offers the resume download next to the section links whenever a resume is published", async () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(screen.getByRole("button", { name: "Open menu" }));
     const panel = document.getElementById("mobile-menu");
-    expect(within(panel).getByRole("link", { name: /Download resume/ })).toHaveAttribute("download");
+    const links = within(panel).queryAllByRole("link", { name: /Download resume/ });
+    expect(links).toHaveLength(profile.resumes.length ? 1 : 0);
+    links.forEach((link) => expect(link).toHaveAttribute("download"));
   });
 });

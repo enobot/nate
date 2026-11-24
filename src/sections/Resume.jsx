@@ -1,4 +1,4 @@
-import { Download, FileText, UserRound } from "lucide-react";
+import { Download, FileText, Mail, UserRound } from "lucide-react";
 import ButtonLink from "../components/ButtonLink.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Section from "../components/Section.jsx";
@@ -6,6 +6,7 @@ import { profile } from "../data/profile.js";
 import { assetUrl } from "../lib/assetUrl.js";
 
 export default function Resume() {
+  if (profile.resumes.length === 0) return <ResumeUnavailable />;
   return (
     <Section
       id="resume"
@@ -59,6 +60,30 @@ export default function Resume() {
             View LinkedIn profile
           </ButtonLink>
         </p>
+      </Reveal>
+    </Section>
+  );
+}
+
+/** Shown while no resume PDFs are published (profile.resumes is empty). */
+function ResumeUnavailable() {
+  return (
+    <Section id="resume" index="05" kicker="Data files" title="Resume">
+      <Reveal>
+        <div className="glass flex flex-wrap items-center justify-between gap-4 rounded-2xl px-6 py-5 text-ink-muted">
+          <p className="max-w-xl">
+            The PDF resumes are being updated. Until they&apos;re back, my LinkedIn profile has my full
+            experience, or email me and I&apos;ll send a copy.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <ButtonLink href={profile.linkedin} icon={UserRound} external>
+              View LinkedIn profile
+            </ButtonLink>
+            <ButtonLink href={`mailto:${profile.email}`} variant="ghost" icon={Mail}>
+              Email me
+            </ButtonLink>
+          </div>
+        </div>
       </Reveal>
     </Section>
   );

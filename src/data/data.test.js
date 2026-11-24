@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { ICONS } from "../components/icons.js";
@@ -135,14 +135,21 @@ describe("profile data", () => {
   });
 
   it("points every resume download at a real PDF in public/", () => {
-    expect(profile.resumes.length).toBeGreaterThan(0);
+    // The list may be empty while the PDFs are being replaced (see profile.js).
     for (const resume of profile.resumes) {
       expect(resume.file.startsWith("/")).toBe(false);
       const path = resolve(process.cwd(), "public", resume.file);
       expect(existsSync(path), resume.file).toBe(true);
       expect(readFileSync(path).subarray(0, 5).toString()).toBe("%PDF-");
     }
-    expect(profile.resumes.filter((resume) => resume.primary)).toHaveLength(1);
+    expect(profile.resumes.filter((resume) => resume.primary)).toHaveLength(profile.resumes.length ? 1 : 0);
+  });
+
+  it("publishes no resume PDF in public/ that the site doesn't list", () => {
+    const dir = resolve(process.cwd(), "public", "resume");
+    const listed = new Set(profile.resumes.map((resume) => resume.file.replace(/^resume\//, "")));
+    const onDisk = existsSync(dir) ? readdirSync(dir).filter((name) => name.toLowerCase().endsWith(".pdf")) : [];
+    expect(onDisk.filter((name) => !listed.has(name))).toEqual([]);
   });
 });
 
