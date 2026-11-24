@@ -13,17 +13,27 @@ export const profile = {
   location: "Fullerton, CA",
   email: "nathanaelahaig@gmail.com",
   linkedin: "https://www.linkedin.com/in/nah28",
-  // Paste your GitHub profile URL here (e.g. "https://github.com/your-username")
-  // and GitHub links will appear in the Contact section automatically.
+  // Paste your own GitHub profile URL here (e.g. "https://github.com/your-username")
+  // and it replaces the "Project code" link below in the hero and Contact section.
   github: "",
+  // The repository that holds the project code. Shown as "Project code on GitHub"
+  // so it is never mistaken for a personal GitHub profile.
+  projectRepo: "https://github.com/enobot/nate",
 
   hero: {
     kicker: "IT Portfolio",
     role: "IT Support · Networking · Information Systems",
     // The big line under the name: what Nate does, in plain words.
-    headline: "I activate switch ports, assign VLANs, and work network tickets across the Cal State Fullerton campus.",
+    headline: "Campus network support at Cal State Fullerton: switch ports, VLANs, and ServiceNow tickets.",
     tagline:
-      "Information Systems student (B.A., expected May 2027) on the CSUF IT Telecommunications network analyst team. Open to entry-level IT support, network technician, and IT analyst roles.",
+      "Information Systems student (B.A., May 2027) and IT Telecommunications student assistant. Seeking entry-level IT support, network technician, NOC technician, and IT analyst roles.",
+    // Verified facts shown as chips under the tagline (all from the resume).
+    // The project counts are added automatically from projects.js.
+    highlights: [
+      "~50 data/voice jack activations per week",
+      "Switch ports and VLANs on Alcatel-Lucent OmniSwitch over SSH",
+      "ServiceNow tickets in a team that handles 100+ per week",
+    ],
     // Shown in the "status panel" next to the name. Keep each value short.
     status: [
       { label: "Status", value: "Open to entry-level IT roles", live: true },
@@ -35,11 +45,11 @@ export const profile = {
 
   about: {
     paragraphs: [
-      "I'm an Information Systems student at California State University, Fullerton, earning a B.A. in Business Administration with a concentration in Information Systems (expected May 2027).",
-      "As an IT Telecommunications Student Assistant, I support the network analyst team across the entire campus: activating and verifying switch ports, assigning VLANs on Alcatel-Lucent OmniSwitch devices over SSH, installing and repairing data and voice jacks, diagnosing connectivity issues, and working ServiceNow incidents and service requests.",
-      "My coursework covers database management, SQL, systems analysis, and business telecommunications. Earlier roles in high-volume restaurants gave me customer service, team leadership, and staff training experience.",
+      "I'm an Information Systems student at California State University, Fullerton (B.A. in Business Administration, Information Systems concentration, expected May 2027). My coursework covers database management, SQL, systems analysis, and business telecommunications.",
+      "Alongside my job on the campus network team, I build small IT tools to practice the work: a diagnostics module, an asset and ticket tracker, and a network lab. Each project page says what is finished, what was tested, and how AI coding assistance was used.",
+      "Earlier roles in high-volume restaurants gave me customer service, team leadership, and staff training experience.",
     ],
-    targetRoles: ["IT support", "Network technician", "IT analyst"],
+    targetRoles: ["IT support", "Network technician", "NOC technician", "IT analyst"],
   },
 
   education: [
@@ -91,10 +101,9 @@ export const profile = {
       ],
       highlights: [
         "Activate and verify switch ports and assign VLANs on Alcatel-Lucent OmniSwitch devices over SSH using PuTTY, connecting data and voice endpoints across the entire campus.",
-        "Activate roughly 50 data and voice jacks per week and verify additional connections; install and repair jacks to restore LAN and telephone service.",
+        "Install and repair data and voice jacks to restore LAN and telephone service, and verify additional connections.",
         "Diagnose connectivity issues with ping, tracert, ipconfig, and OmniSwitch port status checks, resolving some independently and working with network analysts on complex router, switch, and VPN problems.",
-        "Support department office moves of 50+ people, activating and verifying data and voice connections.",
-        "Work ServiceNow incidents and service requests as part of a team handling 100+ tickets per week (more during move seasons), updating ticket notes and status through closure.",
+        "Work ServiceNow incidents and service requests, updating ticket notes and status through closure (more tickets during move seasons).",
         "Maintain the university's telecommunications database and equipment asset records, keeping phone and equipment information accurate and current.",
       ],
       tools: [
@@ -268,11 +277,24 @@ export const profile = {
 
   // Resume downloads. Files live in public/resume/. `primary: true` is the one
   // the "Download Resume" button in the hero links to.
-  // Empty on purpose: the previous PDFs showed a phone number, so they were taken
-  // down. Add the phone-free PDFs back here (label, description, file, primary)
-  // and the download buttons reappear. While this list is empty, the Resume
-  // section points visitors to LinkedIn and email instead.
-  resumes: [],
+  // Both PDFs are one page and have no phone number (checked before publishing).
+  // If this list is ever emptied, the Resume section points visitors to LinkedIn
+  // and email instead of showing download buttons.
+  resumes: [
+    {
+      id: "network",
+      label: "Network Technician resume",
+      description: "Leads with switch port activation, VLAN assignment, and campus jack work.",
+      file: "resume/Nathanael_Haig_Resume_Network.pdf",
+      primary: true,
+    },
+    {
+      id: "it-support",
+      label: "IT Support resume",
+      description: "Leads with ServiceNow tickets, connectivity diagnostics, and asset records.",
+      file: "resume/Nathanael_Haig_Resume_IT_Support.pdf",
+    },
+  ],
 };
 
 export default profile;

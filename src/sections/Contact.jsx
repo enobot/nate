@@ -13,7 +13,7 @@ export default function Contact() {
     profile.about.targetRoles.map(toSentenceCase),
   );
   return (
-    <Section id="contact" index="06" kicker="Open channel" title="Contact">
+    <Section id="contact" index="06" kicker="Get in touch" title="Contact">
       <Reveal>
         <div className="glass hud-corners relative overflow-hidden rounded-3xl p-6 sm:p-10">
           <div
@@ -30,7 +30,7 @@ export default function Contact() {
               Let&apos;s connect.
             </p>
             <p className="mt-3 text-ink-muted sm:text-lg">
-              I&apos;m open to entry-level {roles} roles. Email is the fastest way to reach me.
+              I&apos;m looking for entry-level {roles} roles. Email is the fastest way to reach me.
             </p>
             <p className="mt-2 flex items-center gap-1.5 text-sm text-ink-dim">
               <MapPin aria-hidden="true" className="size-4 text-cyan" />
@@ -49,10 +49,10 @@ export default function Contact() {
                 LinkedIn
               </ButtonLink>
             </li>
-            {profile.github ? (
+            {profile.github || profile.projectRepo ? (
               <li>
-                <ButtonLink href={profile.github} variant="ghost" icon={FolderGit2} external>
-                  GitHub
+                <ButtonLink href={profile.github || profile.projectRepo} variant="ghost" icon={FolderGit2} external>
+                  {profile.github ? "GitHub" : "Project code on GitHub"}
                 </ButtonLink>
               </li>
             ) : null}

@@ -6,8 +6,8 @@ export default function Skills() {
   return (
     <Section
       id="skills"
-      index="02"
-      kicker="Loadout"
+      index="04"
+      kicker="Technical skills"
       title="Skills"
       intro="Grouped by area. Tags show where each skill was used: on the job at CSUF, in coursework, or in a project."
     >

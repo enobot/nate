@@ -5,7 +5,7 @@ California State University, Fullerton who supports the network analyst team in 
 Telecommunications. The site presents his campus networking experience, skills, projects,
 and resumes with a dark, HUD-inspired interface.
 
-Live site: **https://nathanaelhaig.com/** (a custom domain on GitHub Pages; until GitHub issues the HTTPS certificate, it loads over `http://`)
+Live site: **https://nathanaelhaig.com/** (a custom domain on GitHub Pages, served over HTTPS)
 
 > Want to change the content? Read **[EDITING.md](EDITING.md)**. All text lives in two files:
 > `src/data/profile.js` and `src/data/projects.js`.

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1352 609" width="1352" height="609" role="img">
+<rect width="1352" height="609" fill="#070b18"/>
+<rect width="1352" height="40" fill="#0e1630"/>
+<circle cx="24" cy="20" r="6" fill="#a855f7"/><circle cx="46" cy="20" r="6" fill="#3d7bff"/><circle cx="68" cy="20" r="6" fill="#22e3f5"/>
+<text x="1320" y="26" text-anchor="end" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="14" fill="#94a3b8">Network Diagnostics Toolkit: real output (docs/examples/cmdlet-usage.txt)</text>
+<text x="32" y="64" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#22e3f5">PS&gt; Test-NdtPing -Target 127.0.0.1 -Count 2 | Show-NdtResult</text>
+<text x="32" y="91" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#4ade80">[PASS] Ping 127.0.0.1 - 2/2 replies, 0% loss, min/avg/max 0/0/0 ms</text>
+<text x="32" y="118" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1">       Reply 1: Success from 127.0.0.1 time=0 ms TTL=128</text>
+<text x="32" y="145" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1">       Reply 2: Success from 127.0.0.1 time=0 ms TTL=128</text>
+<text x="32" y="172" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1"></text>
+<text x="32" y="199" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#22e3f5">PS&gt; Invoke-NdtQuickCheck -Target localhost -Port $openPort -Count 1 | New-NdtTicketNote -Title 'INC0000000 example'</text>
+<text x="32" y="226" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1">INC0000000 example</text>
+<text x="32" y="253" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1">Run: 2026-11-23T22:32:35-08:00 from HELPDESK-PC01</text>
+<text x="32" y="280" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1">Tool: Network Diagnostics Toolkit 1.0.0 (read-only checks; only the targets listed were contacted)</text>
+<text x="32" y="307" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1"></text>
+<text x="32" y="334" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#4ade80">[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 0 ms: A 127.0.0.1 (TTL 1200s)</text>
+<text x="32" y="361" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#4ade80">[PASS] Ping localhost - 1/1 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms</text>
+<text x="32" y="388" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#4ade80">[PASS] TcpPort localhost - TCP port 55732 is open on localhost (127.0.0.1) (connected in 0 ms).</text>
+<text x="32" y="415" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1"></text>
+<text x="32" y="442" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1">Totals: 3 check(s) - 3 PASS, 0 FAIL, 0 WARN, 0 INFO</text>
+<text x="32" y="469" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1"></text>
+<text x="32" y="496" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#cbd5e1"></text>
+<text x="32" y="523" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#22e3f5">PS&gt; try { Test-NdtPort -Target 127.0.0.1 -Port (1..21) } catch { ... }</text>
+<text x="32" y="550" xml:space="preserve" font-family="Consolas, Cascadia Mono, Courier New, monospace" font-size="18" fill="#f87171">Error: Too many ports (21). The limit is 20 per run. Port scanning is not supported.</text>
+</svg>

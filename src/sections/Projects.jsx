@@ -12,16 +12,19 @@ export default function Projects() {
   const [filter, setFilter] = useState(ALL);
   const visible = filter === ALL ? projects : projects.filter((project) => project.status === filter);
 
+  const featuredProjects = visible.filter((project) => project.featured);
+  const otherProjects = visible.filter((project) => !project.featured);
+
   const countFor = (value) =>
     value === ALL ? projects.length : projects.filter((project) => project.status === value).length;
 
   return (
     <Section
       id="projects"
-      index="04"
-      kicker="Quest board"
+      index="03"
+      kicker="Portfolio"
       title="Projects"
-      intro="Completed academic work and projects in development. Open any project for the full write-up: the problem, the approach, how it was tested, and links where they exist."
+      intro="Each project page covers the problem, the solution, how it works, how it was tested, its limits, and who did what. Every project says whether it is coursework, an AI-assisted rebuild, or an AI-assisted portfolio project."
     >
       <div role="group" aria-label="Filter projects by status" className="mb-8 flex flex-wrap gap-2">
         {FILTERS.map((value) => {
@@ -52,15 +55,29 @@ export default function Projects() {
         Showing {visible.length} {visible.length === 1 ? "project" : "projects"}
       </p>
 
-      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {visible.map((project, index) => (
-          <li key={project.id}>
-            <Reveal delay={(index % 3) * 0.07} className="h-full">
-              <ProjectCard project={project} />
-            </Reveal>
-          </li>
-        ))}
-      </ul>
+      {featuredProjects.length ? (
+        <ul className="mb-6 grid gap-6 md:grid-cols-2">
+          {featuredProjects.map((project, index) => (
+            <li key={project.id}>
+              <Reveal delay={index * 0.07} className="h-full">
+                <ProjectCard project={project} featured />
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      {otherProjects.length ? (
+        <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {otherProjects.map((project, index) => (
+            <li key={project.id}>
+              <Reveal delay={(index % 3) * 0.07} className="h-full">
+                <ProjectCard project={project} />
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </Section>
   );
 }

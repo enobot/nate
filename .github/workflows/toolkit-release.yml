@@ -1,0 +1,50 @@
+name: Release network toolkit ZIP
+
+# Manual only: Actions tab > "Release network toolkit ZIP" > Run workflow, and type the
+# version (it must match ModuleVersion in NetworkDiagnostics.psd1). This zips the toolkit
+# folder and attaches it to a GitHub release tagged toolkit-v<version>. It uses the
+# built-in GITHUB_TOKEN, so no secrets are needed.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release, for example 1.0.0
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: toolkit-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERSION: ${{ inputs.version }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check the version matches the module manifest
+        run: |
+          manifest=apps/network-diagnostics-toolkit/src/NetworkDiagnostics/NetworkDiagnostics.psd1
+          found=$(grep -oP "ModuleVersion\s*=\s*'\K[^']+" "$manifest")
+          if [ "$found" != "$VERSION" ]; then
+            echo "Manifest says $found but you asked for $VERSION" >&2
+            exit 1
+          fi
+
+      - name: Build the ZIP
+        run: |
+          cd apps/network-diagnostics-toolkit
+          zip -r -q "$GITHUB_WORKSPACE/NetworkDiagnosticsToolkit-$VERSION.zip" . -x '*.git*'
+          unzip -l "$GITHUB_WORKSPACE/NetworkDiagnosticsToolkit-$VERSION.zip" | tail -3
+
+      - name: Create the release
+        run: |
+          gh release create "toolkit-v$VERSION" "NetworkDiagnosticsToolkit-$VERSION.zip" \
+            --title "Network Diagnostics Toolkit $VERSION" \
+            --notes "Read-only PowerShell module and menu for Windows PowerShell 5.1 or PowerShell 7. Unzip it, then run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Start-NetworkToolkit.ps1. See README.md inside for the commands, limits, and tests."

@@ -1,4 +1,4 @@
-import { BookOpen, GraduationCap, MapPin, Target } from "lucide-react";
+import { BookOpen, GraduationCap, MapPin } from "lucide-react";
 import Reveal from "../components/Reveal.jsx";
 import Section from "../components/Section.jsx";
 import { profile } from "../data/profile.js";
@@ -8,34 +8,18 @@ export default function About() {
   const [primary, ...others] = education;
 
   return (
-    <Section id="about" index="01" kicker="Player profile" title="About">
+    <Section id="about" index="01" kicker="Profile" title="About">
       <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
         <Reveal className="space-y-5 text-base text-ink-muted sm:text-lg">
           {about.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
 
-          <div className="grid gap-3 pt-2 sm:grid-cols-2">
-            <div className="glass rounded-xl p-4">
-              <p className="hud-label flex items-center gap-2 text-ink-dim">
-                <MapPin aria-hidden="true" className="size-3.5 text-cyan" /> Location
-              </p>
-              <p className="mt-1.5 text-base text-ink">{profile.location}</p>
-            </div>
-            <div className="glass rounded-xl p-4">
-              <p className="hud-label flex items-center gap-2 text-ink-dim">
-                <Target aria-hidden="true" className="size-3.5 text-cyan" /> Seeking
-              </p>
-              <ul className="mt-1.5 flex flex-wrap gap-x-2 text-base text-ink">
-                {about.targetRoles.map((role, index) => (
-                  <li key={role}>
-                    {role}
-                    {index < about.targetRoles.length - 1 ? <span aria-hidden="true" className="text-ink-dim"> ·</span> : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <p className="flex items-center gap-2 pt-1 text-base text-ink">
+            <MapPin aria-hidden="true" className="size-4 text-cyan" />
+            <span className="sr-only">Location: </span>
+            {profile.location}
+          </p>
         </Reveal>
 
         <Reveal delay={0.1}>

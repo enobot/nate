@@ -1,4 +1,4 @@
-import { ArrowRight, MousePointerClick } from "lucide-react";
+import { ArrowRight, MousePointerClick, Star } from "lucide-react";
 import Chip from "./Chip.jsx";
 import ProjectLinks from "./ProjectLinks.jsx";
 import ProjectVisual from "./ProjectVisual.jsx";
@@ -9,16 +9,17 @@ import { Link } from "../lib/router.jsx";
 import { projectPath } from "../lib/routes.js";
 
 const MAX_BADGES = 5;
+const MAX_BADGES_FEATURED = 8;
 
 /**
  * One project card. Every card has the same layout: preview, status,
  * title, summary, technology badges, then the calls to action. The title
  * and "View project" both open the project's own page.
  */
-export default function ProjectCard({ project }) {
+export default function ProjectCard({ project, featured = false }) {
   const handlePointerMove = useSpotlight();
   const titleId = `project-title-${project.id}`;
-  const shownTech = project.tech.slice(0, MAX_BADGES);
+  const shownTech = project.tech.slice(0, featured ? MAX_BADGES_FEATURED : MAX_BADGES);
   const hiddenTech = project.tech.length - shownTech.length;
   const interactive = interactiveFor(project);
 
@@ -33,6 +34,12 @@ export default function ProjectCard({ project }) {
       <div className="relative z-10 flex flex-1 flex-col p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={project.status} />
+          {featured ? (
+            <span className="hud-label inline-flex items-center gap-1 text-[0.68rem] text-amber">
+              <Star aria-hidden="true" className="size-3" />
+              Featured
+            </span>
+          ) : null}
           <span className="hud-label text-[0.68rem] text-ink-dim">{project.category}</span>
         </div>
 

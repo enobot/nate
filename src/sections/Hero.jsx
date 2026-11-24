@@ -2,6 +2,7 @@ import { ArrowRight, Download, FolderGit2, Mail, UserRound } from "lucide-react"
 import ButtonLink from "../components/ButtonLink.jsx";
 import NetworkCanvas from "../components/NetworkCanvas.jsx";
 import { profile } from "../data/profile.js";
+import { projects } from "../data/projects.js";
 import { assetUrl } from "../lib/assetUrl.js";
 import { withBase } from "../lib/router.jsx";
 
@@ -16,6 +17,12 @@ export default function Hero() {
   const primaryResume = profile.resumes.find((resume) => resume.primary) ?? profile.resumes[0];
   const [firstName, ...rest] = profile.name.split(" ");
   const lastName = rest.join(" ");
+  const finished = projects.filter((project) => project.status === "Completed").length;
+  const live = projects.filter((project) => project.links?.demo).length;
+  const highlights = [
+    ...(hero.highlights ?? []),
+    `${finished} finished projects, ${live} with live demos`,
+  ];
 
   return (
     <section
@@ -68,6 +75,21 @@ export default function Hero() {
             {hero.tagline}
           </p>
 
+          <ul
+            aria-label="Highlights"
+            className="hero-enter mt-6 flex max-w-2xl flex-wrap gap-2"
+            style={{ "--enter-delay": "140ms" }}
+          >
+            {highlights.map((item) => (
+              <li
+                key={item}
+                className="rounded-md border border-cyan/25 bg-cyan/5 px-2.5 py-1 text-sm text-ink"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+
           <div className="hero-enter mt-8 flex flex-wrap gap-3" style={{ "--enter-delay": "160ms" }}>
             <ButtonLink href={withBase("/#projects")} icon={ArrowRight}>
               View Projects
@@ -85,10 +107,9 @@ export default function Hero() {
                 <span className="sr-only">(PDF, {primaryResume.label})</span>
               </ButtonLink>
             ) : null}
-            {/* Shown automatically once profile.github is set. */}
-            {profile.github ? (
-              <ButtonLink href={profile.github} variant="ghost" icon={FolderGit2} external>
-                GitHub
+            {profile.github || profile.projectRepo ? (
+              <ButtonLink href={profile.github || profile.projectRepo} variant="ghost" icon={FolderGit2} external>
+                {profile.github ? "GitHub" : "Project code on GitHub"}
               </ButtonLink>
             ) : null}
           </div>
