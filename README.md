@@ -5,7 +5,7 @@ California State University, Fullerton who supports the network analyst team in 
 Telecommunications. The site presents his campus networking experience, skills, projects,
 and resumes with a dark, HUD-inspired interface.
 
-Live site (after deployment): **https://enobot.github.io/nate/**
+Live site: **https://nathanaelhaig.com/** (a custom domain on GitHub Pages; until GitHub issues the HTTPS certificate, it loads over `http://`)
 
 > Want to change the content? Read **[EDITING.md](EDITING.md)**. All text lives in two files:
 > `src/data/profile.js` and `src/data/projects.js`.
@@ -109,14 +109,16 @@ the site with the correct base path, and publishes it. A failing test stops the 
    ```
 
 4. Open the **Actions** tab and watch **Deploy to GitHub Pages**. When both jobs are green, the
-   site is live at **https://enobot.github.io/nate/** (the first deploy can take a minute or two
-   to appear).
+   site is live at the address shown under **Settings → Pages**: the custom domain
+   **nathanaelhaig.com** here, or `https://<user>.github.io/<repo>/` without one (the first deploy
+   can take a minute or two to appear).
 
 Every later push to `main` redeploys automatically. You can also run the workflow by hand from
 the Actions tab (**Run workflow**).
 
 ### How the base path works
 
+With the custom domain, the site is served from the domain's root, so the base path is `/`. Without one,
 GitHub Pages serves project sites from a sub-path (`/nate/`). The workflow asks
 `actions/configure-pages` for the real path and URL and passes them to the build as
 `BASE_PATH` and `VITE_SITE_URL`. Nothing is hard-coded, so renaming or transferring the
@@ -161,9 +163,8 @@ MSYS_NO_PATHCONV=1 BASE_PATH=/nate/ npx vite preview
   The 404 page is marked `noindex`.
 - `npm run build` writes `robots.txt` and a `sitemap.xml` listing the home page and every
   project page (see `config/seo.js` and the `seo-files` plugin in `vite.config.js`).
-- Note: search engines only read `robots.txt` at the root of a domain, so on
-  `enobot.github.io/nate/` it is informational. Submit `https://enobot.github.io/nate/sitemap.xml`
-  in Google Search Console (URL-prefix property) to get the page indexed faster.
+- The site is at the root of `nathanaelhaig.com`, so search engines read its `robots.txt`. Submit
+  `https://nathanaelhaig.com/sitemap.xml` in Google Search Console to get the pages indexed faster.
 - There is no social preview image (`og:image`) yet. Adding a 1200×630 PNG in `public/` and an
   `og:image` tag with its absolute URL would improve link previews.
 
