@@ -25,11 +25,13 @@ export default function InteractiveBlock({ interactive, headingId }) {
   }, [interactive]);
 
   const { status, Component } = state;
+  // min-w-0 lets this grid item shrink to the page width, so wide parts of a
+  // tool (long menus, access lists) scroll inside their own boxes, not the page.
   return (
     <section
       id={interactive.anchor}
       aria-labelledby={headingId}
-      className="glass relative scroll-mt-24 rounded-2xl border border-cyan/25 p-5 sm:p-7"
+      className="glass relative min-w-0 scroll-mt-24 rounded-2xl border border-cyan/25 p-5 sm:p-7"
     >
       <h2 id={headingId} className="hud-label text-cyan-soft">
         {interactive.title}

@@ -79,7 +79,15 @@ function AclListing({ acl, matchedLine, action }) {
   );
 
   return (
-    <div className="mt-3 overflow-x-auto rounded-lg border border-electric-soft/15 bg-navy-950/80 py-2">
+    // `relative` keeps the absolutely positioned screen-reader text inside this
+    // scroll box; without it, that text would widen the whole page on phones.
+    // tabIndex lets keyboard users scroll long lines sideways.
+    <div
+      role="region"
+      aria-label={`${acl.name} as written in the config`}
+      tabIndex={0}
+      className="relative mt-3 overflow-x-auto rounded-lg border border-electric-soft/15 bg-navy-950/80 py-2"
+    >
       {!acl.numbered ? (
         <p className="px-3 font-mono text-xs whitespace-pre text-ink sm:text-[0.8rem]">
           ip access-list {acl.kind} {acl.name}
@@ -128,7 +136,7 @@ function AclListing({ acl, matchedLine, action }) {
 
 function StepItem({ number, title, detail, action, children }) {
   return (
-    <li className="rounded-xl border border-electric-soft/12 bg-navy-900/40 p-4">
+    <li className="min-w-0 rounded-xl border border-electric-soft/12 bg-navy-900/40 p-4">
       <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
         <span
           aria-hidden="true"
@@ -227,7 +235,7 @@ function Step({ step, number }) {
 }
 
 const fieldClass =
-  "min-h-11 w-full rounded-lg border border-electric-soft/25 bg-navy-950 px-3 text-sm text-ink [color-scheme:dark] transition-colors hover:border-cyan/50 focus-visible:border-cyan disabled:cursor-not-allowed disabled:opacity-60";
+  "min-h-11 w-full min-w-0 max-w-full rounded-lg border border-electric-soft/25 bg-navy-950 px-3 text-sm text-ink [color-scheme:dark] transition-colors hover:border-cyan/50 focus-visible:border-cyan disabled:cursor-not-allowed disabled:opacity-60";
 
 function AddressField({ label, value, custom, onChange, onCustomChange, groups, error, disabled, hint }) {
   const id = useId();
@@ -236,7 +244,7 @@ function AddressField({ label, value, custom, onChange, onCustomChange, groups, 
   const hintId = `${id}-hint`;
   const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ") || undefined;
   return (
-    <div>
+    <div className="min-w-0">
       <label htmlFor={id} className="hud-label text-[0.7rem] text-ink-dim">
         {label}
       </label>
@@ -327,7 +335,12 @@ function LabCases({ network, onLoad }) {
         {results ? `${passed} of ${results.length} cases match the expected result.` : ""}
       </p>
       {results ? (
-        <div className="mt-3 overflow-x-auto rounded-xl border border-electric-soft/12">
+        <div
+          role="region"
+          aria-label="Lab test case results"
+          tabIndex={0}
+          className="relative mt-3 overflow-x-auto rounded-xl border border-electric-soft/12"
+        >
           <table className="w-full min-w-[40rem] text-left text-sm">
             <caption className="sr-only">Results of the lab's policy test cases</caption>
             <thead className="bg-navy-900/60 text-ink-dim">
@@ -421,7 +434,7 @@ export default function PolicyExplorer() {
       </p>
 
       <form onSubmit={(event) => event.preventDefault()} className="mt-6 grid gap-5" aria-label="Traffic to check">
-        <div className="max-w-xl">
+        <div className="min-w-0 max-w-xl">
           <label htmlFor={ids.case} className="hud-label text-[0.7rem] text-ink-dim">
             Start from a lab test case (optional)
           </label>
@@ -466,7 +479,7 @@ export default function PolicyExplorer() {
             disabled={Boolean(service?.dhcp)}
             hint={service?.dhcp ? "A DHCP request is a broadcast to 255.255.255.255, so R1 receives it on the sender's VLAN." : undefined}
           />
-          <div>
+          <div className="min-w-0">
             <label htmlFor={ids.service} className="hud-label text-[0.7rem] text-ink-dim">
               Traffic
             </label>
