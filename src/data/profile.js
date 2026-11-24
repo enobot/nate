@@ -158,8 +158,9 @@ export const profile = {
         { name: "VPN connectivity", usedIn: ["csuf"] },
         { name: "Routers & switches", usedIn: ["csuf"] },
         { name: "Data & voice jack installation and repair", usedIn: ["csuf"] },
-        { name: "ping, tracert, ipconfig", usedIn: ["csuf"] },
+        { name: "ping, tracert, ipconfig", usedIn: ["csuf", "project"] },
         { name: "SSH (PuTTY)", usedIn: ["csuf"] },
+        { name: "Cisco IOS: VLANs, ACLs, DHCP, inter-VLAN routing", usedIn: ["project"] },
       ],
     },
     {
@@ -172,7 +173,7 @@ export const profile = {
         { name: "Hardware & software troubleshooting", usedIn: ["csuf"] },
         { name: "End-user support", usedIn: ["csuf"] },
         { name: "Technical documentation", usedIn: ["csuf"] },
-        { name: "Equipment & asset tracking", usedIn: ["csuf"] },
+        { name: "Equipment & asset tracking", usedIn: ["csuf", "project"] },
         // Nate: add where you used Zoom Phone, e.g. usedIn: ["csuf"].
         { name: "Zoom Phone", usedIn: [] },
         { name: "Customer service", usedIn: ["ramen"] },
@@ -184,7 +185,8 @@ export const profile = {
       icon: "database",
       blurb: "SQL, database management, and data analysis.",
       items: [
-        { name: "SQL", usedIn: ["coursework"] },
+        { name: "SQL", usedIn: ["coursework", "project"] },
+        { name: "SQLite & Entity Framework Core", usedIn: ["project"] },
         { name: "Database management", usedIn: ["coursework", "csuf"] },
         { name: "Telecommunications databases", usedIn: ["csuf"] },
         { name: "Microsoft Excel (pivot tables, Goal Seek, linear programming)", usedIn: ["project"] },
@@ -196,11 +198,14 @@ export const profile = {
       id: "programming",
       label: "Programming",
       icon: "code",
-      blurb: "Application logic and user interface flow from academic work.",
+      blurb: "C#, PowerShell, Python, and TypeScript, with automated tests on every project.",
       items: [
-        { name: "C#", usedIn: ["project"] },
-        { name: "Desktop application UI flow", usedIn: ["project"] },
-        { name: "Pricing & business logic", usedIn: ["project"] },
+        { name: "C# & ASP.NET Core", usedIn: ["project"] },
+        { name: "PowerShell", usedIn: ["project"] },
+        { name: "Python (SciPy, pandas, Streamlit)", usedIn: ["project"] },
+        { name: "React & TypeScript", usedIn: ["project"] },
+        { name: "Automated testing (xUnit, Pester, pytest, Vitest)", usedIn: ["project"] },
+        { name: "Git & GitHub Actions", usedIn: ["project"] },
       ],
     },
     {
@@ -211,6 +216,7 @@ export const profile = {
       items: [
         { name: "Systems analysis & design", usedIn: ["coursework"] },
         { name: "Business analytics", usedIn: ["coursework"] },
+        { name: "Docker & app hosting (Render, Streamlit)", usedIn: ["project"] },
         // Nate: add tags here if you want to show where you used these.
         { name: "Microsoft Project", usedIn: [] },
         { name: "Microsoft Office", usedIn: [] },
