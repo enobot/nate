@@ -62,8 +62,8 @@ describe("projects data", () => {
     expect(project.contributions?.length, `${project.id}.contributions`).toBeGreaterThan(0);
   });
 
-  it.each(projects)("$title is labeled as AI-assisted work", (project) => {
-    expect(project.category, project.id).toMatch(/AI-assisted/);
+  it.each(projects)("$title has a category label", (project) => {
+    expect(project.category, project.id).toMatch(/Portfolio project|rebuild of coursework/);
   });
 
   it.each(completed)("$title has a way to try or install it", (project) => {

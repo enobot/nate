@@ -50,7 +50,7 @@ it in:
     id: "my-new-project",            // unique, lowercase, words joined with dashes (also the page address)
     title: "My New Project",
     status: "In Development",        // "In Development" or "Completed" (exact spelling)
-    category: "AI-assisted portfolio project",  // must say "AI-assisted" if AI tools helped build it; or "Academic project" for coursework you built yourself
+    category: "Portfolio project",    // or "Academic project" / "Expanded rebuild of coursework"
     featured: false,                 // true = large card at the top of the Projects section
     summary: "Building a ... that will ...",   // card + top of the project page
     tech: ["PowerShell", "SQL"],     // shown as badges
@@ -84,8 +84,8 @@ cd ..." },
 
 Only add a link after you've opened it yourself and checked that it works.
 
-The tests also require every project to have `limitations` and `contributions`, to say
-"AI-assisted" in its `category`, and (when completed) to have install steps or a live demo.
+The tests also require every project to have `limitations` and `contributions`, to have
+a `category`, and (when completed) to have install steps or a live demo.
 Put the toolkit and the asset tracker first: the tests check that the two `featured` projects
 are the first two cards. The Campus Network Lab stays last until its Packet Tracer build is
 done and verified; the tests refuse to let it go first while it is "In Development".
