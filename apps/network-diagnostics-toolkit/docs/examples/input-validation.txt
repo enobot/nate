@@ -1,0 +1,306 @@
+# Input validation: rejected targets, ports and values (no network traffic is sent for these)
+# Real console output captured with tools\New-ExampleTranscript.ps1 on 2026-11-23,
+# PowerShell 5.1.26100.10068 (Desktop); output was redirected to a file, so there is no colour.
+# Targets: 127.0.0.1, localhost and a TCP listener opened by the script on a random loopback port.
+# Scrubbed: computer name, user name, folder paths, IP addresses, gateways, DNS servers, MAC
+# addresses and adapter descriptions were replaced with documentation values
+# (192.0.2.0/24, 2001:db8::/32, 00-00-5E-00-53-xx, HELPDESK-PC01).
+# The menu ran with answers piped in, so PowerShell echoes each typed answer after its prompt.
+
+PS C:\Tools\network-diagnostics-toolkit> .\Start-NetworkToolkit.ps1 -NoColor
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 192.0.2.0/24
+[ERROR] '192.0.2.0/24' looks like a subnet (CIDR) range. Enter individual IP addresses or host names; ranges are not allowed.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 198.51.100.1-50
+[ERROR] '198.51.100.1-50' looks like an address range. Enter each address separately; ranges are not allowed.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): *.example
+[ERROR] '*.example' contains a wildcard. Enter individual IP addresses or host names; wildcards are not allowed.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 192.0.2.1,192.0.2.2,192.0.2.3,192.0.2.4,192.0.2.5,192.0.2.6,192.0.2.7,192.0.2.8,192.0.2.9,192.0.2.10,192.0.2.11
+[ERROR] Too many targets (11). The limit is 10 per run. This toolkit checks specific devices; it is not a network scanner.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 010.1.1.1
+[ERROR] '010.1.1.1' is not a valid IPv4 address. Use four numbers from 0 to 255 separated by dots, without leading zeros (for example 192.0.2.10).
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 192.168.1
+[ERROR] '192.168.1' is not a valid IPv4 address. Use four numbers from 0 to 255 separated by dots, without leading zeros (for example 192.0.2.10).
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 224.0.0.1
+[ERROR] '224.0.0.1' is a multicast address. Multicast targets are not allowed because many devices can answer.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 127.0.0.1
+Echo requests per target (1-10) [4]: 50
+[ERROR] 50 is out of range. Enter a number from 1 to 10.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 6
+Hosts to check (max 10): 127.0.0.1
+TCP ports (for example 443 or 80,443; max 20, no ranges): 1-1024
+[ERROR] Port ranges like '1-1024' are not allowed. List each port separately, for example 80,443.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 6
+Hosts to check (max 10): 192.0.2.1 192.0.2.2 192.0.2.3
+TCP ports (for example 443 or 80,443; max 20, no ranges): 1,2,3,4,5,6,7
+[ERROR] That would be 21 TCP checks (3 hosts x 7 ports). The limit is 20 per run. Use fewer hosts or ports.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 2
+Target to trace (one IP address or host name): 127.0.0.1 192.0.2.1
+[ERROR] Traceroute runs against one target at a time. Enter a single IP address or host name.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 4
+Names to look up (or IP addresses for reverse lookup, max 10): example.com
+Record type A, AAAA, CNAME, MX, NS, PTR, SOA, SRV or TXT [A]: ANY
+[ERROR] 'ANY' is not a supported record type. Use one of: A, AAAA, CNAME, MX, NS, PTR, SOA, SRV, TXT.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: x
+[ERROR] 'X' is not a menu option. Enter 1-9, C, H or Q.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: q
+Goodbye.

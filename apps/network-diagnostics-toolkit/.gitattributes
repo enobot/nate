@@ -1,0 +1,9 @@
+# Keep Windows line endings for PowerShell and text files on checkout.
+* text=auto
+*.ps1  text eol=crlf
+*.psm1 text eol=crlf
+*.psd1 text eol=crlf
+*.md   text eol=crlf
+*.txt  text eol=crlf
+*.csv  text eol=crlf
+*.yml  text eol=lf

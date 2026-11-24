@@ -1,0 +1,91 @@
+# Using the module commands directly from a PowerShell prompt
+# Real console output captured with tools\New-ExampleTranscript.ps1 on 2026-11-23,
+# PowerShell 5.1.26100.10068 (Desktop); output was redirected to a file, so there is no colour.
+# Targets: 127.0.0.1, localhost and a TCP listener opened by the script on a random loopback port.
+# Scrubbed: computer name, user name, folder paths, IP addresses, gateways, DNS servers, MAC
+# addresses and adapter descriptions were replaced with documentation values
+# (192.0.2.0/24, 2001:db8::/32, 00-00-5E-00-53-xx, HELPDESK-PC01).
+# Each "PS ...>" line is the command that ran; the lines after it are its output.
+
+(listener for this run: port 55732 open, port 55733 closed)
+
+PS C:\Tools\network-diagnostics-toolkit> Import-Module .\src\NetworkDiagnostics\NetworkDiagnostics.psd1
+
+PS C:\Tools\network-diagnostics-toolkit> Get-Command -Module NetworkDiagnostics | Select-Object -ExpandProperty Name
+Export-NdtReport
+Get-NdtAdapter
+Get-NdtIPConfig
+Invoke-NdtQuickCheck
+New-NdtTicketNote
+Resolve-NdtDnsName
+Show-NdtResult
+Start-NdtMenu
+Test-NdtPing
+Test-NdtPort
+Trace-NdtRoute
+
+PS C:\Tools\network-diagnostics-toolkit> Test-NdtPing -Target 127.0.0.1 -Count 2 | Show-NdtResult
+[PASS] Ping 127.0.0.1 - 2/2 replies, 0% loss, min/avg/max 0/0/0 ms
+       Reply 1: Success from 127.0.0.1 time=0 ms TTL=128
+       Reply 2: Success from 127.0.0.1 time=0 ms TTL=128
+
+PS C:\Tools\network-diagnostics-toolkit> Test-NdtPing -Target 127.0.0.1, localhost -Count 1 | Format-Table -AutoSize
+
+Status TestType Target    Summary                                                           
+------ -------- ------    -------                                                           
+PASS   Ping     127.0.0.1 1/1 replies, 0% loss, min/avg/max 0/0/0 ms                        
+PASS   Ping     localhost 1/1 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
+
+
+
+PS C:\Tools\network-diagnostics-toolkit> Test-NdtPort -Target 127.0.0.1 -Port $openPort, $closedPort | Format-Table Status, Target, Port, State, ElapsedMs -AutoSize
+
+Status Target     Port State   ElapsedMs
+------ ------     ---- -----   ---------
+PASS   127.0.0.1 55732 Open            5
+FAIL   127.0.0.1 55733 Refused      2049
+
+
+
+PS C:\Tools\network-diagnostics-toolkit> Trace-NdtRoute -Target 127.0.0.1 -MaxHops 3 -TimeoutMs 500 | Show-NdtResult
+[PASS] Traceroute 127.0.0.1 - Reached 127.0.0.1 in 1 hop(s).
+       Hop  Probe 1  Probe 2  Probe 3  Address / note
+       1    <1 ms    <1 ms    <1 ms    127.0.0.1
+
+PS C:\Tools\network-diagnostics-toolkit> (Trace-NdtRoute -Target 127.0.0.1 -MaxHops 3 -TimeoutMs 500).Hops | Format-Table -AutoSize
+
+Hop Probe1 Probe2 Probe3 Address   TimedOutCount Note
+--- ------ ------ ------ -------   ------------- ----
+  1 <1 ms  <1 ms  <1 ms  127.0.0.1             0     
+
+
+
+PS C:\Tools\network-diagnostics-toolkit> Resolve-NdtDnsName -Name localhost | Show-NdtResult
+[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 206 ms: A 127.0.0.1 (TTL 1200s)
+       Query: A localhost
+       Server: system default (see IP configuration)
+       Query time: 206 ms
+       Record: A 127.0.0.1 (TTL 1200s)
+
+PS C:\Tools\network-diagnostics-toolkit> Get-NdtAdapter | Show-NdtResult -NoDetails
+[PASS] Adapter Ethernet - Up at 1 Gbps, MAC 00-00-5E-00-53-10
+[WARN] Adapter Wi-Fi - Media disconnected: no link detected, MAC 00-00-5E-00-53-11. Check the cable and wall jack, or that Wi-Fi is connected.
+[INFO] Adapter Wi-Fi 2 - Adapter hardware is not present (a driver is installed but the device is missing or removed).
+[INFO] Adapter Wi-Fi 4 - Adapter hardware is not present (a driver is installed but the device is missing or removed).
+
+PS C:\Tools\network-diagnostics-toolkit> Invoke-NdtQuickCheck -Target localhost -Port $openPort -Count 1 | New-NdtTicketNote -Title 'INC0000000 example'
+INC0000000 example
+Run: 2026-11-23T22:32:35-08:00 from HELPDESK-PC01
+Tool: Network Diagnostics Toolkit 1.0.0 (read-only checks; only the targets listed were contacted)
+
+[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 0 ms: A 127.0.0.1 (TTL 1200s)
+[PASS] Ping localhost - 1/1 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
+[PASS] TcpPort localhost - TCP port 55732 is open on localhost (127.0.0.1) (connected in 0 ms).
+
+Totals: 3 check(s) - 3 PASS, 0 FAIL, 0 WARN, 0 INFO
+
+PS C:\Tools\network-diagnostics-toolkit> try { Test-NdtPing -Target 192.0.2.0/24 } catch { "Error: $($_.Exception.Message)" }
+Error: '192.0.2.0/24' looks like a subnet (CIDR) range. Enter individual IP addresses or host names; ranges are not allowed.
+
+PS C:\Tools\network-diagnostics-toolkit> try { Test-NdtPort -Target 127.0.0.1 -Port (1..21) } catch { "Error: $($_.Exception.Message)" }
+Error: Too many ports (21). The limit is 20 per run. Port scanning is not supported.

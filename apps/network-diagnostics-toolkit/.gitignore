@@ -1,0 +1,14 @@
+# Reports written by the toolkit. They can contain internal IP addresses, host names
+# and MAC addresses, so they are never committed. (samples/ holds fictional examples.)
+reports/
+
+# Test output (Pester result XML and code coverage)
+TestResults/
+coverage.xml
+*.log
+
+# Editor and OS files
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

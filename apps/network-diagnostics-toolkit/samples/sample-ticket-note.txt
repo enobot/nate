@@ -1,0 +1,16 @@
+SAMPLE - fictional data - INC0000000 user cannot open intranet.example
+Run: 2026-11-20T09:14:02-08:00 to 2026-11-20T09:14:32-08:00 from EXAMPLE-HELPDESK-01
+Tool: Network Diagnostics Toolkit 1.0.0 (read-only checks; only the targets listed were contacted)
+
+[PASS] IPConfig Ethernet - IPv4 192.0.2.25/24; gateway 192.0.2.1; DNS 198.51.100.53; DHCP Enabled
+[PASS] Adapter Ethernet - Up at 1 Gbps, MAC 00-00-5E-00-53-25
+[WARN] Adapter Wi-Fi - Media disconnected: no link detected, MAC 00-00-5E-00-53-26. Check the cable and wall jack, or that Wi-Fi is connected.
+[PASS] Ping 192.0.2.1 - 4/4 replies, 0% loss, min/avg/max 1/1/2 ms
+[FAIL] DNS intranet.example - A lookup for intranet.example failed: The DNS query timed out. The DNS server may be unreachable or not answering.
+[PASS] Ping 203.0.113.50 - 4/4 replies, 0% loss, min/avg/max 8/9/10 ms
+[PASS] TcpPort 203.0.113.50 - TCP port 443 is open on 203.0.113.50 (connected in 11 ms).
+[FAIL] Ping 198.51.100.53 - 0/4 replies, 100% loss. No reply within 1000 ms. The device may be off or on another network, or a firewall may be blocking ICMP. Try a TCP port check to the same host.
+[FAIL] TcpPort 198.51.100.53 - TCP port 53 on 198.51.100.53 did not answer within 3000 ms: a firewall may be dropping the traffic, or the host is offline.
+[FAIL] Traceroute 198.51.100.53 - Did not reach 198.51.100.53 within 8 hops. Last hop that answered: hop 2 (198.51.100.1). The problem is likely at or after that point.
+
+Totals: 10 check(s) - 5 PASS, 4 FAIL, 1 WARN, 0 INFO
