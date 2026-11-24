@@ -1,10 +1,11 @@
-import { BookOpen, CirclePlay, ExternalLink, FolderGit2 } from "lucide-react";
+import { BookOpen, CirclePlay, Download, ExternalLink, FolderGit2 } from "lucide-react";
 import ButtonLink from "./ButtonLink.jsx";
 
 // The external links a project can have, in the order they're shown.
 // A button only appears when its URL is filled in projects.js.
 export const PROJECT_LINK_TYPES = [
   { key: "demo", label: "Live demo", icon: ExternalLink },
+  { key: "release", label: "Download ZIP", icon: Download },
   { key: "source", label: "Source code", icon: FolderGit2 },
   { key: "docs", label: "Documentation", icon: BookOpen },
   { key: "video", label: "Demo video", icon: CirclePlay },

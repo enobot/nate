@@ -77,6 +77,7 @@ cd ..." },
       demo: "",                       // live demo
       docs: "",                       // documentation
       video: "",                      // demo video
+      release: "",                    // downloadable release (GitHub release page)
     },
   },
 ```

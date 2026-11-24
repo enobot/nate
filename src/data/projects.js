@@ -260,7 +260,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     ],
     install: [
       { step: "Needs Windows 10, Windows 11, or Windows Server with Windows PowerShell 5.1 (built in) or PowerShell 7. No administrator rights needed." },
-      { step: "Download the repository (Code > Download ZIP) and open apps\\network-diagnostics-toolkit, or clone it.", code: "git clone https://github.com/enobot/nate.git\ncd nate\\apps\\network-diagnostics-toolkit" },
+      { step: "Download NetworkDiagnosticsToolkit-1.0.0.zip from the release and extract it, or clone the repository and open apps\\network-diagnostics-toolkit.", code: "git clone https://github.com/enobot/nate.git\ncd nate\\apps\\network-diagnostics-toolkit" },
       { step: "Start the interactive menu.", code: "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\Start-NetworkToolkit.ps1" },
       { step: "Or import the module and run the commands directly.", code: "Import-Module .\\src\\NetworkDiagnostics\\NetworkDiagnostics.psd1" },
     ],
@@ -269,6 +269,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
       "The checks mirror the ping, tracert, and ipconfig troubleshooting in Nathanael's CSUF IT Telecommunications job.",
     ],
     links: {
+      release: "https://github.com/enobot/nate/releases/tag/toolkit-v1.0.0",
       source: "https://github.com/enobot/nate/tree/main/apps/network-diagnostics-toolkit",
       docs: "https://github.com/enobot/nate/blob/main/apps/network-diagnostics-toolkit/docs/WALKTHROUGH.md",
     },
