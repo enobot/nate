@@ -2,29 +2,42 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import App from "./App.jsx";
+import { PROJECT_LINK_TYPES } from "./components/ProjectLinks.jsx";
 import { profile } from "./data/profile.js";
 import { projects } from "./data/projects.js";
+import { withBase } from "./lib/router.jsx";
+import { projectPath } from "./lib/routes.js";
 
 describe("project cards", () => {
-  it("expand and collapse their details with aria-expanded", async () => {
+  it("each open the project's own page", () => {
+    render(<App />);
+    const section = document.getElementById("projects");
+    for (const project of projects) {
+      const card = within(section).getByRole("article", { name: project.title });
+      const link = within(card).getByRole("link", { name: `View project ${project.title}` });
+      expect(link).toHaveAttribute("href", withBase(projectPath(project)));
+      // The title is a link to the same page.
+      expect(within(card).getByRole("link", { name: project.title })).toHaveAttribute("href", withBase(projectPath(project)));
+    }
+  });
+
+  it("navigate to the project page without a reload, then Back returns home", async () => {
     const user = userEvent.setup();
     render(<App />);
     const project = projects.find((item) => item.details?.length);
-    const card = screen.getByRole("article", { name: project.title });
-    const toggle = within(card).getByRole("button", { name: `Details for ${project.title}` });
+    const card = within(document.getElementById("projects")).getByRole("article", { name: project.title });
+    await user.click(within(card).getByRole("link", { name: `View project ${project.title}` }));
 
-    const region = document.getElementById(toggle.getAttribute("aria-controls"));
-    expect(region).not.toBeNull();
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    expect(within(region).queryByText(project.details[0])).toBeNull();
+    const heading = await screen.findByRole("heading", { level: 1, name: project.title });
+    expect(window.location.pathname).toBe(withBase(projectPath(project)));
+    expect(document.title).toBe(`${project.title} | ${profile.name}`);
+    // Focus moves to the new page's title for keyboard and screen-reader users.
+    await waitFor(() => expect(heading).toHaveFocus());
+    project.details.forEach((detail) => expect(screen.getByText(detail)).toBeInTheDocument());
 
-    await user.click(toggle);
-    expect(toggle).toHaveAttribute("aria-expanded", "true");
-    project.details.forEach((detail) => expect(within(region).getByText(detail)).toBeInTheDocument());
-
-    await user.click(toggle);
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    await waitFor(() => expect(within(region).queryByText(project.details[0])).toBeNull());
+    window.history.back();
+    expect(await screen.findByRole("heading", { level: 1, name: profile.name })).toBeInTheDocument();
+    expect(document.getElementById("projects")).not.toBeNull();
   });
 
   it("can be filtered by status", async () => {
@@ -46,65 +59,65 @@ describe("project cards", () => {
     expect(within(section).getAllByRole("article")).toHaveLength(projects.length);
   });
 
-  it("hide GitHub and demo buttons when no URL is set", () => {
+  it("show a link button only for links that are filled in", () => {
     render(<App />);
     for (const project of projects) {
       const card = screen.getByRole("article", { name: project.title });
-      const github = within(card).queryByRole("link", { name: /github/i });
-      const demo = within(card).queryByRole("link", { name: /live demo/i });
-      if (project.github) expect(github).toHaveAttribute("href", project.github);
-      else expect(github).toBeNull();
-      if (project.demo) expect(demo).toHaveAttribute("href", project.demo);
-      else expect(demo).toBeNull();
+      for (const { key, label } of PROJECT_LINK_TYPES) {
+        const link = within(card).queryByRole("link", { name: new RegExp(`^${label} for ${project.title}`) });
+        if (project.links?.[key]) {
+          expect(link, `${project.id}.${key}`).toHaveAttribute("href", project.links[key]);
+          expect(link).toHaveAttribute("target", "_blank");
+          expect(link.getAttribute("rel")).toContain("noopener");
+        } else {
+          expect(link, `${project.id}.${key}`).toBeNull();
+        }
+      }
     }
   });
 });
 
-describe("skills tabs", () => {
-  it("move with the arrow keys and update aria-selected", async () => {
-    const user = userEvent.setup();
+describe("skills", () => {
+  it("shows all five groups at once, with every skill visible", () => {
     render(<App />);
-    const tablist = screen.getByRole("tablist", { name: "Skill categories" });
-    const tabs = within(tablist).getAllByRole("tab");
-    expect(tabs).toHaveLength(profile.skills.length);
+    const skills = document.getElementById("skills");
+    const groupHeadings = within(skills).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent);
+    expect(groupHeadings).toEqual(["Networking", "IT Operations", "Databases", "Programming", "Systems"]);
 
-    expect(tabs[0]).toHaveAttribute("aria-selected", "true");
-    expect(tabs.filter((tab) => tab.tabIndex === 0)).toEqual([tabs[0]]);
-
-    await user.click(tabs[0]);
-    await user.keyboard("{ArrowRight}");
-    expect(tabs[1]).toHaveAttribute("aria-selected", "true");
-    expect(tabs[0]).toHaveAttribute("aria-selected", "false");
-    expect(tabs[1]).toHaveFocus();
-    expect(tabs.filter((tab) => tab.tabIndex === 0)).toEqual([tabs[1]]);
-
-    // Only the selected panel is shown, and it belongs to the selected tab.
-    const panel = screen.getByRole("tabpanel");
-    expect(panel).toHaveAttribute("aria-labelledby", tabs[1].id);
-    expect(tabs[1]).toHaveAttribute("aria-controls", panel.id);
-    profile.skills[1].items.forEach((item) => expect(within(panel).getByText(item.name)).toBeInTheDocument());
-
-    await user.keyboard("{ArrowLeft}");
-    expect(tabs[0]).toHaveAttribute("aria-selected", "true");
-    expect(tabs[0]).toHaveFocus();
-
-    // Wraps around from the first tab to the last.
-    await user.keyboard("{ArrowLeft}");
-    expect(tabs[tabs.length - 1]).toHaveAttribute("aria-selected", "true");
-    expect(tabs[tabs.length - 1]).toHaveFocus();
-
-    await user.keyboard("{Home}");
-    expect(tabs[0]).toHaveAttribute("aria-selected", "true");
-    await user.keyboard("{End}");
-    expect(tabs[tabs.length - 1]).toHaveAttribute("aria-selected", "true");
+    // No tabs: nothing is hidden behind a click.
+    expect(within(skills).queryByRole("tablist")).toBeNull();
+    for (const group of profile.skills) {
+      const region = within(skills).getByRole("region", { name: group.label });
+      group.items.forEach((item) => expect(within(region).getByText(item.name)).toBeVisible());
+    }
   });
 
-  it("show where each skill was used", () => {
+  it("shows where each skill was used", () => {
     render(<App />);
-    const panel = screen.getByRole("tabpanel");
-    const firstSkill = profile.skills[0].items[0];
-    const slot = within(panel).getByText(firstSkill.name).closest("li");
-    firstSkill.usedIn.forEach((key) => expect(within(slot).getByText(profile.evidence[key])).toBeInTheDocument());
+    const skills = document.getElementById("skills");
+    for (const group of profile.skills) {
+      const region = within(skills).getByRole("region", { name: group.label });
+      for (const item of group.items) {
+        const row = within(region).getByText(item.name).closest("li");
+        item.usedIn.forEach((key) => expect(within(row).getByText(profile.evidence[key])).toBeInTheDocument());
+      }
+    }
+  });
+});
+
+describe("jack activation workflow", () => {
+  it("shows every step and moves the highlight to the chosen one", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const steps = profile.workflow.steps;
+    steps.forEach((step) => expect(screen.getByText(step.text)).toBeInTheDocument());
+
+    const first = screen.getByRole("button", { name: `Step 1: ${steps[0].label}` });
+    const third = screen.getByRole("button", { name: `Step 3: ${steps[2].label}` });
+    expect(first).toHaveAttribute("aria-pressed", "true");
+    await user.click(third);
+    expect(third).toHaveAttribute("aria-pressed", "true");
+    expect(first).toHaveAttribute("aria-pressed", "false");
   });
 });
 
@@ -140,5 +153,13 @@ describe("mobile menu", () => {
     const menu = screen.getByRole("navigation", { name: "Mobile" });
     await user.click(within(menu).getByRole("link", { name: /Projects/ }));
     expect(toggle).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("offers the resume download next to the section links", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: "Open menu" }));
+    const panel = document.getElementById("mobile-menu");
+    expect(within(panel).getByRole("link", { name: /Download resume/ })).toHaveAttribute("download");
   });
 });

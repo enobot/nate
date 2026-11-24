@@ -212,14 +212,53 @@
   background-size: 44px 44px;
 }
 
+/* -----------------------------------------------------------------------------
+   Entrance effects
+----------------------------------------------------------------------------- */
+
+/* Hero entrance: a short slide-up on first paint. Pure CSS, so it doesn't wait
+   for JavaScript; stagger with style="--enter-delay: 80ms". */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.hero-enter {
+  animation: hero-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+/* Scroll reveal (see components/Reveal.jsx). Content is only hidden while
+   JavaScript is running (html.js), so it's always readable without it. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 /* Animations are already short; respect users who ask for less motion. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .js .reveal {
+    transform: none;
   }
 }
 

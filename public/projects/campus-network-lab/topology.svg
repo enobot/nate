@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" width="1200" height="840" role="img" aria-labelledby="title desc">
+  <title id="title">Halcyon Ridge University campus network lab topology</title>
+  <desc id="desc">Router R1 connects by an 802.1Q trunk to core switch CORE-SW1, which connects the web and DNS server and trunks to access switches ACC-SW1 in Hartley Hall and ACC-SW2 in the Library. Hosts are colour-coded by VLAN.</desc>
+  <style>
+    text { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; fill: #0f172a; }
+    .title { font-size: 22px; font-weight: 700; }
+    .sub { font-size: 13px; fill: #475569; }
+    .dev { font-size: 14px; font-weight: 700; }
+    .devsub { font-size: 12px; fill: #334155; }
+    .host { font-size: 11px; font-weight: 700; }
+    .hostsub { font-size: 10px; fill: #334155; }
+    .port { font-size: 10px; fill: #475569; paint-order: stroke; stroke: #f8fafc; stroke-width: 4px; stroke-linejoin: round; }
+    .note { font-size: 11px; fill: #475569; paint-order: stroke; stroke: #f8fafc; stroke-width: 4px; stroke-linejoin: round; }
+    .legend { font-size: 12px; }
+    .box { fill: #ffffff; stroke: #0f172a; stroke-width: 2; }
+    .trunk { stroke: #0f172a; stroke-width: 4; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="1200" height="840" fill="#f8fafc"/>
+
+  <text class="title" x="40" y="46">Halcyon Ridge University campus network (fictional lab)</text>
+  <text class="sub" x="40" y="70">Router-on-a-stick · 802.1Q trunks with native VLAN 999 · DHCP and ACLs on R1 · SSH-only management from VLAN 99</text>
+
+  <!-- R1 -->
+  <rect class="box" x="470" y="100" width="260" height="70" rx="12"/>
+  <text class="dev" x="600" y="127" text-anchor="middle">R1 · ISR4331</text>
+  <text class="devsub" x="600" y="146" text-anchor="middle">Inter-VLAN routing · DHCP server · ACLs</text>
+  <text class="port" x="600" y="162" text-anchor="middle">Gi0/0/0 subinterfaces .10 .20 .30 .50 .99 (+ .999 native)</text>
+  <text class="note" x="458" y="124" text-anchor="end" style="fill:#15803d">ACL STUDENT-IN</text>
+  <text class="note" x="458" y="140" text-anchor="end">inbound on .20</text>
+  <text class="note" x="742" y="124" style="fill:#6d28d9">ACL SERVERS-OUT</text>
+  <text class="note" x="742" y="140">outbound on .30</text>
+
+  <!-- Trunk R1 - CORE -->
+  <line class="trunk" x1="600" y1="170" x2="600" y2="250"/>
+  <text class="port" x="608" y="186">Gi0/0/0</text>
+  <text class="port" x="608" y="244">Gi0/1</text>
+  <text class="note" x="616" y="214">802.1Q trunk · VLANs 10, 20, 30, 50, 99</text>
+
+  <!-- CORE-SW1 -->
+  <rect class="box" x="480" y="250" width="240" height="64" rx="10"/>
+  <text class="dev" x="600" y="277" text-anchor="middle">CORE-SW1 · Catalyst 2960</text>
+  <text class="devsub" x="600" y="297" text-anchor="middle">STP root · mgmt 10.10.99.2</text>
+
+  <!-- Server -->
+  <line x1="720" y1="282" x2="860" y2="282" stroke="#7c3aed" stroke-width="2.5"/>
+  <text class="port" x="728" y="274">Fa0/10</text>
+  <rect x="860" y="252" width="220" height="60" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+  <rect x="860" y="252" width="8" height="60" rx="3" fill="#7c3aed"/>
+  <text class="host" x="880" y="276" style="font-size:13px">SRV-WEB-DNS</text>
+  <text class="hostsub" x="880" y="296" style="font-size:11px">10.10.30.10 · VLAN 30 · web + DNS</text>
+
+  <!-- Trunks CORE - access -->
+  <line class="trunk" x1="560" y1="314" x2="330" y2="404"/>
+  <line class="trunk" x1="640" y1="314" x2="870" y2="404"/>
+  <text class="port" x="528" y="330" text-anchor="end">Fa0/1</text>
+  <text class="port" x="672" y="330">Fa0/2</text>
+  <text class="port" x="342" y="396">Gi0/1</text>
+  <text class="port" x="858" y="396" text-anchor="end">Gi0/1</text>
+  <text class="note" x="600" y="356" text-anchor="middle" font-style="italic">802.1Q trunks</text>
+
+  <!-- ACC-SW1 -->
+  <rect class="box" x="210" y="404" width="240" height="64" rx="10"/>
+  <text class="dev" x="330" y="431" text-anchor="middle">ACC-SW1 · Hartley Hall</text>
+  <text class="devsub" x="330" y="451" text-anchor="middle">Access switch · mgmt 10.10.99.3</text>
+
+  <!-- ACC-SW2 -->
+  <rect class="box" x="750" y="404" width="240" height="64" rx="10"/>
+  <text class="dev" x="870" y="431" text-anchor="middle">ACC-SW2 · Library</text>
+  <text class="devsub" x="870" y="451" text-anchor="middle">Access switch · mgmt 10.10.99.4</text>
+
+  <!-- ACC-SW1 access links -->
+  <line x1="236" y1="468" x2="68" y2="564" stroke="#ea580c" stroke-width="2"/>
+  <line x1="268" y1="468" x2="160" y2="564" stroke="#2563eb" stroke-width="2"/>
+  <line x1="300" y1="468" x2="252" y2="564" stroke="#2563eb" stroke-width="2"/>
+  <line x1="360" y1="468" x2="344" y2="564" stroke="#16a34a" stroke-width="2"/>
+  <line x1="392" y1="468" x2="436" y2="564" stroke="#16a34a" stroke-width="2"/>
+  <line x1="424" y1="468" x2="528" y2="564" stroke="#dc2626" stroke-width="2"/>
+
+  <!-- ACC-SW1 hosts -->
+  <g>
+    <text class="port" x="68" y="558" text-anchor="middle">Fa0/1</text>
+    <rect x="25" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#ea580c" stroke-width="2"/>
+    <rect x="25" y="564" width="86" height="6" rx="3" fill="#ea580c"/>
+    <text class="host" x="68" y="587" text-anchor="middle">FAC-PHONE1</text>
+    <text class="hostsub" x="68" y="603" text-anchor="middle">VLAN 50 · DHCP</text>
+  </g>
+  <line x1="68" y1="616" x2="68" y2="664" stroke="#2563eb" stroke-width="2"/>
+  <text class="port" x="76" y="644">PC port</text>
+  <g>
+    <rect x="25" y="664" width="86" height="52" rx="8" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <rect x="25" y="664" width="86" height="6" rx="3" fill="#2563eb"/>
+    <text class="host" x="68" y="687" text-anchor="middle">FAC-PC1</text>
+    <text class="hostsub" x="68" y="703" text-anchor="middle">VLAN 10 · DHCP</text>
+  </g>
+  <g>
+    <text class="port" x="160" y="558" text-anchor="middle">Fa0/2</text>
+    <rect x="117" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <rect x="117" y="564" width="86" height="6" rx="3" fill="#2563eb"/>
+    <text class="host" x="160" y="587" text-anchor="middle">FAC-PC2</text>
+    <text class="hostsub" x="160" y="603" text-anchor="middle">VLAN 10 · DHCP</text>
+  </g>
+  <g>
+    <text class="port" x="252" y="558" text-anchor="middle">Fa0/10</text>
+    <rect x="209" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <rect x="209" y="564" width="86" height="6" rx="3" fill="#2563eb"/>
+    <text class="host" x="252" y="587" text-anchor="middle">FAC-PRINTER</text>
+    <text class="hostsub" x="252" y="603" text-anchor="middle">10.10.10.10</text>
+  </g>
+  <g>
+    <text class="port" x="344" y="558" text-anchor="middle">Fa0/11</text>
+    <rect x="301" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+    <rect x="301" y="564" width="86" height="6" rx="3" fill="#16a34a"/>
+    <text class="host" x="344" y="587" text-anchor="middle">STU-PC1</text>
+    <text class="hostsub" x="344" y="603" text-anchor="middle">VLAN 20 · DHCP</text>
+  </g>
+  <g>
+    <text class="port" x="436" y="558" text-anchor="middle">Fa0/12</text>
+    <rect x="393" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+    <rect x="393" y="564" width="86" height="6" rx="3" fill="#16a34a"/>
+    <text class="host" x="436" y="587" text-anchor="middle">STU-PC2</text>
+    <text class="hostsub" x="436" y="603" text-anchor="middle">VLAN 20 · DHCP</text>
+  </g>
+  <g>
+    <text class="port" x="528" y="558" text-anchor="middle">Fa0/21</text>
+    <rect x="485" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+    <rect x="485" y="564" width="86" height="6" rx="3" fill="#dc2626"/>
+    <text class="host" x="528" y="587" text-anchor="middle">IT-ADMIN-PC</text>
+    <text class="hostsub" x="528" y="603" text-anchor="middle">10.10.99.50</text>
+  </g>
+
+  <!-- ACC-SW2 access links -->
+  <line x1="830" y1="468" x2="780" y2="564" stroke="#ea580c" stroke-width="2"/>
+  <line x1="870" y1="468" x2="872" y2="564" stroke="#16a34a" stroke-width="2"/>
+  <line x1="910" y1="468" x2="964" y2="564" stroke="#16a34a" stroke-width="2"/>
+
+  <!-- ACC-SW2 hosts -->
+  <g>
+    <text class="port" x="780" y="558" text-anchor="middle">Fa0/1</text>
+    <rect x="737" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#ea580c" stroke-width="2"/>
+    <rect x="737" y="564" width="86" height="6" rx="3" fill="#ea580c"/>
+    <text class="host" x="780" y="587" text-anchor="middle">LIB-PHONE1</text>
+    <text class="hostsub" x="780" y="603" text-anchor="middle">VLAN 50 · DHCP</text>
+  </g>
+  <line x1="780" y1="616" x2="780" y2="664" stroke="#2563eb" stroke-width="2"/>
+  <text class="port" x="788" y="644">PC port</text>
+  <g>
+    <rect x="737" y="664" width="86" height="52" rx="8" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+    <rect x="737" y="664" width="86" height="6" rx="3" fill="#2563eb"/>
+    <text class="host" x="780" y="687" text-anchor="middle">LIB-PC1</text>
+    <text class="hostsub" x="780" y="703" text-anchor="middle">VLAN 10 · DHCP</text>
+  </g>
+  <g>
+    <text class="port" x="872" y="558" text-anchor="middle">Fa0/5</text>
+    <rect x="829" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+    <rect x="829" y="564" width="86" height="6" rx="3" fill="#16a34a"/>
+    <text class="host" x="872" y="587" text-anchor="middle">STU-PC3</text>
+    <text class="hostsub" x="872" y="603" text-anchor="middle">VLAN 20 · DHCP</text>
+  </g>
+  <g>
+    <text class="port" x="964" y="558" text-anchor="middle">Fa0/6</text>
+    <rect x="921" y="564" width="86" height="52" rx="8" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+    <rect x="921" y="564" width="86" height="6" rx="3" fill="#16a34a"/>
+    <text class="host" x="964" y="587" text-anchor="middle">STU-PC4</text>
+    <text class="hostsub" x="964" y="603" text-anchor="middle">VLAN 20 · DHCP</text>
+  </g>
+
+  <!-- Legend -->
+  <line x1="40" y1="748" x2="1160" y2="748" stroke="#cbd5e1" stroke-width="1"/>
+  <g class="legend">
+    <rect x="40" y="764" width="14" height="14" rx="3" fill="#2563eb"/>
+    <text x="62" y="776">VLAN 10 FACULTY · 10.10.10.0/24</text>
+    <rect x="270" y="764" width="14" height="14" rx="3" fill="#16a34a"/>
+    <text x="292" y="776">VLAN 20 STUDENTS · 10.10.20.0/24</text>
+    <rect x="506" y="764" width="14" height="14" rx="3" fill="#7c3aed"/>
+    <text x="528" y="776">VLAN 30 SERVERS · 10.10.30.0/24</text>
+    <rect x="740" y="764" width="14" height="14" rx="3" fill="#ea580c"/>
+    <text x="762" y="776">VLAN 50 VOICE · 10.10.50.0/24</text>
+    <rect x="960" y="764" width="14" height="14" rx="3" fill="#dc2626"/>
+    <text x="982" y="776">VLAN 99 MGMT · 10.10.99.0/24</text>
+  </g>
+  <text class="note" x="40" y="806">Thick lines: 802.1Q trunks (native VLAN 999, allowed 10, 20, 30, 50, 99). Gateways are .1 on R1. DHCP pools exclude .1–.20.</text>
+  <text class="note" x="40" y="824">Unused switch ports sit in VLAN 998 and are shut down. Diagram of the design, not a Packet Tracer screenshot.</text>
+</svg>

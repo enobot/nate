@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { ICONS } from "../components/icons.js";
+import { headFor, headTags } from "../lib/routes.js";
 import { profile } from "./profile.js";
 import { PROJECT_STATUSES, projects } from "./projects.js";
 
@@ -32,22 +33,30 @@ describe("projects data", () => {
     project.tech.forEach((tech) => expect(tech.trim()).toBeTruthy());
   });
 
-  it.each(projects)("$title only uses https links", (project) => {
-    for (const key of ["github", "demo"]) {
-      const url = project[key];
-      if (url) expect(url, `${project.id}.${key}`).toMatch(/^https:\/\/\S+$/);
+  it.each(projects)("$title only uses known link types with https URLs", (project) => {
+    for (const [key, url] of Object.entries(project.links ?? {})) {
+      expect(["source", "demo", "docs", "video"], `${project.id}.links.${key}`).toContain(key);
+      if (url) expect(url, `${project.id}.links.${key}`).toMatch(/^https:\/\/\S+$/);
     }
   });
 
-  it.each(projects)("$title uses a known icon and a well-formed screenshot (if any)", (project) => {
+  it.each(projects)("$title uses a known icon and well-formed images (if any)", (project) => {
     if (project.icon) expect(Object.keys(ICONS)).toContain(project.icon);
-    if (project.image) {
-      expect(project.image.src).toBeTruthy();
-      expect(project.image.src.startsWith("/")).toBe(false);
-      expect(project.image.alt?.trim()).toBeTruthy();
-      expect(project.image.width).toBeGreaterThan(0);
-      expect(project.image.height).toBeGreaterThan(0);
-      expect(existsSync(resolve(process.cwd(), "public", project.image.src))).toBe(true);
+    for (const image of project.images ?? []) {
+      expect(image.src).toBeTruthy();
+      expect(image.src.startsWith("/")).toBe(false);
+      expect(image.alt?.trim()).toBeTruthy();
+      expect(image.width).toBeGreaterThan(0);
+      expect(image.height).toBeGreaterThan(0);
+      expect(existsSync(resolve(process.cwd(), "public", image.src)), image.src).toBe(true);
+    }
+  });
+
+  it("only marks a project Completed without goal wording on its page either", () => {
+    for (const project of completed) {
+      for (const field of ["overview", "solution"]) {
+        if (project[field]) expect(project[field], `${project.id}.${field}`).not.toMatch(GOAL_PHRASING);
+      }
     }
   });
 
@@ -99,6 +108,17 @@ describe("profile data", () => {
     ]);
   });
 
+  it("groups skills into the five requested areas", () => {
+    // Order is chosen so each two-column row pairs groups of similar height.
+    expect(profile.skills.map((group) => group.label)).toEqual([
+      "Networking",
+      "IT Operations",
+      "Databases",
+      "Programming",
+      "Systems",
+    ]);
+  });
+
   it("tags skills only with known evidence and never with proficiency levels", () => {
     for (const category of profile.skills) {
       expect(category.items.length).toBeGreaterThan(0);
@@ -129,8 +149,15 @@ describe("index.html", () => {
     expect(html).not.toMatch(/tel:/i);
   });
 
-  it("builds absolute URLs from VITE_SITE_URL", () => {
-    expect(html).toContain('<link rel="canonical" href="%VITE_SITE_URL%/" />');
-    expect(html).toContain('<meta property="og:url" content="%VITE_SITE_URL%/" />');
+  it("has the placeholder where each page's <head> tags are inserted", () => {
+    expect(html).toContain("<!--app-head-->");
+    // Title, description and canonical come from src/lib/routes.js, not here.
+    expect(html).not.toMatch(/<title>/);
+  });
+
+  it("builds absolute canonical and Open Graph URLs from the site URL", () => {
+    const tags = headTags(headFor({ name: "home" }), "https://enobot.github.io/nate");
+    expect(tags).toContain('<link rel="canonical" href="https://enobot.github.io/nate/" />');
+    expect(tags).toContain('<meta property="og:url" content="https://enobot.github.io/nate/" />');
   });
 });

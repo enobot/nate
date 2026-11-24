@@ -50,9 +50,18 @@ describe("robots.txt and sitemap.xml", () => {
   });
 
   it("lists the home page in the sitemap", () => {
-    const xml = buildSitemapXml("https://enobot.github.io/nate", new Date("2026-11-22T12:00:00Z"));
+    const xml = buildSitemapXml("https://enobot.github.io/nate", ["/"], new Date("2026-11-22T12:00:00Z"));
     expect(xml).toContain("<loc>https://enobot.github.io/nate/</loc>");
     expect(xml).toContain("<lastmod>2026-11-22</lastmod>");
     expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true);
+  });
+
+  it("lists every page it is given, once each", () => {
+    const paths = ["/", "/projects/campus-network-lab/", "/projects/movie-theater-tickets/"];
+    const xml = buildSitemapXml("https://enobot.github.io/nate", paths, new Date("2026-11-22T12:00:00Z"));
+    for (const path of paths) {
+      expect(xml.split(`<loc>https://enobot.github.io/nate${path}</loc>`)).toHaveLength(2);
+    }
+    expect(xml.match(/<url>/g)).toHaveLength(paths.length);
   });
 });

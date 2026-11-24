@@ -43,11 +43,38 @@ describe("App rendering", () => {
     const nav = screen.getByRole("navigation", { name: "Primary" });
     const links = within(nav).getAllByRole("link");
     expect(links.map((link) => link.textContent)).toEqual(sections.map((section) => section.label));
+    // Links are "<base>#section" so they also work from a project page.
+    const pattern = new RegExp(`^${import.meta.env.BASE_URL}#([a-z-]+)$`);
     for (const link of links) {
       const href = link.getAttribute("href");
-      expect(href).toMatch(/^#[a-z-]+$/);
-      expect(document.getElementById(href.slice(1)), href).not.toBeNull();
+      expect(href).toMatch(pattern);
+      expect(document.getElementById(href.match(pattern)[1]), href).not.toBeNull();
     }
+  });
+
+  it("leads with a headline and the main calls to action", () => {
+    render(<App />);
+    const home = document.getElementById("home");
+    expect(within(home).getByText(profile.hero.headline)).toBeInTheDocument();
+    expect(within(home).getByRole("link", { name: "View Projects" })).toHaveAttribute(
+      "href",
+      `${import.meta.env.BASE_URL}#projects`,
+    );
+    expect(within(home).getByRole("link", { name: /download resume/i })).toBeInTheDocument();
+  });
+
+  it("keeps a resume download in the navigation bar", () => {
+    render(<App />);
+    const header = screen.getByRole("banner");
+    const resume = within(header).getByRole("link", { name: "Resume (PDF download)" });
+    expect(resume).toHaveAttribute("href", assetUrl(profile.resumes.find((item) => item.primary).file));
+    expect(resume).toHaveAttribute("download");
+  });
+
+  it("credits Nathanael Haig and Tracy Tran in the footer", () => {
+    render(<App />);
+    const footer = screen.getByRole("contentinfo");
+    expect(within(footer).getByText(/© \d{4} Nathanael Haig and Tracy Tran/)).toBeInTheDocument();
   });
 
   it("has a skip link that targets the main content", () => {
@@ -80,12 +107,19 @@ describe("App rendering", () => {
     });
   });
 
-  it("hides GitHub links while no GitHub URL is set", () => {
+  it("shows a GitHub profile button only when profile.github is set", () => {
     render(<App />);
-    const anyGithubUrl = profile.github || projects.some((project) => project.github);
-    if (!anyGithubUrl) {
-      expect(screen.queryByRole("link", { name: /github/i })).toBeNull();
-      expect(document.querySelector('a[href*="github.com"]')).toBeNull();
+    const home = document.getElementById("home");
+    const button = within(home).queryByRole("link", { name: /^GitHub/ });
+    if (profile.github) expect(button).toHaveAttribute("href", profile.github);
+    else expect(button).toBeNull();
+  });
+
+  it("only links to GitHub URLs that are listed in the data", () => {
+    render(<App />);
+    const allowed = new Set([profile.github, ...projects.flatMap((project) => Object.values(project.links ?? {}))]);
+    for (const link of document.querySelectorAll('a[href*="github.com"]')) {
+      expect(allowed.has(link.getAttribute("href")), link.getAttribute("href")).toBe(true);
     }
   });
 

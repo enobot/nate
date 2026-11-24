@@ -20,8 +20,10 @@ export const profile = {
   hero: {
     kicker: "IT Portfolio",
     role: "IT Support · Networking · Information Systems",
+    // The big line under the name: what Nate does, in plain words.
+    headline: "I activate switch ports, assign VLANs, and work network tickets across the Cal State Fullerton campus.",
     tagline:
-      "Information Systems student at Cal State Fullerton, supporting the network analyst team in CSUF IT Telecommunications across the entire campus.",
+      "Information Systems student (B.A., expected May 2027) on the CSUF IT Telecommunications network analyst team. Open to entry-level IT support, network technician, and IT analyst roles.",
     // Shown in the "status panel" next to the name. Keep each value short.
     status: [
       { label: "Status", value: "Open to entry-level IT roles", live: true },
@@ -138,8 +140,10 @@ export const profile = {
     chipotle: "Chipotle",
   },
 
-  // Skill categories shown as tabs. `usedIn` lists keys from `evidence` above.
+  // Skill groups, all shown at once so they're quick to scan.
+  // `usedIn` lists keys from `evidence` above (where the skill was used).
   // Leave `usedIn` empty ([]) if you'd rather not show a tag for a skill.
+  // Only list skills backed by the resume or a verified project.
   skills: [
     {
       id: "networking",
@@ -154,77 +158,107 @@ export const profile = {
         { name: "VPN connectivity", usedIn: ["csuf"] },
         { name: "Routers & switches", usedIn: ["csuf"] },
         { name: "Data & voice jack installation and repair", usedIn: ["csuf"] },
+        { name: "ping, tracert, ipconfig", usedIn: ["csuf"] },
+        { name: "SSH (PuTTY)", usedIn: ["csuf"] },
       ],
     },
     {
-      id: "diagnostics",
-      label: "Diagnostics & Tools",
-      icon: "terminal",
-      blurb: "Command-line checks and the tools used to find and fix connectivity problems.",
-      items: [
-        { name: "ping", usedIn: ["csuf"] },
-        { name: "tracert", usedIn: ["csuf"] },
-        { name: "ipconfig", usedIn: ["csuf"] },
-        { name: "Switch port status commands", usedIn: ["csuf"] },
-        { name: "SSH", usedIn: ["csuf"] },
-        { name: "PuTTY", usedIn: ["csuf"] },
-        { name: "ServiceNow", usedIn: ["csuf"] },
-        // Nate: add where you used Zoom Phone, e.g. usedIn: ["csuf"].
-        { name: "Zoom Phone", usedIn: [] },
-      ],
-    },
-    {
-      id: "it-support",
-      label: "IT Support",
+      id: "it-operations",
+      label: "IT Operations",
       icon: "headset",
-      blurb: "Helping campus users and keeping technical records accurate.",
+      blurb: "Tickets, troubleshooting, and keeping campus users connected.",
       items: [
+        { name: "ServiceNow incidents & service requests", usedIn: ["csuf"] },
         { name: "Hardware & software troubleshooting", usedIn: ["csuf"] },
         { name: "End-user support", usedIn: ["csuf"] },
         { name: "Technical documentation", usedIn: ["csuf"] },
         { name: "Equipment & asset tracking", usedIn: ["csuf"] },
-        { name: "Telecommunications databases", usedIn: ["csuf"] },
+        // Nate: add where you used Zoom Phone, e.g. usedIn: ["csuf"].
+        { name: "Zoom Phone", usedIn: [] },
+        { name: "Customer service", usedIn: ["ramen"] },
       ],
     },
     {
-      id: "data-programming",
-      label: "Data & Programming",
+      id: "databases",
+      label: "Databases",
       icon: "database",
-      blurb: "Database, programming, and analytics skills from coursework and academic projects.",
+      blurb: "SQL, database management, and data analysis.",
       items: [
         { name: "SQL", usedIn: ["coursework"] },
-        { name: "C#", usedIn: ["project"] },
         { name: "Database management", usedIn: ["coursework", "csuf"] },
-        { name: "Systems analysis", usedIn: ["coursework"] },
+        { name: "Telecommunications databases", usedIn: ["csuf"] },
         { name: "Microsoft Excel (pivot tables, Goal Seek, linear programming)", usedIn: ["project"] },
         { name: "Data visualization", usedIn: ["coursework"] },
         { name: "Statistical analysis", usedIn: ["coursework"] },
       ],
     },
     {
-      id: "software",
-      label: "Software",
-      icon: "app-window",
-      blurb: "Productivity, planning, and creative applications.",
+      id: "programming",
+      label: "Programming",
+      icon: "code",
+      blurb: "Application logic and user interface flow from academic work.",
       items: [
-        // Nate: add tags here if you want to show where you used these.
-        { name: "Microsoft Office", usedIn: [] },
-        { name: "Microsoft Project", usedIn: [] },
-        { name: "Adobe After Effects", usedIn: [] },
+        { name: "C#", usedIn: ["project"] },
+        { name: "Desktop application UI flow", usedIn: ["project"] },
+        { name: "Pricing & business logic", usedIn: ["project"] },
       ],
     },
     {
-      id: "professional",
-      label: "Professional",
-      icon: "handshake",
-      blurb: "People skills from high-volume restaurant roles.",
+      id: "systems",
+      label: "Systems",
+      icon: "server",
+      blurb: "Analyzing and planning business information systems.",
       items: [
-        { name: "Customer service", usedIn: ["ramen"] },
-        { name: "Team leadership", usedIn: ["chipotle"] },
-        { name: "Staff training", usedIn: ["chipotle"] },
+        { name: "Systems analysis & design", usedIn: ["coursework"] },
+        { name: "Business analytics", usedIn: ["coursework"] },
+        // Nate: add tags here if you want to show where you used these.
+        { name: "Microsoft Project", usedIn: [] },
+        { name: "Microsoft Office", usedIn: [] },
       ],
     },
   ],
+
+  // "How a jack activation works": the steps shown in the Experience section.
+  // Built from the CSUF duties on the resume. Nate: correct the wording if
+  // your team's real process differs.
+  workflow: {
+    title: "How a jack activation works",
+    steps: [
+      {
+        id: "ticket",
+        label: "Ticket",
+        icon: "ticket",
+        text: "A ServiceNow service request comes in for a data or voice jack.",
+      },
+      {
+        id: "locate",
+        label: "Locate",
+        icon: "cable",
+        text: "Match the wall jack to the switch port it's patched to.",
+      },
+      {
+        id: "configure",
+        label: "Configure",
+        icon: "terminal",
+        text: "SSH into the Alcatel-Lucent OmniSwitch with PuTTY, activate the port, and assign the VLAN.",
+      },
+      {
+        id: "verify",
+        label: "Verify",
+        icon: "network",
+        text: "Check the port status and confirm connectivity with tools like ping.",
+      },
+      {
+        id: "close",
+        label: "Close",
+        icon: "clipboard",
+        text: "Update the ticket notes and status through closure.",
+      },
+    ],
+  },
+
+  // People credited in the footer for building this site.
+  credits: ["Nathanael Haig", "Tracy Tran"],
 
   // Resume downloads. Files live in public/resume/. `primary: true` is the one
   // the "Download Resume" button in the hero links to.
