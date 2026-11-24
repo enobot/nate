@@ -13,7 +13,7 @@ export default function Contact() {
     profile.about.targetRoles.map(toSentenceCase),
   );
   return (
-    <Section id="contact" index="06" kicker="Get in touch" title="Contact">
+    <Section id="contact" index="06" kicker="Contact" title="Contact">
       <Reveal>
         <div className="glass hud-corners relative overflow-hidden rounded-3xl p-6 sm:p-10">
           <div

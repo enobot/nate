@@ -72,7 +72,7 @@ describe("projects data", () => {
 
   it("keeps the Network Diagnostics Toolkit and IT Asset Tracker featured and first", () => {
     const featured = projects.filter((project) => project.featured).map((project) => project.id);
-    expect(featured).toEqual(["it-asset-tracker", "network-diagnostics-toolkit"]);
+    expect(featured).toEqual(["network-diagnostics-toolkit", "it-asset-tracker"]);
     expect(projects.slice(0, 2).map((project) => project.id).sort()).toEqual([...featured].sort());
   });
 

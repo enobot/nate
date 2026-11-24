@@ -24,7 +24,7 @@ export const profile = {
     kicker: "IT Portfolio",
     role: "IT Support · Networking · Information Systems",
     // The big line under the name: what Nate does, in plain words.
-    headline: "Campus network support at Cal State Fullerton: switch ports, VLANs, and ServiceNow tickets.",
+    headline: "Information Systems student with hands-on campus network and ServiceNow support experience at Cal State Fullerton.",
     tagline:
       "Information Systems student (B.A., May 2027) and IT Telecommunications student assistant. Seeking entry-level IT support, network technician, NOC technician, and IT analyst roles.",
     // Verified facts shown as chips under the tagline (all from the resume).
