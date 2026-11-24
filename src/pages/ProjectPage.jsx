@@ -15,7 +15,7 @@ import { projectPath } from "../lib/routes.js";
 /** A titled block on the project page. Only rendered when it has content. */
 function Block({ id, title, children }) {
   return (
-    <Reveal as="section" aria-labelledby={id} className="glass relative rounded-2xl p-5 sm:p-7">
+    <Reveal as="section" aria-labelledby={id} className="glass relative min-w-0 rounded-2xl p-5 sm:p-7">
       <h2 id={id} className="hud-label text-cyan-soft">
         {title}
       </h2>
@@ -90,7 +90,7 @@ export default function ProjectPage({ project, navigated }) {
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <StatusBadge status={project.status} />
-              <span className="hud-label text-[0.7rem] text-ink-dim">{project.category}</span>
+              <span className="hud-label text-xs text-ink-dim">{project.category}</span>
             </div>
             <h1
               id={`${prefix}-title`}
@@ -136,7 +136,7 @@ export default function ProjectPage({ project, navigated }) {
           </p>
         ) : null}
 
-        <div className="mt-10 grid gap-5">
+        <div className="mt-10 grid grid-cols-1 gap-5">
           {has(project.overview) ? (
             <Block id={`${prefix}-overview`} title="Overview">
               <p className="max-w-3xl text-base sm:text-lg">{project.overview}</p>
@@ -146,7 +146,7 @@ export default function ProjectPage({ project, navigated }) {
           {interactive ? <InteractiveBlock interactive={interactive} headingId={`${prefix}-interactive`} /> : null}
 
           {has(project.problem) || has(project.solution) ? (
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               {has(project.problem) ? (
                 <Block id={`${prefix}-problem`} title="Problem">
                   <p>{project.problem}</p>
@@ -205,7 +205,7 @@ export default function ProjectPage({ project, navigated }) {
 
           {has(project.images) ? (
             <Block id={`${prefix}-images`} title="Screenshots & diagrams">
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 {project.images.map((image) => (
                   <figure key={image.src} className="overflow-hidden rounded-xl border border-electric-soft/12 bg-navy-950">
                     <a href={assetUrl(image.src)} target="_blank" rel="noopener" className="block">

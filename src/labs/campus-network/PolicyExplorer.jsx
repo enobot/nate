@@ -245,7 +245,7 @@ function AddressField({ label, value, custom, onChange, onCustomChange, groups, 
   const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ") || undefined;
   return (
     <div className="min-w-0">
-      <label htmlFor={id} className="hud-label text-[0.7rem] text-ink-dim">
+      <label htmlFor={id} className="hud-label text-xs text-ink-dim">
         {label}
       </label>
       <select
@@ -345,10 +345,10 @@ function LabCases({ network, onLoad }) {
             <caption className="sr-only">Results of the lab's policy test cases</caption>
             <thead className="bg-navy-900/60 text-ink-dim">
               <tr>
-                <th scope="col" className="hud-label px-3 py-2 text-[0.68rem]">Case</th>
-                <th scope="col" className="hud-label px-3 py-2 text-[0.68rem]">Scenario</th>
-                <th scope="col" className="hud-label px-3 py-2 text-[0.68rem]">Expected</th>
-                <th scope="col" className="hud-label px-3 py-2 text-[0.68rem]">Result</th>
+                <th scope="col" className="hud-label px-3 py-2 text-xs">Case</th>
+                <th scope="col" className="hud-label px-3 py-2 text-xs">Scenario</th>
+                <th scope="col" className="hud-label px-3 py-2 text-xs">Expected</th>
+                <th scope="col" className="hud-label px-3 py-2 text-xs">Result</th>
                 <th scope="col" className="px-3 py-2"><span className="sr-only">Load</span></th>
               </tr>
             </thead>
@@ -435,7 +435,7 @@ export default function PolicyExplorer() {
 
       <form onSubmit={(event) => event.preventDefault()} className="mt-6 grid gap-5" aria-label="Traffic to check">
         <div className="min-w-0 max-w-xl">
-          <label htmlFor={ids.case} className="hud-label text-[0.7rem] text-ink-dim">
+          <label htmlFor={ids.case} className="hud-label text-xs text-ink-dim">
             Start from a lab test case (optional)
           </label>
           <select
@@ -480,7 +480,7 @@ export default function PolicyExplorer() {
             hint={service?.dhcp ? "A DHCP request is a broadcast to 255.255.255.255, so R1 receives it on the sender's VLAN." : undefined}
           />
           <div className="min-w-0">
-            <label htmlFor={ids.service} className="hud-label text-[0.7rem] text-ink-dim">
+            <label htmlFor={ids.service} className="hud-label text-xs text-ink-dim">
               Traffic
             </label>
             <select

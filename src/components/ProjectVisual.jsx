@@ -46,7 +46,7 @@ export default function ProjectVisual({ project, className, eager = false }) {
       <div className="relative flex size-20 items-center justify-center rounded-2xl border border-cyan/30 bg-navy-900/80 shadow-[0_0_40px_-8px_rgb(61_123_255/0.8)] transition-transform duration-500 motion-safe:group-hover:scale-110 motion-safe:group-hover:rotate-3">
         <Icon className={cn("size-9", inDevelopment ? "text-amber" : "text-cyan")} />
       </div>
-      <span className="hud-label absolute bottom-3 left-4 text-[0.62rem] text-ink-dim">{project.id}</span>
+      <span className="hud-label absolute bottom-3 left-4 text-xs text-ink-dim">{project.id}</span>
       {inDevelopment ? (
         <span className="absolute top-0 left-0 h-0.5 w-full bg-[repeating-linear-gradient(90deg,rgb(251_191_36/0.7)_0_12px,transparent_12px_24px)]" />
       ) : null}
