@@ -12,6 +12,7 @@ on:
       - ".github/workflows/ops-app.yml"
       - ".github/workflows/toolkit.yml"
       - ".github/workflows/toolkit-publish.yml"
+      - ".github/workflows/asset-tracker.yml"
   pull_request:
     branches: [main]
     paths-ignore:
@@ -19,6 +20,7 @@ on:
       - ".github/workflows/ops-app.yml"
       - ".github/workflows/toolkit.yml"
       - ".github/workflows/toolkit-publish.yml"
+      - ".github/workflows/asset-tracker.yml"
   workflow_dispatch:
 
 permissions:
