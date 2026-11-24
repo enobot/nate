@@ -6,8 +6,15 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    # Changes that only touch the project apps don't change the portfolio site.
+    paths-ignore:
+      - "apps/**"
+      - ".github/workflows/ops-app.yml"
   pull_request:
     branches: [main]
+    paths-ignore:
+      - "apps/**"
+      - ".github/workflows/ops-app.yml"
   workflow_dispatch:
 
 permissions:

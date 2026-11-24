@@ -133,21 +133,35 @@ export const projects = [
     id: "operations-optimization",
     title: "Operations & Optimization Analysis",
     status: "Completed",
-    category: "Academic project",
+    category: "Expanded rebuild of an academic project",
     summary:
-      "Linear programming models in Microsoft Excel that evaluate production decisions and maximize profit contribution.",
-    tech: ["Microsoft Excel", "Linear programming", "Sensitivity analysis", "Goal Seek"],
+      "A Streamlit app that solves a product-mix linear program with SciPy's HiGHS solver, with shadow prices, sensitivity sweeps, Goal Seek, and saved SQLite scenarios. An expanded rebuild of an Excel coursework project.",
+    tech: ["Python", "SciPy (HiGHS)", "pandas", "SQL / SQLite", "Plotly", "Streamlit", "Excel (openpyxl)", "pytest", "GitHub Actions"],
     icon: "calculator",
     overview:
-      "A Microsoft Excel analysis, built for a class, that uses linear programming to decide what a business should produce.",
+      "An interactive web app for a fictional furniture maker, Juniper Oak Furniture Co. (all data is synthetic and labeled as such). It rebuilds Nate's Excel linear-programming coursework as a full application: change the inputs, re-solve, and see what limits profit and why.",
     problem:
-      "A business with limited resources has to decide how much of each product to make so that it earns the most profit without breaking its constraints.",
+      "A manufacturer with limited labor hours, machine hours, and material budget has to decide how many of each product to build to earn the most profit contribution.",
     solution:
-      "Linear programming models in Excel find the profit-maximizing production plan, and sensitivity analysis and Goal Seek show how that plan changes when the constraints or targets change.",
+      "A linear-programming model solved with HiGHS through SciPy's linprog. The solver's dual values become shadow prices, each checked against a re-solve with one more unit. Sensitivity ranges and Goal Seek come from repeated re-solves, scenarios are saved in SQLite, and CSV and Excel files can be imported and exported.",
     details: [
-      "Built linear programming models to evaluate production decisions and maximize profit contribution.",
-      "Applied sensitivity analysis and Goal Seek to test constraints and financial scenarios.",
+      "Built the product-mix linear program and turned the solver's dual values into shadow prices with plain-English bottleneck explanations.",
+      "Recovered Excel-style allowable ranges and Goal Seek (bisection and Brent's method over repeated solves).",
+      "Stored datasets, scenarios, and solver runs in SQLite with parameterized reporting queries, and validated uploads (size limits, spreadsheet-formula neutralization).",
     ],
+    architecture: [
+      "optimizer/: the model, solver, sensitivity, and Goal Seek as plain Python with no Streamlit code, so it can be tested on its own.",
+      "data/: SQLite storage (datasets, scenarios, solver runs) and CSV/Excel import and export.",
+      "app_pages/ and ui/: eight Streamlit pages (Dashboard, Optimizer, Sensitivity, Scenarios, Goal Seek, Data & Files, SQL Reports, About) with Plotly charts.",
+    ],
+    testing: [
+      "127 automated tests (pytest and Streamlit AppTest): hand-solved textbook problems, infeasible and unbounded cases, shadow-price sign checks, Goal Seek accuracy, upload validation, SQLite round trips, and CSV/Excel round trips.",
+      "Checked by hand in the browser: raising labor hours from 2,800 to 3,000 raised profit from $134,524 to $138,844, exactly the 200 × $21.60 the app's shadow price predicts.",
+    ],
+    links: {
+      source: "https://github.com/enobot/nate/tree/main/apps/operations-optimization-analysis",
+      docs: "https://github.com/enobot/nate/blob/main/apps/operations-optimization-analysis/docs/WALKTHROUGH.md",
+    },
   },
 
   // ---------------------------------------------------------------------------

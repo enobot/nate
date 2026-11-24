@@ -1,0 +1,42 @@
+name: Operations app tests
+
+# Runs the Operations & Optimization app's test suite whenever its folder changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/operations-optimization-analysis/**"
+      - ".github/workflows/ops-app.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/operations-optimization-analysis/**"
+      - ".github/workflows/ops-app.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/operations-optimization-analysis
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: apps/operations-optimization-analysis/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m pytest -q
