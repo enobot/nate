@@ -1,9 +1,10 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MousePointerClick } from "lucide-react";
 import Chip from "./Chip.jsx";
 import ProjectLinks from "./ProjectLinks.jsx";
 import ProjectVisual from "./ProjectVisual.jsx";
 import StatusBadge from "./StatusBadge.jsx";
 import { useSpotlight } from "../hooks/useSpotlight.js";
+import { interactiveFor } from "../labs/registry.js";
 import { Link } from "../lib/router.jsx";
 import { projectPath } from "../lib/routes.js";
 
@@ -19,6 +20,7 @@ export default function ProjectCard({ project }) {
   const titleId = `project-title-${project.id}`;
   const shownTech = project.tech.slice(0, MAX_BADGES);
   const hiddenTech = project.tech.length - shownTech.length;
+  const interactive = interactiveFor(project);
 
   return (
     <article
@@ -63,6 +65,16 @@ export default function ProjectCard({ project }) {
             <span className="sr-only">{project.title}</span>
             <ArrowRight aria-hidden="true" className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-0.5" />
           </Link>
+          {interactive ? (
+            <Link
+              to={`${projectPath(project)}#${interactive.anchor}`}
+              className="glow-frame glass relative inline-flex min-h-11 items-center gap-2 rounded-lg px-3.5 text-xs font-semibold text-ink transition-colors hover:text-white"
+            >
+              <MousePointerClick aria-hidden="true" className="size-4 shrink-0 text-cyan" />
+              {interactive.cardCta}
+              <span className="sr-only">: {interactive.title} for {project.title}</span>
+            </Link>
+          ) : null}
           <ProjectLinks project={project} size="sm" />
         </div>
       </div>
