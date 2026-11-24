@@ -8,8 +8,8 @@ All of the data belongs to **Alder Creek College**, a made-up organization. Ever
 device, serial number and ticket was made up by the app's demo seeder. Email addresses use the
 reserved `.example` domain. Nothing comes from a real school or company.
 
-> Status: runs as a local demo. The Dockerfile for hosting is included but has not been built
-> yet (see [Verification status](#verification-status)).
+> Status: runs as a local demo. The Docker image for hosting builds in CI but hasn't been run on a
+> host yet (see [Verification status](#verification-status)).
 
 ## Contents
 
@@ -802,9 +802,9 @@ docker build -t it-asset-tracker apps/it-asset-service-request-tracker
 docker run --rm -e PORT=10000 -p 10000:10000 it-asset-tracker
 ```
 
-Docker was not installed on the machine this was built on, so **the image has not been built or run
-yet**. The CI workflow has a `docker build` job, so the first push to GitHub will show whether it
-builds. To test it yourself: install Docker Desktop, run the commands above, and confirm that `/`
+Docker was not installed on the machine this was built on. The CI workflow's `docker build` job
+builds the image on GitHub's Linux runners, and it passed on the first run. **The container itself
+has not been run yet.** To test it yourself: install Docker Desktop, run the commands above, and confirm that `/`
 shows the dashboard and `/api/health` returns `Healthy`.
 
 ### Data on hosts without a persistent disk
@@ -859,8 +859,9 @@ A move to a managed database (Azure SQL or PostgreSQL) would fix the data-reset 
 | Compression and cache headers | VERIFIED | `curl` showed `Content-Encoding: br` and the expected `Cache-Control` values |
 | Cross-browser, screen reader, keyboard-only use | NOT TESTED | layout and ARIA are implemented but not checked with real devices or assistive tech |
 | `run-demo.sh` | NOT TESTED | the PowerShell version was tested |
-| Docker image build and run | NOT TESTED | Docker not installed; CI includes a build job |
-| GitHub Actions workflow | NOT TESTED | it runs on the first push |
+| Docker image build | VERIFIED | the CI `docker build` job passed on GitHub's Linux runner |
+| Docker container run | NOT TESTED | the image hasn't been started yet; the first host will be the first run |
+| GitHub Actions workflow | VERIFIED | backend, frontend and Docker jobs all passed on the first run |
 | Any hosted deployment | NOT DONE | see hosting options |
 | Frontend coverage, LCP/INP | NOT MEASURED | |
 

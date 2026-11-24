@@ -328,6 +328,7 @@ export const projects = [
     testing: [
       "191 xUnit tests: unit tests for every ticket status change (36 combinations), the asset and network rules, and VLAN range edges, plus integration tests that run the real API against real SQLite files.",
       "40 Vitest component tests for the React pages, plus TypeScript type-checking and linting.",
+      "GitHub Actions runs the backend tests, the client checks, and a Docker image build whenever the app changes. All three jobs passed on the first run.",
       "Checked by hand in the browser on desktop and mobile: creating an asset (including validation errors), moving a ticket through its workflow with its history, patching and activating jacks, and the reports.",
     ],
     images: [
