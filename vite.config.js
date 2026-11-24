@@ -56,8 +56,8 @@ export default defineConfig(({ mode }) => {
   const siteUrl = normalizeSiteUrl(process.env.VITE_SITE_URL || env.VITE_SITE_URL);
 
   return {
-    // "/" for local development; the deploy workflow sets BASE_PATH to "/nate/"
-    // (or whatever the repository is called) so asset URLs work on GitHub Pages.
+    // "/" for local development. The deploy workflow sets BASE_PATH from GitHub
+    // Pages: "/" on the custom domain, or "/<repository>/" on a github.io address.
     base: normalizeBasePath(process.env.BASE_PATH || "/"),
     plugins: [react(), tailwindcss(), seoFiles(siteUrl), homeHeadTags(siteUrl)],
     build: {
