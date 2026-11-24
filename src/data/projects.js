@@ -163,11 +163,46 @@ export const projects = [
       docs: "https://github.com/enobot/nate/blob/main/apps/operations-optimization-analysis/docs/WALKTHROUGH.md",
     },
   },
+  {
+    id: "network-diagnostics-toolkit",
+    title: "Network Diagnostics Toolkit",
+    status: "Completed",
+    category: "Personal project",
+    summary:
+      "A read-only PowerShell module and interactive menu for help desk and network technicians. It runs ping, traceroute, IP configuration, DNS, adapter, and TCP port checks, then saves the results as timestamped CSV and text reports plus paste-ready ticket notes.",
+    tech: ["PowerShell", ".NET (Ping, TcpClient)", "NetTCPIP / DnsClient / NetAdapter", "tracert", "Pester", "PSScriptAnalyzer", "GitHub Actions"],
+    icon: "terminal",
+    overview:
+      "A PowerShell module for the first round of network troubleshooting on a Windows PC. Every check prints a clear [PASS], [FAIL], [WARN], or [INFO] line with a plain-language explanation, and the results can be saved as a report or turned into notes for a help desk ticket.",
+    problem:
+      "Help desk technicians repeat the same connectivity checks for every ticket, then retype the results into the ticket notes by hand.",
+    solution:
+      "Eleven module commands and a numbered menu. Every check returns the same result shape, so ping, DNS, and port results all feed one CSV file, one text report, and one block of ticket notes. Input is validated before anything is sent: explicit targets only, no address ranges or scans, at most 10 targets and 20 TCP checks per run, and no command that changes settings.",
+    details: [
+      "Built 11 commands with comment-based help and an interactive menu with [PASS]/[FAIL] output.",
+      "Used .NET Ping and TcpClient with timeouts instead of Test-NetConnection, which took 8.9 s to report a closed port on the development PC, compared with 2.1 s for TcpClient.",
+      "Wrote reports as UTF-8 CSV and text files that never overwrite an existing file and neutralize spreadsheet-formula cells.",
+    ],
+    architecture: [
+      "src/NetworkDiagnostics/: the module, with one file per exported command in Public/ and the shared logic in Private/.",
+      "Each check has three steps: validate the input, collect data through small network wrapper functions, and interpret the result as PASS, FAIL, WARN, or INFO.",
+      "Only the wrapper functions touch the network, so unit tests can replace them with mocks. Reports and ticket notes are built from the same result objects.",
+    ],
+    testing: [
+      "271 Pester tests: 260 unit tests with mocked Windows network calls and 11 integration tests against localhost and a TCP listener the tests open, including an end-to-end menu run in a separate PowerShell process.",
+      "94.3% code coverage of the module on Windows PowerShell 5.1.",
+      "PowerShell 7 support pending CI: the same tests run on PowerShell 7 in GitHub Actions, along with PSScriptAnalyzer.",
+    ],
+    links: {
+      source: "https://github.com/enobot/nate/tree/main/apps/network-diagnostics-toolkit",
+      docs: "https://github.com/enobot/nate/blob/main/apps/network-diagnostics-toolkit/docs/WALKTHROUGH.md",
+    },
+  },
 
   // ---------------------------------------------------------------------------
-  // IMPORTANT, NATE: The two "In Development" projects below are still being
-  // built. Before you share this site with recruiters, edit or delete any project
-  // you are not actually working on. Interviewers may ask about anything listed.
+  // IMPORTANT, NATE: The "In Development" project below is still being built.
+  // Before you share this site with recruiters, edit or delete any project you
+  // are not actually working on. Interviewers may ask about anything listed.
   // When one is finished and verified: change status to "Completed", rewrite the
   // text in the past tense, and add its links, images, and test results.
   // ---------------------------------------------------------------------------
@@ -185,22 +220,6 @@ export const projects = [
     details: [
       "Will track equipment, jack and port assignments, and service requests in one database.",
       "Will include SQL reporting queries over that data.",
-    ],
-  },
-  {
-    id: "network-diagnostics-toolkit",
-    title: "Network Diagnostics Toolkit",
-    status: "In Development",
-    category: "Personal project",
-    summary:
-      "Building PowerShell scripts that will automate ping, tracert, and ipconfig checks and log the results to CSV for ticket notes.",
-    tech: ["PowerShell", "ping", "tracert", "ipconfig", "CSV"],
-    icon: "terminal",
-    overview:
-      "A planned set of PowerShell scripts for junior IT support and network technicians: run the usual connectivity checks in one place and save the results in a form that can go straight into a ticket.",
-    details: [
-      "Will run ping, tracert, and ipconfig checks from a single script.",
-      "Will log results to CSV so they can be added to ticket notes.",
     ],
   },
 ];

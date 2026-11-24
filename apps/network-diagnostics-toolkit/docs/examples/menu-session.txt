@@ -1,0 +1,341 @@
+# Interactive menu session: every check, ticket notes and a saved report
+# Real console output captured with tools\New-ExampleTranscript.ps1 on 2026-11-23,
+# PowerShell 5.1.26100.10068 (Desktop); output was redirected to a file, so there is no colour.
+# Targets: 127.0.0.1, localhost and a TCP listener opened by the script on a random loopback port.
+# Scrubbed: computer name, user name, folder paths, IP addresses, gateways, DNS servers, MAC
+# addresses and adapter descriptions were replaced with documentation values
+# (192.0.2.0/24, 2001:db8::/32, 00-00-5E-00-53-xx, HELPDESK-PC01).
+# The menu ran with answers piped in, so PowerShell echoes each typed answer after its prompt.
+
+PS C:\Tools\network-diagnostics-toolkit> .\Start-NetworkToolkit.ps1 -NoColor
+(listener for this run: port 55732 open, port 55733 closed)
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 0 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 3
+Also list interfaces whose adapter is not present (removed USB, old Wi-Fi)? [y/N]: n
+
+[PASS] IPConfig Ethernet - IPv4 192.0.2.103/24; gateway 192.0.2.105, 2001:db8::6e; DNS 2001:db8::6f, 192.0.2.105; DHCP Enabled
+       Description : Example Network Adapter 1
+       Status      : Up   MAC: 00-00-5E-00-53-10
+       IPv4        : 192.0.2.103/24
+       IPv6        : 2001:db8::68/64, 2001:db8::6a/64, 2001:db8::6c/128
+       Gateway     : 192.0.2.105, 2001:db8::6e
+       DNS servers : 2001:db8::6f, 192.0.2.105
+       DHCP (IPv4) : Enabled
+[INFO] IPConfig Wi-Fi - Adapter is disconnected, so these settings are not in use. Check the link with Get-NdtAdapter. IPv4 192.0.2.104/16; gateway none; DNS 2001:db8::70, 2001:db8::71, 2001:db8::72; DHCP Enabled
+       Description : Example Network Adapter 5
+       Status      : Disconnected   MAC: 00-00-5E-00-53-11
+       IPv4        : 192.0.2.104/16
+       Gateway     : none
+       DNS servers : 2001:db8::70, 2001:db8::71, 2001:db8::72
+       DHCP (IPv4) : Enabled
+[INFO] IPConfig Bluetooth Network Connection - Adapter is disconnected, so these settings are not in use. Check the link with Get-NdtAdapter. IPv4 192.0.2.102/16; gateway none; DNS 2001:db8::70, 2001:db8::71, 2001:db8::72; DHCP Enabled
+       Description : Example Network Adapter 6
+       Status      : Disconnected   MAC: 00-00-5E-00-53-12
+       IPv4        : 192.0.2.102/16
+       Gateway     : none
+       DNS servers : 2001:db8::70, 2001:db8::71, 2001:db8::72
+       DHCP (IPv4) : Enabled
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 3 result(s), 3 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 5
+Include virtual adapters (VPN, Hyper-V, Bluetooth)? [y/N]: n
+
+[PASS] Adapter Ethernet - Up at 1 Gbps, MAC 00-00-5E-00-53-10
+       Description : Example Network Adapter 1
+       Status      : Up
+       Link speed  : 1 Gbps
+       MAC address : 00-00-5E-00-53-10
+       Media type  : 802.3
+       Index       : 20   Virtual: False
+[WARN] Adapter Wi-Fi - Media disconnected: no link detected, MAC 00-00-5E-00-53-11. Check the cable and wall jack, or that Wi-Fi is connected.
+       Description : Example Network Adapter 5
+       Status      : Disconnected
+       Link speed  : 0 bps
+       MAC address : 00-00-5E-00-53-11
+       Media type  : Native 802.11
+       Index       : 16   Virtual: False
+[INFO] Adapter Wi-Fi 2 - Adapter hardware is not present (a driver is installed but the device is missing or removed).
+       Description : Example Network Adapter 5
+       Status      : Not Present
+       Link speed  : 0 bps
+       MAC address :
+       Media type  : Native 802.11
+       Index       : 12   Virtual: False
+[INFO] Adapter Wi-Fi 4 - Adapter hardware is not present (a driver is installed but the device is missing or removed).
+       Description : Example Network Adapter 5
+       Status      : Not Present
+       Link speed  : 0 bps
+       MAC address :
+       Media type  : Native 802.11
+       Index       : 11   Virtual: False
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 7 result(s), 7 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 1
+Targets to ping (IP addresses or host names, max 10): 127.0.0.1, localhost
+Echo requests per target (1-10) [4]: 2
+Timeout per reply in ms (100-5000) [1000]: 
+Pinging 2 target(s)...
+
+[PASS] Ping 127.0.0.1 - 2/2 replies, 0% loss, min/avg/max 0/0/0 ms
+       Reply 1: Success from 127.0.0.1 time=0 ms TTL=128
+       Reply 2: Success from 127.0.0.1 time=0 ms TTL=128
+[PASS] Ping localhost - 2/2 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
+       Reply 1: Success from 127.0.0.1 time=0 ms TTL=128
+       Reply 2: Success from 127.0.0.1 time=0 ms TTL=128
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 9 result(s), 9 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 2
+Target to trace (one IP address or host name): 127.0.0.1
+Maximum hops (1-30) [20]: 3
+Timeout per probe in ms (100-5000) [1000]: 500
+Tracing route to 127.0.0.1. This stops when the target answers; worst case about 5 seconds...
+
+[PASS] Traceroute 127.0.0.1 - Reached 127.0.0.1 in 1 hop(s).
+       Hop  Probe 1  Probe 2  Probe 3  Address / note
+       1    <1 ms    <1 ms    <1 ms    127.0.0.1
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 10 result(s), 10 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 4
+Names to look up (or IP addresses for reverse lookup, max 10): localhost
+Record type A, AAAA, CNAME, MX, NS, PTR, SOA, SRV or TXT [A]: 
+DNS server to ask (IP or name; press Enter for this PC's DNS servers): 
+
+[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 8 ms: A 127.0.0.1 (TTL 1200s)
+       Query: A localhost
+       Server: system default (see IP configuration)
+       Query time: 8 ms
+       Record: A 127.0.0.1 (TTL 1200s)
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 11 result(s), 11 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 6
+Hosts to check (max 10): 127.0.0.1
+TCP ports (for example 443 or 80,443; max 20, no ranges): 55732, 55733
+Timeout per connection in ms (500-10000) [3000]: 
+Checking 2 host/port combination(s)...
+
+[PASS] TcpPort 127.0.0.1 - TCP port 55732 is open on 127.0.0.1 (connected in 4 ms).
+       State: Open
+       Elapsed: 4 ms (timeout 3000 ms)
+       Message: TCP handshake completed.
+[FAIL] TcpPort 127.0.0.1 - TCP port 55733 refused on 127.0.0.1: the host answered, but nothing is listening on that port or a firewall rejected the connection.
+       State: Refused
+       Elapsed: 2047 ms (timeout 3000 ms)
+       Message: No connection could be made because the target machine actively refused it 127.0.0.1:55733
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 13 result(s), 13 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 7
+Targets for the quick check (max 10): localhost
+TCP ports to check on each target (press Enter to skip): 55732
+Running quick check for 1 target(s)...
+
+[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 0 ms: A 127.0.0.1 (TTL 1200s)
+       Query: A localhost
+       Server: system default (see IP configuration)
+       Query time: 0 ms
+       Record: A 127.0.0.1 (TTL 1200s)
+[PASS] Ping localhost - 2/2 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
+       Reply 1: Success from 127.0.0.1 time=0 ms TTL=128
+       Reply 2: Success from 127.0.0.1 time=0 ms TTL=128
+[PASS] TcpPort localhost - TCP port 55732 is open on localhost (127.0.0.1) (connected in 0 ms).
+       State: Open
+       Elapsed: 0 ms (timeout 3000 ms)
+       Message: TCP handshake completed.
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 16 result(s), 16 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 8
+
+----- ticket notes (copy from here) -----
+Network diagnostics
+Run: 2026-11-23T22:32:26-08:00 to 2026-11-23T22:32:30-08:00 from HELPDESK-PC01
+Tool: Network Diagnostics Toolkit 1.0.0 (read-only checks; only the targets listed were contacted)
+
+[PASS] IPConfig Ethernet - IPv4 192.0.2.103/24; gateway 192.0.2.105, 2001:db8::6e; DNS 2001:db8::6f, 192.0.2.105; DHCP Enabled
+[INFO] IPConfig Wi-Fi - Adapter is disconnected, so these settings are not in use. Check the link with Get-NdtAdapter. IPv4 192.0.2.104/16; gateway none; DNS 2001:db8::70, 2001:db8::71, 2001:db8::72; DHCP Enabled
+[INFO] IPConfig Bluetooth Network Connection - Adapter is disconnected, so these settings are not in use. Check the link with Get-NdtAdapter. IPv4 192.0.2.102/16; gateway none; DNS 2001:db8::70, 2001:db8::71, 2001:db8::72; DHCP Enabled
+[PASS] Adapter Ethernet - Up at 1 Gbps, MAC 00-00-5E-00-53-10
+[WARN] Adapter Wi-Fi - Media disconnected: no link detected, MAC 00-00-5E-00-53-11. Check the cable and wall jack, or that Wi-Fi is connected.
+[INFO] Adapter Wi-Fi 2 - Adapter hardware is not present (a driver is installed but the device is missing or removed).
+[INFO] Adapter Wi-Fi 4 - Adapter hardware is not present (a driver is installed but the device is missing or removed).
+[PASS] Ping 127.0.0.1 - 2/2 replies, 0% loss, min/avg/max 0/0/0 ms
+[PASS] Ping localhost - 2/2 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
+[PASS] Traceroute 127.0.0.1 - Reached 127.0.0.1 in 1 hop(s).
+[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 8 ms: A 127.0.0.1 (TTL 1200s)
+[PASS] TcpPort 127.0.0.1 - TCP port 55732 is open on 127.0.0.1 (connected in 4 ms).
+[FAIL] TcpPort 127.0.0.1 - TCP port 55733 refused on 127.0.0.1: the host answered, but nothing is listening on that port or a firewall rejected the connection.
+[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 0 ms: A 127.0.0.1 (TTL 1200s)
+[PASS] Ping localhost - 2/2 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
+[PASS] TcpPort localhost - TCP port 55732 is open on localhost (127.0.0.1) (connected in 0 ms).
+
+Totals: 16 check(s) - 10 PASS, 1 FAIL, 1 WARN, 4 INFO
+----- end of ticket notes -----
+Copy ticket notes to the clipboard? [y/N]: n
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 16 result(s), 16 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: 9
+[INFO] Saved C:\Tools\network-diagnostics-toolkit\reports\ndt-report-20261123-223230.csv
+[INFO] Saved C:\Tools\network-diagnostics-toolkit\reports\ndt-report-20261123-223230.txt
+
+ Network Diagnostics Toolkit 1.0.0
+ Read-only checks. Only the targets you type are contacted.
+ --------------------------------------------------------------
+  1  Ping (ICMP echo) test
+  2  Traceroute
+  3  IP configuration
+  4  DNS lookup
+  5  Network adapters
+  6  TCP port check
+  7  Quick check (DNS + ping + TCP ports)
+  8  Show ticket notes for this session
+  9  Save report (CSV + text)
+  C  Clear session results
+  H  Help and safety limits
+  Q  Quit
+ --------------------------------------------------------------
+ Session: 16 result(s), 0 not saved. Reports folder: C:\Tools\network-diagnostics-toolkit\reports
+Select an option: q
+Goodbye.

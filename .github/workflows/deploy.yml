@@ -10,11 +10,15 @@ on:
     paths-ignore:
       - "apps/**"
       - ".github/workflows/ops-app.yml"
+      - ".github/workflows/toolkit.yml"
+      - ".github/workflows/toolkit-publish.yml"
   pull_request:
     branches: [main]
     paths-ignore:
       - "apps/**"
       - ".github/workflows/ops-app.yml"
+      - ".github/workflows/toolkit.yml"
+      - ".github/workflows/toolkit-publish.yml"
   workflow_dispatch:
 
 permissions:
