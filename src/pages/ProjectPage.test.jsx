@@ -99,3 +99,30 @@ describe("not-found page", () => {
     expect(screen.getByRole("link", { name: new RegExp(profile.name) })).toBeInTheDocument();
   });
 });
+
+describe("interactive tools on project pages", () => {
+  const project = projects.find((item) => item.interactive);
+
+  it("loads the tool on its project page and links to it from the top of the page", async () => {
+    render(<App url={projectPath(project)} />);
+    const section = screen.getByRole("region", { name: "Policy explorer" });
+    expect(section).toHaveAttribute("id", "policy-explorer");
+    expect(within(section).getByText(/Loading the policy explorer/)).toBeInTheDocument();
+    expect(await within(section).findByRole("combobox", { name: /Start from a lab test case/ })).toBeInTheDocument();
+    expect(within(section).queryByText(/Loading the policy explorer/)).toBeNull();
+    expect(screen.getByRole("link", { name: "Try the policy explorer" })).toHaveAttribute(
+      "href",
+      withBase(`${projectPath(project)}#policy-explorer`),
+    );
+  });
+
+  it("is not shown on projects without one", () => {
+    for (const other of projects.filter((item) => !item.interactive)) {
+      const { unmount } = renderPage(other);
+      expect(screen.queryByRole("region", { name: "Policy explorer" }), other.id).toBeNull();
+      expect(screen.queryByRole("link", { name: "Try the policy explorer" }), other.id).toBeNull();
+      unmount();
+    }
+  });
+});
+

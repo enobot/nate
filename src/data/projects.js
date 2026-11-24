@@ -61,6 +61,9 @@ export const PROJECT_STATUSES = /** @type {const} */ (["Completed", "In Developm
  * @property {string[]} [lessons]      Project page: lessons learned, in your own words.
  * @property {ProjectImage[]} [images] Screenshots or diagrams; the first is the card preview.
  * @property {ProjectLinks} [links]
+ * @property {string} [interactive]
+ *   An interactive tool shown on the project page, by its key in
+ *   src/labs/registry.js. The card and page also get a "Try it" link to it.
  */
 
 /** @type {Project[]} */
@@ -72,8 +75,9 @@ export const projects = [
     category: "Personal project",
     summary:
       "A Cisco Packet Tracer lab of a fictional university network. The design, device configs, and automated checks are done; the Packet Tracer build and hands-on testing are in progress.",
-    tech: ["Cisco Packet Tracer", "VLANs", "802.1Q trunking", "Inter-VLAN routing", "DHCP", "ACLs", "SSH", "Python (pytest)"],
+    tech: ["Cisco Packet Tracer", "VLANs", "802.1Q trunking", "Inter-VLAN routing", "DHCP", "ACLs", "SSH", "Python (pytest)", "JavaScript"],
     icon: "network",
+    interactive: "campus-policy-explorer",
     overview:
       "A campus network for a fictional school, Halcyon Ridge University, designed for Cisco Packet Tracer: five VLANs trunked over 802.1Q, inter-VLAN routing on a router-on-a-stick, DHCP with exclusions, a voice VLAN for IP phones, ACLs that control who can reach what, and SSH-only device management.",
     problem:
@@ -93,6 +97,7 @@ export const projects = [
     ],
     testing: [
       "Automated design checks (pytest) read the config files and verify the addressing plan, VLANs and trunks, DHCP pools, SSH settings, and 32 allowed/blocked ACL traffic cases. They run on GitHub Actions and are currently passing.",
+      "The policy explorer on this page is a JavaScript port of the Python ACL checker that runs on the real config files in the browser. For all 32 cases it gives the same result and the same reasoning as the Python version, and its own tests check that every line of R1's two ACLs decides at least one case.",
       "Not yet tested in Packet Tracer: pasting the configs into Packet Tracer and checking end-to-end connectivity is the next step.",
     ],
     images: [
@@ -191,7 +196,7 @@ export const projects = [
     testing: [
       "271 Pester tests: 260 unit tests with mocked Windows network calls and 11 integration tests against localhost and a TCP listener the tests open, including an end-to-end menu run in a separate PowerShell process.",
       "94.3% code coverage of the module on Windows PowerShell 5.1.",
-      "PowerShell 7 support pending CI: the same tests run on PowerShell 7 in GitHub Actions, along with PSScriptAnalyzer.",
+      "GitHub Actions runs the same tests on Windows PowerShell 5.1 and PowerShell 7, plus PSScriptAnalyzer, which fails the build on any warning. All three passed on the first run.",
     ],
     links: {
       source: "https://github.com/enobot/nate/tree/main/apps/network-diagnostics-toolkit",

@@ -1,0 +1,129 @@
+! =====================================================================
+! ACC-SW1  -  Access switch, Hartley Hall (Cisco 2960-24TT)
+! Halcyon Ridge University lab
+! Role: faculty offices (PC + IP phone per port), student computer lab,
+! and the IT office.
+!
+! How to use: open ACC-SW1 > CLI in Packet Tracer and paste this whole
+! file at the "Switch>" prompt. Lines starting with "!" are comments.
+! Passwords below are lab-only placeholders. Never reuse them on real gear.
+! =====================================================================
+enable
+configure terminal
+hostname ACC-SW1
+no ip domain-lookup
+ip domain-name hru.test
+enable secret Lab-Enable-2026
+service password-encryption
+username netadmin privilege 15 secret Lab-Admin-2026
+banner motd # Halcyon Ridge University lab network - authorized access only #
+!
+vtp mode transparent
+spanning-tree mode rapid-pvst
+!
+vlan 10
+ name FACULTY
+vlan 20
+ name STUDENTS
+vlan 30
+ name SERVERS
+vlan 50
+ name VOICE
+vlan 99
+ name MGMT
+vlan 998
+ name PARKING
+vlan 999
+ name NATIVE
+!
+! Uplink trunk to the core switch.
+interface GigabitEthernet0/1
+ description Uplink trunk to CORE-SW1 Fa0/1
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,50,99
+ switchport nonegotiate
+ no shutdown
+!
+! ---------------------------------------------------------------------
+! Faculty offices: the PC's data rides VLAN 10 untagged, and the IP phone
+! between the wall jack and the PC tags its voice traffic for VLAN 50.
+! ---------------------------------------------------------------------
+interface range FastEthernet0/1 - 9
+ description Faculty office (PC data VLAN 10 + IP phone voice VLAN 50)
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 50
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+!
+! Department printer (static address 10.10.10.10, inside the DHCP exclusions).
+interface FastEthernet0/10
+ description FAC-PRINTER (VLAN 10)
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+!
+! ---------------------------------------------------------------------
+! Student computer lab: port security learns the first computer's MAC
+! address on each port and shuts the port down if a different device
+! (or a second one, through a hub) is plugged in.
+! ---------------------------------------------------------------------
+interface range FastEthernet0/11 - 20
+ description Student lab
+ switchport mode access
+ switchport access vlan 20
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security violation shutdown
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+!
+! IT office: the admin workstation lives in the management VLAN.
+interface range FastEthernet0/21 - 22
+ description IT office (management VLAN 99)
+ switchport mode access
+ switchport access vlan 99
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+!
+! Every unused port: parked in a dead VLAN and shut down.
+interface range FastEthernet0/23 - 24, GigabitEthernet0/2
+ description Unused - parked
+ switchport mode access
+ switchport access vlan 998
+ shutdown
+!
+interface Vlan99
+ description Management
+ ip address 10.10.99.3 255.255.255.0
+ no shutdown
+interface Vlan1
+ no ip address
+ shutdown
+ip default-gateway 10.10.99.1
+!
+access-list 10 remark Only the management VLAN may manage network devices
+access-list 10 permit 10.10.99.0 0.0.0.255
+!
+! SSH-only management. If your Packet Tracer version rejects the one-line
+! key command, type "crypto key generate rsa" and enter 2048 when asked.
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+line con 0
+ logging synchronous
+ exec-timeout 10 0
+ login local
+line vty 0 15
+ transport input ssh
+ login local
+ access-class 10 in
+ exec-timeout 10 0
+end
+write memory

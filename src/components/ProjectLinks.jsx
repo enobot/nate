@@ -10,8 +10,12 @@ export const PROJECT_LINK_TYPES = [
   { key: "video", label: "Demo video", icon: CirclePlay },
 ];
 
-/** Buttons for a project's demo, source code, documentation, and video links. */
-export default function ProjectLinks({ project, size = "md" }) {
+/**
+ * Buttons for a project's demo, source code, documentation, and video links.
+ * The first one is the primary button unless `primaryFirst` is false (when
+ * the page already has its own primary call to action).
+ */
+export default function ProjectLinks({ project, size = "md", primaryFirst = true }) {
   const available = PROJECT_LINK_TYPES.filter(({ key }) => project.links?.[key]);
   if (available.length === 0) return null;
   return (
@@ -20,7 +24,7 @@ export default function ProjectLinks({ project, size = "md" }) {
         <li key={key}>
           <ButtonLink
             href={project.links[key]}
-            variant={index === 0 && size === "md" ? "primary" : "ghost"}
+            variant={primaryFirst && index === 0 && size === "md" ? "primary" : "ghost"}
             icon={icon}
             external
             className={size === "sm" ? "px-3.5 text-xs" : undefined}

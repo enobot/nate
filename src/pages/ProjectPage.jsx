@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
-import { ArrowLeft, ArrowRight, CircleAlert } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, CircleAlert } from "lucide-react";
 import Chip from "../components/Chip.jsx";
+import InteractiveBlock from "../components/InteractiveBlock.jsx";
 import ProjectLinks from "../components/ProjectLinks.jsx";
 import ProjectVisual from "../components/ProjectVisual.jsx";
 import Reveal from "../components/Reveal.jsx";
 import StatusBadge from "../components/StatusBadge.jsx";
 import { projects } from "../data/projects.js";
+import { interactiveFor } from "../labs/registry.js";
 import { assetUrl } from "../lib/assetUrl.js";
 import { Link } from "../lib/router.jsx";
 import { projectPath } from "../lib/routes.js";
@@ -49,6 +51,7 @@ export default function ProjectPage({ project, navigated }) {
   const next = index < projects.length - 1 ? projects[index + 1] : null;
   const completed = project.status === "Completed";
   const prefix = `project-${project.id}`;
+  const interactive = interactiveFor(project);
 
   // After navigating here inside the site, move focus to the page title so
   // keyboard and screen-reader users start at the new content.
@@ -92,8 +95,17 @@ export default function ProjectPage({ project, navigated }) {
                 </li>
               ))}
             </ul>
-            <div className="mt-7">
-              <ProjectLinks project={project} />
+            <div className="mt-7 flex flex-wrap gap-2">
+              {interactive ? (
+                <Link
+                  to={`${projectPath(project)}#${interactive.anchor}`}
+                  className="glow-frame relative inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-linear-to-r from-electric-deep to-neon-purple-deep px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_-6px_rgb(61_123_255/0.7)] transition-[color,box-shadow,transform] duration-200 hover:shadow-[0_0_32px_-4px_rgb(168_85_247/0.75)] motion-safe:hover:-translate-y-0.5"
+                >
+                  <ArrowDown aria-hidden="true" className="size-4 shrink-0" />
+                  {interactive.cta}
+                </Link>
+              ) : null}
+              <ProjectLinks project={project} primaryFirst={!interactive} />
             </div>
           </div>
           <div className="glass hud-corners relative overflow-hidden rounded-2xl">
@@ -117,6 +129,8 @@ export default function ProjectPage({ project, navigated }) {
               <p className="max-w-3xl text-base sm:text-lg">{project.overview}</p>
             </Block>
           ) : null}
+
+          {interactive ? <InteractiveBlock interactive={interactive} headingId={`${prefix}-interactive`} /> : null}
 
           {has(project.problem) || has(project.solution) ? (
             <div className="grid gap-5 md:grid-cols-2">

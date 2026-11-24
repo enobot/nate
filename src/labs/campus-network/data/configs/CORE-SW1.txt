@@ -1,0 +1,114 @@
+! =====================================================================
+! CORE-SW1  -  Core switch (Cisco 2960-24TT)  -  Halcyon Ridge University
+! Role: joins the router, both buildings and the server; spanning-tree
+! root for every user VLAN; hosts the campus server port.
+!
+! How to use: open CORE-SW1 > CLI in Packet Tracer and paste this whole
+! file at the "Switch>" prompt. Lines starting with "!" are comments.
+! Passwords below are lab-only placeholders. Never reuse them on real gear.
+! =====================================================================
+enable
+configure terminal
+hostname CORE-SW1
+no ip domain-lookup
+ip domain-name hru.test
+enable secret Lab-Enable-2026
+service password-encryption
+username netadmin privilege 15 secret Lab-Admin-2026
+banner motd # Halcyon Ridge University lab network - authorized access only #
+!
+! VTP transparent: each switch keeps its own VLAN list, so a mistake on
+! one switch can never wipe the VLANs on the others.
+vtp mode transparent
+spanning-tree mode rapid-pvst
+!
+vlan 10
+ name FACULTY
+vlan 20
+ name STUDENTS
+vlan 30
+ name SERVERS
+vlan 50
+ name VOICE
+vlan 99
+ name MGMT
+vlan 998
+ name PARKING
+vlan 999
+ name NATIVE
+!
+! Make the core the root bridge so traffic takes the shortest path.
+spanning-tree vlan 10,20,30,50,99 root primary
+!
+! ---------------------------------------------------------------------
+! Trunks: only the VLANs in use are allowed, the native VLAN is moved
+! off VLAN 1 to an unused VLAN, and DTP negotiation is turned off.
+! ---------------------------------------------------------------------
+interface GigabitEthernet0/1
+ description Trunk to R1 Gi0/0/0
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,50,99
+ switchport nonegotiate
+ no shutdown
+interface FastEthernet0/1
+ description Trunk to ACC-SW1 Gi0/1 (Hartley Hall)
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,50,99
+ switchport nonegotiate
+ no shutdown
+interface FastEthernet0/2
+ description Trunk to ACC-SW2 Gi0/1 (Library)
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,50,99
+ switchport nonegotiate
+ no shutdown
+!
+! Campus web and DNS server.
+interface FastEthernet0/10
+ description SRV-WEB-DNS (VLAN 30)
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+!
+! Every unused port: parked in a dead VLAN and shut down.
+interface range FastEthernet0/3 - 9, FastEthernet0/11 - 24, GigabitEthernet0/2
+ description Unused - parked
+ switchport mode access
+ switchport access vlan 998
+ shutdown
+!
+! ---------------------------------------------------------------------
+! Management address in VLAN 99; VLAN 1's interface is shut down.
+! ---------------------------------------------------------------------
+interface Vlan99
+ description Management
+ ip address 10.10.99.2 255.255.255.0
+ no shutdown
+interface Vlan1
+ no ip address
+ shutdown
+ip default-gateway 10.10.99.1
+!
+access-list 10 remark Only the management VLAN may manage network devices
+access-list 10 permit 10.10.99.0 0.0.0.255
+!
+! SSH-only management. If your Packet Tracer version rejects the one-line
+! key command, type "crypto key generate rsa" and enter 2048 when asked.
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+line con 0
+ logging synchronous
+ exec-timeout 10 0
+ login local
+line vty 0 15
+ transport input ssh
+ login local
+ access-class 10 in
+ exec-timeout 10 0
+end
+write memory

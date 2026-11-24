@@ -51,7 +51,7 @@ The repository also includes [fictional sample reports](samples/), [real console
 | Technology | Why |
 | --- | --- |
 | **Windows PowerShell 5.1** | Installed on every supported Windows 10/11 and Windows Server machine, so help desk PCs can run the toolkit without installing anything. The code avoids PowerShell 7-only syntax. |
-| **PowerShell 7** | Supported as a second target. It is only tested in GitHub Actions (see [Testing](#testing)). |
+| **PowerShell 7** | Supported as a second target. It is tested in GitHub Actions, not locally (see [Testing](#testing)). |
 | **`System.Net.NetworkInformation.Ping`** (.NET) | Used for ping instead of `Test-Connection`. `Test-Connection` returns different objects in 5.1 and 7, and the 5.1 version has no timeout parameter (checked with `Get-Command Test-Connection`). The .NET class behaves the same in both and takes a timeout in milliseconds. |
 | **`tracert.exe -d`** | Used for traceroute instead of `Test-NetConnection -TraceRoute`. tracert shows the three round-trip times per hop and which hops did not answer; `Test-NetConnection -TraceRoute` only returns a list of hop addresses and ran a ping test first (5.1 s against 127.0.0.1, versus 0.12 s for tracert, on the development PC). |
 | **`Get-NetIPConfiguration`** (NetTCPIP) | The object form of `ipconfig /all`: addresses, prefix length, gateway, DNS servers, DHCP state and the adapter, without parsing text. |
@@ -60,7 +60,7 @@ The repository also includes [fictional sample reports](samples/), [real console
 | **`System.Net.Sockets.TcpClient`** (.NET) | Used for TCP port checks instead of `Test-NetConnection -Port`, which has no timeout setting. Against a closed port on 127.0.0.1 on the development PC, `Test-NetConnection -Port` took 8.9 s; `TcpClient` reported "refused" in 2.1 s. |
 | **Pester 6.2.0** | The standard PowerShell test framework. Mocks let unit tests replace the Windows network calls with fixed data, so each pass/fail/timeout case is repeatable. |
 | **PSScriptAnalyzer** | Static analysis for PowerShell. Run in CI only. |
-| **GitHub Actions (`windows-latest`)** | Runs the tests on Windows PowerShell 5.1 and PowerShell 7 on every push and pull request. |
+| **GitHub Actions (`windows-latest`)** | Runs the tests on Windows PowerShell 5.1 and PowerShell 7 for every push and pull request that changes the toolkit. |
 
 The timings above are single measurements on one Windows 11 PC (Windows PowerShell 5.1.26100), meant to show the difference in behaviour, not as benchmarks.
 
@@ -331,7 +331,7 @@ Pester 5.0 or later is required (developed with Pester 6.2.0): `Install-Module P
 
 **Results on the development PC** (Windows 11, Windows PowerShell 5.1.26100, Pester 6.2.0, non-elevated): 271 tests passed, 0 failed, 0 skipped (260 unit, 11 integration). Pester's code coverage for `src\NetworkDiagnostics` was 94.3% of 1,619 analysed commands. The end-to-end menu test runs in a separate process, so it is not counted in that figure.
 
-**PowerShell 7 and PSScriptAnalyzer** are only run in GitHub Actions ([toolkit.yml](../../.github/workflows/toolkit.yml)): the same suite runs once with `shell: powershell` (5.1) and once with `shell: pwsh` (7), and PSScriptAnalyzer checks the module, entry script and tools. Until that workflow has run on GitHub, PowerShell 7 support is untested.
+**PowerShell 7 and PSScriptAnalyzer** are only run in GitHub Actions ([toolkit.yml](../../.github/workflows/toolkit.yml)): the same suite runs once with `shell: powershell` (5.1) and once with `shell: pwsh` (7), and PSScriptAnalyzer checks the module, entry script and tools. The first run on GitHub passed all three jobs: Pester on Windows PowerShell 5.1, Pester on PowerShell 7, and PSScriptAnalyzer with no findings.
 
 ## Troubleshooting examples
 

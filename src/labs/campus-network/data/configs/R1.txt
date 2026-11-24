@@ -1,0 +1,144 @@
+! =====================================================================
+! R1  -  Campus router (Cisco ISR4331)  -  Halcyon Ridge University lab
+! Role: inter-VLAN routing (router-on-a-stick), DHCP server, ACLs
+!
+! How to use: open R1 > CLI in Packet Tracer, answer "no" to the initial
+! configuration dialog, then paste this whole file at the "Router>" prompt.
+! Lines starting with "!" are comments; IOS ignores them.
+! Passwords below are lab-only placeholders. Never reuse them on real gear.
+! =====================================================================
+enable
+configure terminal
+hostname R1
+no ip domain-lookup
+ip domain-name hru.test
+enable secret Lab-Enable-2026
+service password-encryption
+username netadmin privilege 15 secret Lab-Admin-2026
+banner motd # Halcyon Ridge University lab network - authorized access only #
+!
+! ---------------------------------------------------------------------
+! DHCP server. Addresses .1-.20 in each pool are reserved for gateways,
+! printers and other static devices, so DHCP never hands them out.
+! VLAN 30 (servers) and VLAN 99 (management) use static addresses only.
+! ---------------------------------------------------------------------
+ip dhcp excluded-address 10.10.10.1 10.10.10.20
+ip dhcp excluded-address 10.10.20.1 10.10.20.20
+ip dhcp excluded-address 10.10.50.1 10.10.50.20
+ip dhcp pool FACULTY
+ network 10.10.10.0 255.255.255.0
+ default-router 10.10.10.1
+ dns-server 10.10.30.10
+ip dhcp pool STUDENTS
+ network 10.10.20.0 255.255.255.0
+ default-router 10.10.20.1
+ dns-server 10.10.30.10
+ip dhcp pool VOICE
+ network 10.10.50.0 255.255.255.0
+ default-router 10.10.50.1
+ dns-server 10.10.30.10
+!
+! ---------------------------------------------------------------------
+! STUDENT-IN: applied INBOUND on the student gateway (Gi0/0/0.20), as
+! close to the source as possible. Students get DHCP, campus web/DNS and
+! ping to the server; everything else toward internal VLANs is blocked.
+! ---------------------------------------------------------------------
+ip access-list extended STUDENT-IN
+ remark Let student devices request and renew DHCP leases from R1
+ permit udp any eq 68 any eq 67
+ remark Allow replies to pings that faculty or IT send to student devices
+ permit icmp 10.10.20.0 0.0.0.255 any echo-reply
+ remark Campus web (HTTP/HTTPS), DNS and ping to the campus server
+ permit tcp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 80
+ permit tcp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 443
+ permit udp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 53
+ permit icmp 10.10.20.0 0.0.0.255 host 10.10.30.10 echo
+ remark Block everything else toward internal networks
+ deny ip 10.10.20.0 0.0.0.255 10.10.10.0 0.0.0.255
+ deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255
+ deny ip 10.10.20.0 0.0.0.255 10.10.50.0 0.0.0.255
+ deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255
+ remark Students may still reach their own gateway (and an internet edge later)
+ permit ip 10.10.20.0 0.0.0.255 any
+!
+! ---------------------------------------------------------------------
+! SERVERS-OUT: applied OUTBOUND on the server gateway (Gi0/0/0.30), so it
+! protects the server VLAN from every other VLAN with one list. Only the
+! services the server actually offers are reachable; IT has full access.
+! The explicit final deny shows hit counts in "show access-lists".
+! ---------------------------------------------------------------------
+ip access-list extended SERVERS-OUT
+ remark Campus web and DNS are open to every VLAN
+ permit tcp any host 10.10.30.10 eq 80
+ permit tcp any host 10.10.30.10 eq 443
+ permit udp any host 10.10.30.10 eq 53
+ remark Anyone may ping servers, and replies to server-initiated pings may return
+ permit icmp any 10.10.30.0 0.0.0.255 echo
+ permit icmp any 10.10.30.0 0.0.0.255 echo-reply
+ remark The IT team in the management VLAN has full admin access to servers
+ permit ip 10.10.99.0 0.0.0.255 10.10.30.0 0.0.0.255
+ deny ip any any
+!
+! Management-plane ACL: only the management VLAN may open SSH sessions.
+access-list 10 remark Only the management VLAN may manage network devices
+access-list 10 permit 10.10.99.0 0.0.0.255
+!
+! ---------------------------------------------------------------------
+! Router-on-a-stick: one physical trunk to CORE-SW1, one subinterface
+! (and one gateway address) per VLAN. The physical interface carries no
+! IP address; it only needs to be up.
+! ---------------------------------------------------------------------
+interface GigabitEthernet0/0/0
+ description Trunk to CORE-SW1 Gi0/1
+ no ip address
+ no shutdown
+interface GigabitEthernet0/0/0.10
+ description VLAN 10 FACULTY gateway
+ encapsulation dot1Q 10
+ ip address 10.10.10.1 255.255.255.0
+interface GigabitEthernet0/0/0.20
+ description VLAN 20 STUDENTS gateway
+ encapsulation dot1Q 20
+ ip address 10.10.20.1 255.255.255.0
+ ip access-group STUDENT-IN in
+interface GigabitEthernet0/0/0.30
+ description VLAN 30 SERVERS gateway
+ encapsulation dot1Q 30
+ ip address 10.10.30.1 255.255.255.0
+ ip access-group SERVERS-OUT out
+interface GigabitEthernet0/0/0.50
+ description VLAN 50 VOICE gateway
+ encapsulation dot1Q 50
+ ip address 10.10.50.1 255.255.255.0
+interface GigabitEthernet0/0/0.99
+ description VLAN 99 MGMT gateway
+ encapsulation dot1Q 99
+ ip address 10.10.99.1 255.255.255.0
+interface GigabitEthernet0/0/0.999
+ description VLAN 999 NATIVE - matches the switch trunks; no IP on purpose
+ encapsulation dot1Q 999 native
+interface GigabitEthernet0/0/1
+ description Unused
+ shutdown
+interface GigabitEthernet0/0/2
+ description Unused
+ shutdown
+!
+! ---------------------------------------------------------------------
+! SSH-only management. The RSA key needs the hostname and domain name set
+! above. If your Packet Tracer version rejects the one-line key command,
+! type "crypto key generate rsa" and enter 2048 when it asks for the size.
+! ---------------------------------------------------------------------
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+line con 0
+ logging synchronous
+ exec-timeout 10 0
+ login local
+line vty 0 4
+ transport input ssh
+ login local
+ access-class 10 in
+ exec-timeout 10 0
+end
+write memory

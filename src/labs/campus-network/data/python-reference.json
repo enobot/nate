@@ -1,0 +1,419 @@
+{
+  "about": "Decisions from the lab's Python checker (labcheck.network.CampusNetwork.evaluate_policy) for every policy test case, at source_commit. network.test.js checks that the JavaScript port gives the same results.",
+  "source_commit": "93dcae70c53b96e01838e583c439fdad8cb98569",
+  "cases": [
+    {
+      "id": "P01",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit udp any eq 68 any eq 67)",
+        "delivered to R1 itself"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit udp any eq 68 any eq 67"
+        ]
+      ]
+    },
+    {
+      "id": "P02",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit ip 10.10.20.0 0.0.0.255 any)",
+        "delivered to R1 itself"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit ip 10.10.20.0 0.0.0.255 any"
+        ]
+      ]
+    },
+    {
+      "id": "P03",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit tcp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 80)",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit tcp any host 10.10.30.10 eq 80)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit tcp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 80"
+        ],
+        [
+          "SERVERS-OUT",
+          "permit tcp any host 10.10.30.10 eq 80"
+        ]
+      ]
+    },
+    {
+      "id": "P04",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit tcp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 443)",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit tcp any host 10.10.30.10 eq 443)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit tcp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 443"
+        ],
+        [
+          "SERVERS-OUT",
+          "permit tcp any host 10.10.30.10 eq 443"
+        ]
+      ]
+    },
+    {
+      "id": "P05",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit udp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 53)",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit udp any host 10.10.30.10 eq 53)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit udp 10.10.20.0 0.0.0.255 host 10.10.30.10 eq 53"
+        ],
+        [
+          "SERVERS-OUT",
+          "permit udp any host 10.10.30.10 eq 53"
+        ]
+      ]
+    },
+    {
+      "id": "P06",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit icmp 10.10.20.0 0.0.0.255 host 10.10.30.10 echo)",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit icmp any 10.10.30.0 0.0.0.255 echo)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit icmp 10.10.20.0 0.0.0.255 host 10.10.30.10 echo"
+        ],
+        [
+          "SERVERS-OUT",
+          "permit icmp any 10.10.30.0 0.0.0.255 echo"
+        ]
+      ]
+    },
+    {
+      "id": "P07",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> deny (deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P08",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> deny (deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P09",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> deny (deny ip 10.10.20.0 0.0.0.255 10.10.10.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "deny ip 10.10.20.0 0.0.0.255 10.10.10.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P10",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> deny (deny ip 10.10.20.0 0.0.0.255 10.10.10.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "deny ip 10.10.20.0 0.0.0.255 10.10.10.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P11",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> deny (deny ip 10.10.20.0 0.0.0.255 10.10.50.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "deny ip 10.10.20.0 0.0.0.255 10.10.50.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P12",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> deny (deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P13",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> deny (deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "deny ip 10.10.20.0 0.0.0.255 10.10.99.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P14",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit ip 10.10.20.0 0.0.0.255 any)",
+        "delivered to R1 itself",
+        "R1: VTY access-class 10 -> deny (implicit deny any)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit ip 10.10.20.0 0.0.0.255 any"
+        ]
+      ]
+    },
+    {
+      "id": "P15",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "out on GigabitEthernet0/0/0.20: no ACL"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P16",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit icmp 10.10.20.0 0.0.0.255 any echo-reply)",
+        "out on GigabitEthernet0/0/0.10: no ACL"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit icmp 10.10.20.0 0.0.0.255 any echo-reply"
+        ]
+      ]
+    },
+    {
+      "id": "P17",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit tcp any host 10.10.30.10 eq 80)"
+      ],
+      "matched": [
+        [
+          "SERVERS-OUT",
+          "permit tcp any host 10.10.30.10 eq 80"
+        ]
+      ]
+    },
+    {
+      "id": "P18",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit udp any host 10.10.30.10 eq 53)"
+      ],
+      "matched": [
+        [
+          "SERVERS-OUT",
+          "permit udp any host 10.10.30.10 eq 53"
+        ]
+      ]
+    },
+    {
+      "id": "P19",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> deny (deny ip any any)"
+      ],
+      "matched": [
+        [
+          "SERVERS-OUT",
+          "deny ip any any"
+        ]
+      ]
+    },
+    {
+      "id": "P20",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> deny (deny ip any any)"
+      ],
+      "matched": [
+        [
+          "SERVERS-OUT",
+          "deny ip any any"
+        ]
+      ]
+    },
+    {
+      "id": "P21",
+      "action": "permit",
+      "reasons": [
+        "same VLAN 10: switched, never reaches R1"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P22",
+      "action": "deny",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "out on GigabitEthernet0/0/0.99: no ACL",
+        "CORE-SW1: VTY access-class 10 -> deny (implicit deny any)"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P23",
+      "action": "permit",
+      "reasons": [
+        "same VLAN 99: switched, never reaches R1",
+        "CORE-SW1: VTY access-class 10 -> permit (permit 10.10.99.0 0.0.0.255)"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P24",
+      "action": "permit",
+      "reasons": [
+        "same VLAN 99: switched, never reaches R1",
+        "ACC-SW2: VTY access-class 10 -> permit (permit 10.10.99.0 0.0.0.255)"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P25",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.99: no ACL",
+        "delivered to R1 itself",
+        "R1: VTY access-class 10 -> permit (permit 10.10.99.0 0.0.0.255)"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P26",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.99: no ACL",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit ip 10.10.99.0 0.0.0.255 10.10.30.0 0.0.0.255)"
+      ],
+      "matched": [
+        [
+          "SERVERS-OUT",
+          "permit ip 10.10.99.0 0.0.0.255 10.10.30.0 0.0.0.255"
+        ]
+      ]
+    },
+    {
+      "id": "P27",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.99: no ACL",
+        "out on GigabitEthernet0/0/0.20: no ACL"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P28",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.30: no ACL",
+        "out on GigabitEthernet0/0/0.20: no ACL"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P29",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.50: no ACL",
+        "delivered to R1 itself"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P30",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "delivered to R1 itself"
+      ],
+      "matched": []
+    },
+    {
+      "id": "P31",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.10: no ACL",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit icmp any 10.10.30.0 0.0.0.255 echo-reply)"
+      ],
+      "matched": [
+        [
+          "SERVERS-OUT",
+          "permit icmp any 10.10.30.0 0.0.0.255 echo-reply"
+        ]
+      ]
+    },
+    {
+      "id": "P32",
+      "action": "permit",
+      "reasons": [
+        "in on GigabitEthernet0/0/0.20: STUDENT-IN -> permit (permit icmp 10.10.20.0 0.0.0.255 any echo-reply)",
+        "out on GigabitEthernet0/0/0.30: SERVERS-OUT -> permit (permit icmp any 10.10.30.0 0.0.0.255 echo-reply)"
+      ],
+      "matched": [
+        [
+          "STUDENT-IN",
+          "permit icmp 10.10.20.0 0.0.0.255 any echo-reply"
+        ],
+        [
+          "SERVERS-OUT",
+          "permit icmp any 10.10.30.0 0.0.0.255 echo-reply"
+        ]
+      ]
+    }
+  ]
+}

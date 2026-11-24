@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { ICONS } from "../components/icons.js";
+import { INTERACTIVES } from "../labs/registry.js";
 import { headFor, headTags } from "../lib/routes.js";
 import { profile } from "./profile.js";
 import { PROJECT_STATUSES, projects } from "./projects.js";
@@ -50,6 +51,10 @@ describe("projects data", () => {
       expect(image.height).toBeGreaterThan(0);
       expect(existsSync(resolve(process.cwd(), "public", image.src)), image.src).toBe(true);
     }
+  });
+
+  it.each(projects)("$title only names an interactive tool that exists (if any)", (project) => {
+    if (project.interactive !== undefined) expect(Object.keys(INTERACTIVES)).toContain(project.interactive);
   });
 
   it("only marks a project Completed without goal wording on its page either", () => {

@@ -64,6 +64,18 @@ describe("accessibility (axe-core)", () => {
     },
   );
 
+  it("has no violations with the policy explorer loaded, all lab cases run, and an invalid address typed", async () => {
+    const user = userEvent.setup();
+    const path = projectPath(projects.find((item) => item.interactive));
+    setTitleFor(path);
+    render(<App url={path} />);
+    await screen.findByRole("combobox", { name: /Start from a lab test case/ });
+    await user.click(screen.getByRole("button", { name: /^Run all/ }));
+    await user.selectOptions(screen.getByRole("combobox", { name: "To" }), "custom");
+    await user.type(screen.getByRole("textbox", { name: "To: IPv4 address" }), "10.10");
+    expect(await runAxe()).toEqual([]);
+  });
+
   it("has no violations on the not-found page", async () => {
     setTitleFor("/no-such-page/");
     render(<App url="/no-such-page/" />);

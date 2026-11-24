@@ -9,6 +9,23 @@ import { withBase } from "./lib/router.jsx";
 import { projectPath } from "./lib/routes.js";
 
 describe("project cards", () => {
+  it("link an interactive project straight to its tool, and only that project", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const section = document.getElementById("projects");
+    const project = projects.find((item) => item.interactive);
+    for (const other of projects.filter((item) => !item.interactive)) {
+      const card = within(section).getByRole("article", { name: other.title });
+      expect(within(card).queryByRole("link", { name: /^Try it live/ }), other.id).toBeNull();
+    }
+    const card = within(section).getByRole("article", { name: project.title });
+    const link = within(card).getByRole("link", { name: `Try it live: Policy explorer for ${project.title}` });
+    expect(link).toHaveAttribute("href", withBase(`${projectPath(project)}#policy-explorer`));
+    await user.click(link);
+    expect(screen.getByRole("heading", { level: 1, name: project.title })).toBeInTheDocument();
+    expect(await screen.findByRole("combobox", { name: /Start from a lab test case/ })).toBeInTheDocument();
+  });
+
   it("each open the project's own page", () => {
     render(<App />);
     const section = document.getElementById("projects");

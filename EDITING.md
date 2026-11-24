@@ -83,6 +83,11 @@ Only add a link after you've opened it yourself and checked that it works.
 
 **Remove a project:** delete its whole `{ ... },` block.
 
+**Interactive tools:** a project can show a tool that runs on its page, like the Campus
+Network Lab's policy explorer (`interactive: "campus-policy-explorer"`). The card and the
+page then get a "Try it" link to it. The tools themselves live in `src/labs/`, and
+`src/labs/registry.js` lists the names you can use.
+
 > Before you send the link to recruiters, edit or delete any "In Development" project you
 > aren't actually building. Interviewers may ask about anything listed.
 
