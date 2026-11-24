@@ -78,7 +78,7 @@ export const projects = [
     title: "IT Asset & Service Request Tracker",
     status: "Completed",
     featured: true,
-    category: "AI-assisted portfolio project",
+    category: "Portfolio project",
     summary:
       "A full-stack IT management app for a fictional college that tracks equipment, network jacks and switch ports, and service requests from intake to resolution.",
     tech: [
@@ -178,7 +178,7 @@ export const projects = [
       { step: "Full setup, test commands, and Docker instructions are in the README." },
     ],
     contributions: [
-      "Built with AI coding assistance as a portfolio project, directed by Tracy Tran.",
+      "Portfolio project built by Tracy Tran and Nathanael Haig.",
       "The data model is based on the jack, switch port, and ServiceNow ticket work in Nathanael's CSUF IT Telecommunications job.",
     ],
     links: {
@@ -192,7 +192,7 @@ export const projects = [
     title: "Network Diagnostics Toolkit",
     status: "Completed",
     featured: true,
-    category: "AI-assisted portfolio project",
+    category: "Portfolio project",
     summary:
       "A read-only PowerShell module and interactive menu for help desk and network technicians. It runs ping, traceroute, IP configuration, DNS, adapter, and TCP port checks, then saves the results as timestamped CSV and text reports plus paste-ready ticket notes.",
     tech: ["PowerShell", ".NET (Ping, TcpClient)", "NetTCPIP / DnsClient / NetAdapter", "tracert", "Pester", "PSScriptAnalyzer", "GitHub Actions"],
@@ -265,7 +265,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
       { step: "Or import the module and run the commands directly.", code: "Import-Module .\\src\\NetworkDiagnostics\\NetworkDiagnostics.psd1" },
     ],
     contributions: [
-      "Built with AI coding assistance as a portfolio project, directed by Tracy Tran.",
+      "Portfolio project built by Tracy Tran and Nathanael Haig.",
       "The checks mirror the ping, tracert, and ipconfig troubleshooting in Nathanael's CSUF IT Telecommunications job.",
     ],
     links: {
@@ -278,7 +278,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     id: "movie-theater-tickets",
     title: "Movie Theater Ticket System",
     status: "Completed",
-    category: "AI-assisted rebuild of coursework",
+    category: "Expanded rebuild of coursework",
     summary:
       "An expanded web rebuild of an academic C# desktop project: a full-stack movie ticketing app with live seat maps, timed seat holds, simulated checkout, and an admin dashboard.",
     tech: [
@@ -383,7 +383,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     ],
     contributions: [
       "Original coursework: Nathanael Haig built the original C# desktop ticketing app for a class. That version isn't included here.",
-      "This web rebuild: built with AI coding assistance as a portfolio project, directed by Tracy Tran, reusing the original's pricing rules.",
+      "This web rebuild: a portfolio project built by Tracy Tran and Nathanael Haig, reusing the original's pricing rules.",
     ],
     links: {
       demo: "https://movie-theater-ticket-system.onrender.com",
@@ -395,7 +395,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     id: "operations-optimization",
     title: "Operations & Optimization Analysis",
     status: "Completed",
-    category: "AI-assisted rebuild of coursework",
+    category: "Expanded rebuild of coursework",
     summary:
       "A Streamlit app that solves a product-mix linear program with SciPy's HiGHS solver, with shadow prices, sensitivity sweeps, Goal Seek, and saved SQLite scenarios. An expanded rebuild of an Excel coursework project.",
     tech: ["Python", "SciPy (HiGHS)", "pandas", "SQL / SQLite", "Plotly", "Streamlit", "Excel (openpyxl)", "pytest", "GitHub Actions"],
@@ -449,7 +449,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     ],
     contributions: [
       "Original coursework: Nathanael Haig built the original Excel linear-programming model for a class.",
-      "This web rebuild: built with AI coding assistance as a portfolio project, directed by Tracy Tran.",
+      "This web rebuild: a portfolio project built by Tracy Tran and Nathanael Haig.",
     ],
     links: {
       demo: "https://nate-operations-optimization.streamlit.app",
@@ -463,7 +463,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     id: "campus-network-lab",
     title: "Campus Network Lab",
     status: "In Development",
-    category: "AI-assisted portfolio project",
+    category: "Portfolio project",
     summary:
       "A Cisco Packet Tracer lab of a fictional university network. The design, device configs, and automated checks are done; the Packet Tracer build and hands-on testing are in progress.",
     tech: ["Cisco Packet Tracer", "VLANs", "802.1Q trunking", "Inter-VLAN routing", "DHCP", "ACLs", "SSH", "Python (pytest)", "JavaScript"],
@@ -505,7 +505,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
       "The automated checks read the config files; they don't prove the configs behave the same on Packet Tracer's simulated devices.",
     ],
     contributions: [
-      "Designed with AI coding assistance as a portfolio project, directed by Tracy Tran.",
+      "Portfolio project designed by Tracy Tran and Nathanael Haig.",
     ],
     links: {
       source: "https://github.com/enobot/campus-network-lab",

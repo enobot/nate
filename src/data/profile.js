@@ -46,7 +46,7 @@ export const profile = {
   about: {
     paragraphs: [
       "I'm an Information Systems student at California State University, Fullerton (B.A. in Business Administration, Information Systems concentration, expected May 2027). My coursework covers database management, SQL, systems analysis, and business telecommunications.",
-      "Alongside my job on the campus network team, I build small IT tools to practice the work: a diagnostics module, an asset and ticket tracker, and a network lab. Each project page says what is finished, what was tested, and how AI coding assistance was used.",
+      "Alongside my job on the campus network team, I build small IT tools to practice the work: a diagnostics module, an asset and ticket tracker, and a network lab. Each project page says what is finished and what was tested.",
       "Earlier roles in high-volume restaurants gave me customer service, team leadership, and staff training experience.",
     ],
     targetRoles: ["IT support", "Network technician", "NOC technician", "IT analyst"],

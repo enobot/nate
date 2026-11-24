@@ -24,7 +24,7 @@ export default function Projects() {
       index="03"
       kicker="Portfolio"
       title="Projects"
-      intro="Each project page covers the problem, the solution, how it works, how it was tested, its limits, and who did what. Every project says whether it is coursework, an AI-assisted rebuild, or an AI-assisted portfolio project."
+      intro="Each project page covers the problem, the solution, how it works, how it was tested, its limits, and who did what. Each one says whether it is a portfolio project or an expanded rebuild of coursework."
     >
       <div role="group" aria-label="Filter projects by status" className="mb-8 flex flex-wrap gap-2">
         {FILTERS.map((value) => {
