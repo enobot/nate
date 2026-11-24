@@ -151,7 +151,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
       { step: "Or import the module and run the commands directly.", code: "Import-Module .\\src\\NetworkDiagnostics\\NetworkDiagnostics.psd1" },
     ],
     contributions: [
-      "Portfolio project built by Tracy Tran and Nathanael Haig.",
+      "Portfolio project built by Nathanael Haig.",
       "The checks mirror the ping, tracert, and ipconfig troubleshooting in Nathanael's CSUF IT Telecommunications job.",
     ],
     links: {
@@ -265,7 +265,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
       { step: "Full setup, test commands, and Docker instructions are in the README." },
     ],
     contributions: [
-      "Portfolio project built by Tracy Tran and Nathanael Haig.",
+      "Portfolio project built by Nathanael Haig.",
       "The data model is based on the jack, switch port, and ServiceNow ticket work in Nathanael's CSUF IT Telecommunications job.",
     ],
     links: {
@@ -321,7 +321,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
       "The automated checks read the config files; they don't prove the configs behave the same on Packet Tracer's simulated devices.",
     ],
     contributions: [
-      "Portfolio project designed by Tracy Tran and Nathanael Haig.",
+      "Portfolio project designed by Nathanael Haig.",
     ],
     links: {
       source: "https://github.com/enobot/campus-network-lab",
@@ -386,7 +386,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     ],
     contributions: [
       "Original coursework: Nathanael Haig built the original Excel linear-programming model for a class.",
-      "This web rebuild: a portfolio project built by Tracy Tran and Nathanael Haig.",
+      "This web rebuild: a portfolio project built by Nathanael Haig.",
     ],
     links: {
       demo: "https://nate-operations-optimization.streamlit.app",
@@ -503,7 +503,7 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     ],
     contributions: [
       "Original coursework: Nathanael Haig built the original C# desktop ticketing app for a class. That version isn't included here.",
-      "This web rebuild: a portfolio project built by Tracy Tran and Nathanael Haig, reusing the original's pricing rules.",
+      "This web rebuild: a portfolio project built by Nathanael Haig, reusing the original's pricing rules.",
     ],
     links: {
       demo: "https://movie-theater-ticket-system.onrender.com",

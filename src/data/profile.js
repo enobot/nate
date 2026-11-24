@@ -273,7 +273,7 @@ export const profile = {
   },
 
   // People credited in the footer for building this site.
-  credits: ["Nathanael Haig", "Tracy Tran"],
+  credits: ["Nathanael Haig"],
 
   // Resume downloads. Files live in public/resume/. `primary: true` is the one
   // the "Download Resume" button in the hero links to.

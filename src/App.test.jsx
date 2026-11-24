@@ -79,7 +79,7 @@ describe("App rendering", () => {
     expect(links[0]).toHaveAttribute("download");
   });
 
-  it("credits Nathanael Haig and Tracy Tran in the footer", () => {
+  it("credits Nathanael Haig in the footer", () => {
     render(<App />);
     const footer = screen.getByRole("contentinfo");
     expect(within(footer).getByText(/© \d{4} Nathanael Haig and Tracy Tran/)).toBeInTheDocument();
