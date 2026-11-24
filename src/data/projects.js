@@ -239,12 +239,15 @@ export const projects = [
       "optimizer/: the model, solver, sensitivity, and Goal Seek as plain Python with no Streamlit code, so it can be tested on its own.",
       "data/: SQLite storage (datasets, scenarios, solver runs) and CSV/Excel import and export.",
       "app_pages/ and ui/: eight Streamlit pages (Dashboard, Optimizer, Sensitivity, Scenarios, Goal Seek, Data & Files, SQL Reports, About) with Plotly charts.",
+      "Hosted free on Streamlit Community Cloud from this site's repository. The app sleeps when nobody has used it for a while, so the first visit may need a click to wake it, and anything a visitor saves is reset when it restarts.",
     ],
     testing: [
       "127 automated tests (pytest and Streamlit AppTest): hand-solved textbook problems, infeasible and unbounded cases, shadow-price sign checks, Goal Seek accuracy, upload validation, SQLite round trips, and CSV/Excel round trips.",
       "Checked by hand in the browser: raising labor hours from 2,800 to 3,000 raised profit from $134,524 to $138,844, exactly the 200 × $21.60 the app's shadow price predicts.",
+      "The hosted app shows the same $134,524 optimal plan as the local one.",
     ],
     links: {
+      demo: "https://nate-operations-optimization.streamlit.app",
       source: "https://github.com/enobot/nate/tree/main/apps/operations-optimization-analysis",
       docs: "https://github.com/enobot/nate/blob/main/apps/operations-optimization-analysis/docs/WALKTHROUGH.md",
     },

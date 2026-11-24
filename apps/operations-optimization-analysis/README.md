@@ -6,8 +6,8 @@ A Streamlit app that decides how many of each product a small manufacturer shoul
 
 **Synthetic data.** The company in the app, *Juniper Oak Furniture Co.*, is fictional. Every price, cost, capacity, and history value was made up for demonstration, and the app labels it that way on every page.
 
-- Live demo: *(add the Streamlit Community Cloud URL after deploying, see [Deployment](#deployment))*
-- Source: https://github.com/enobot/operations-optimization-analysis
+- Live demo: https://nate-operations-optimization.streamlit.app (a free Streamlit Community Cloud app: it sleeps when nobody has used it for a while, so the first visit may need a click to wake it up)
+- Source: https://github.com/enobot/nate/tree/main/apps/operations-optimization-analysis
 
 ---
 
@@ -301,11 +301,11 @@ The app was also started with `streamlit run app.py --server.headless true --ser
 
 ### Streamlit Community Cloud
 
-These steps follow the Streamlit docs (deploy page and app-dependencies page, checked November 2026). The deployment itself has **not** been done or tested yet.
+These steps follow the Streamlit docs (deploy page and app-dependencies page, checked November 2026). The app is deployed this way at https://nate-operations-optimization.streamlit.app.
 
-1. Push this folder to a GitHub repository named `enobot/operations-optimization-analysis`.
+1. The app lives in the `enobot/nate` repository, in `apps/operations-optimization-analysis/`. The theme config is in that repository's root `.streamlit/config.toml`.
 2. Sign in at https://share.streamlit.io with GitHub and click **Create app**, then **Yup, I have an app**.
-3. Fill in the repository (`enobot/operations-optimization-analysis`), branch (`main`), and main file path (`app.py`). Optionally pick a custom subdomain.
+3. Fill in the repository (`enobot/nate`), branch (`main`), and main file path (`apps/operations-optimization-analysis/app.py`). Optionally pick a custom subdomain.
 4. Open **Advanced settings**, choose **Python 3.13** in the **Python version** dropdown (the default is 3.12, and this project was only tested on 3.13), leave **Secrets** empty, and click **Save**.
 5. Deploy the app from the same form. Community Cloud reads `requirements.txt` from the repository root (it looks next to the entrypoint first, then the root) and installs those exact versions; the first build can take a few minutes.
 6. Open the app URL and check that the Dashboard loads with the "Synthetic data" label.
@@ -314,11 +314,7 @@ These steps follow the Streamlit docs (deploy page and app-dependencies page, ch
 
 ### Linking from the portfolio
 
-After deploying, copy the app URL (for example `https://<your-subdomain>.streamlit.app`) and:
-
-1. Replace the "Live demo" line at the top of this README with the URL.
-2. On the portfolio site, add a project card with two links: **Live demo** → the Streamlit URL, **Source code** → https://github.com/enobot/operations-optimization-analysis.
-3. Optionally add the demo URL to the repository's GitHub "About" section (Website field).
+The portfolio's Operations & Optimization project page links to the live demo, this folder's source code, and the walkthrough.
 
 ## What's next
 

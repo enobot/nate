@@ -72,6 +72,6 @@ st.markdown(
 st.subheader("Credits")
 st.markdown(
     "Built by **Nathanael Haig** and **Tracy Tran**. Source code: "
-    "[github.com/enobot/operations-optimization-analysis](https://github.com/enobot/operations-optimization-analysis). "
+    "[github.com/enobot/nate (apps/operations-optimization-analysis)](https://github.com/enobot/nate/tree/main/apps/operations-optimization-analysis). "
     "MIT License, Copyright (c) 2026 Nathanael Haig and Tracy Tran."
 )
