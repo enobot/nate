@@ -720,8 +720,9 @@ migrations, with a fixed clock:
   headers, UTC dates, enum names in JSON, the 429 write limit, and a Production start against a
   missing database file (created, migrated and seeded).
 
-Measured backend coverage: 81.7% of hand-written API source lines (2,699 of 3,305 unique lines, not
-counting migrations and compiler-produced files); 69.4% branch coverage overall.
+Measured backend coverage, from the coverage command above (Debug build): 87.7% of lines in
+hand-written API code (2,439 of 2,781 source lines, each file and line counted once, not counting
+the generated files in `Data/Migrations/`), and 69.4% branch coverage overall as reported by coverlet.
 
 **Frontend tests** (`client/src/**/*.test.ts(x)`). They render the real pages and the real API
 client. Only `fetch` is replaced (`src/test/mockFetch.ts`).
