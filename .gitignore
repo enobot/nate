@@ -9,3 +9,10 @@ coverage
 *.local
 .DS_Store
 dist-ssr
+
+# Project apps in apps/: local environments, caches and runtime databases
+.venv/
+__pycache__/
+.pytest_cache/
+apps/**/instance/
+*.db

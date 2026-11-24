@@ -1,0 +1,19 @@
+# Streamlit settings for local runs and Streamlit Community Cloud.
+
+[theme]
+base = "dark"
+primaryColor = "#3987e5"
+backgroundColor = "#151514"
+secondaryBackgroundColor = "#1f1f1d"
+textColor = "#f0efec"
+borderColor = "#33332f"
+font = "sans-serif"
+
+[server]
+# The app also checks uploads itself (2 MB); this is the outer limit in MB.
+maxUploadSize = 5
+
+[browser]
+# Do not send usage statistics to Streamlit.
+gatherUsageStats = false
+
