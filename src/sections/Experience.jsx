@@ -1,5 +1,6 @@
 import { Briefcase, MapPin } from "lucide-react";
 import Chip from "../components/Chip.jsx";
+import JackWorkflow from "../components/JackWorkflow.jsx";
 import Reveal from "../components/Reveal.jsx";
 import Section from "../components/Section.jsx";
 import { getIcon } from "../components/icons.js";
@@ -69,6 +70,12 @@ function FeaturedRole({ job }) {
               <StatTile key={stat.value + stat.label} stat={stat} />
             ))}
           </ul>
+        ) : null}
+
+        {job.featured && profile.workflow ? (
+          <div className="mt-7">
+            <JackWorkflow workflow={profile.workflow} />
+          </div>
         ) : null}
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.6fr_1fr]">

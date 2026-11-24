@@ -1,18 +1,15 @@
-import { m } from "motion/react";
-import { ArrowRight, Download, Mail, UserRound } from "lucide-react";
+import { ArrowRight, Download, FolderGit2, Mail, UserRound } from "lucide-react";
 import ButtonLink from "../components/ButtonLink.jsx";
 import NetworkCanvas from "../components/NetworkCanvas.jsx";
 import { profile } from "../data/profile.js";
 import { assetUrl } from "../lib/assetUrl.js";
+import { withBase } from "../lib/router.jsx";
 
-const container = {
-  hidden: {},
-  shown: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } },
-};
-const item = {
-  hidden: { opacity: 0, y: 16 },
-  shown: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
-};
+// The hero text is part of the pre-rendered HTML and fully visible on the
+// first paint (no "fade in from invisible"), because it's the largest thing
+// on screen and the browser's Largest Contentful Paint metric waits for it.
+// The entrance effect is a short CSS slide (`hero-enter`) that respects
+// reduced-motion settings.
 
 export default function Hero() {
   const { hero } = profile;
@@ -30,41 +27,46 @@ export default function Hero() {
       <NetworkCanvas className="absolute inset-0 -z-10 h-full w-full opacity-80 [mask-image:radial-gradient(ellipse_at_60%_45%,#000_35%,transparent_80%)]" />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-r from-void/85 via-void/40 to-transparent"
+        className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-r from-void/90 via-void/50 to-transparent"
       />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-linear-to-b from-transparent to-void"
       />
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.25fr_1fr]">
-        <m.div variants={container} initial="hidden" animate="shown">
-          <m.p variants={item} className="hud-label flex items-center gap-2 text-cyan-soft">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.3fr_1fr]">
+        <div>
+          <p className="hero-enter hud-label flex flex-wrap items-center gap-2 text-cyan-soft">
             <span aria-hidden="true">[</span>
-            {hero.kicker}
+            {hero.role}
             <span aria-hidden="true">]</span>
             <span aria-hidden="true" className="inline-block h-3.5 w-2 bg-cyan motion-safe:animate-blink" />
-          </m.p>
+          </p>
 
-          <m.h1
+          <h1
             id="home-heading"
-            variants={item}
-            className="mt-5 font-display text-4xl leading-[1.05] font-bold tracking-wide text-white sm:text-6xl lg:text-7xl"
+            className="hero-enter mt-5 font-display text-4xl leading-[1.05] font-bold tracking-wide text-white sm:text-6xl lg:text-7xl"
+            style={{ "--enter-delay": "40ms" }}
           >
-            <span className="block">{firstName}</span>{" "}
-            <span className="text-neon block">{lastName}</span>
-          </m.h1>
+            <span className="block">{firstName}</span> <span className="text-neon block">{lastName}</span>
+          </h1>
 
-          <m.p variants={item} className="mt-5 font-mono text-sm tracking-wide text-electric-soft sm:text-base">
-            {hero.role}
-          </m.p>
+          <p
+            className="hero-enter mt-6 max-w-2xl text-xl leading-snug font-semibold text-white sm:text-2xl"
+            style={{ "--enter-delay": "80ms" }}
+          >
+            {hero.headline}
+          </p>
 
-          <m.p variants={item} className="mt-5 max-w-xl text-base text-ink-muted sm:text-lg">
+          <p
+            className="hero-enter mt-4 max-w-2xl text-base text-ink-muted sm:text-lg"
+            style={{ "--enter-delay": "120ms" }}
+          >
             {hero.tagline}
-          </m.p>
+          </p>
 
-          <m.div variants={item} className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="#projects" icon={ArrowRight}>
+          <div className="hero-enter mt-8 flex flex-wrap gap-3" style={{ "--enter-delay": "160ms" }}>
+            <ButtonLink href={withBase("/#projects")} icon={ArrowRight}>
               View Projects
             </ButtonLink>
             {primaryResume ? (
@@ -80,9 +82,19 @@ export default function Hero() {
                 <span className="sr-only">(PDF, {primaryResume.label})</span>
               </ButtonLink>
             ) : null}
-          </m.div>
+            {/* Shown automatically once profile.github is set. */}
+            {profile.github ? (
+              <ButtonLink href={profile.github} variant="ghost" icon={FolderGit2} external>
+                GitHub
+              </ButtonLink>
+            ) : null}
+          </div>
 
-          <m.ul variants={item} className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm" aria-label="Quick contact">
+          <ul
+            className="hero-enter mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm"
+            style={{ "--enter-delay": "200ms" }}
+            aria-label="Quick contact"
+          >
             <li>
               <a
                 href={`mailto:${profile.email}`}
@@ -104,8 +116,8 @@ export default function Hero() {
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </li>
-          </m.ul>
-        </m.div>
+          </ul>
+        </div>
 
         <StatusPanel status={hero.status} />
       </div>
@@ -116,12 +128,7 @@ export default function Hero() {
 /** HUD-style status readout next to the name. */
 function StatusPanel({ status }) {
   return (
-    <m.div
-      initial={{ opacity: 0, x: 24 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className="glass hud-corners relative rounded-2xl p-5 sm:p-6"
-    >
+    <div className="hero-enter glass hud-corners relative rounded-2xl p-5 sm:p-6" style={{ "--enter-delay": "260ms" }}>
       <div className="flex items-center justify-between border-b border-electric-soft/10 pb-3">
         <p className="hud-label text-ink-dim">sys.status</p>
         <span aria-hidden="true" className="flex gap-1.5">
@@ -147,17 +154,6 @@ function StatusPanel({ status }) {
           </div>
         ))}
       </dl>
-
-      <div aria-hidden="true" className="mt-5 flex items-end gap-1 border-t border-electric-soft/10 pt-4">
-        {[40, 65, 50, 80, 60, 90, 70, 55, 85, 75, 95, 65].map((height, index) => (
-          <span
-            // Purely decorative "signal" bars.
-            key={index}
-            className="w-full rounded-sm bg-linear-to-t from-electric/30 to-cyan/70"
-            style={{ height: `${height * 0.28}px` }}
-          />
-        ))}
-      </div>
-    </m.div>
+    </div>
   );
 }

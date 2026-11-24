@@ -48,19 +48,23 @@ export function buildRobotsTxt(siteUrl) {
 }
 
 /**
- * Contents of sitemap.xml. The site is a single page, so it has one entry.
+ * Contents of sitemap.xml: one entry per page (home + each project page).
  * @param {string} siteUrl - normalized site URL (no trailing slash)
+ * @param {string[]} [paths] - site paths such as "/" or "/projects/lab/"
  * @param {Date} [date] - used for <lastmod>, defaults to the build date
  */
-export function buildSitemapXml(siteUrl, date = new Date()) {
+export function buildSitemapXml(siteUrl, paths = ["/"], date = new Date()) {
   const lastmod = date.toISOString().slice(0, 10);
+  const entries = paths.flatMap((path) => [
+    "  <url>",
+    `    <loc>${siteUrl}${path}</loc>`,
+    `    <lastmod>${lastmod}</lastmod>`,
+    "  </url>",
+  ]);
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    "  <url>",
-    `    <loc>${siteUrl}/</loc>`,
-    `    <lastmod>${lastmod}</lastmod>`,
-    "  </url>",
+    ...entries,
     "</urlset>",
     "",
   ].join("\n");

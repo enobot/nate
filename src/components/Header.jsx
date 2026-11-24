@@ -1,21 +1,33 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, m } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Download, Menu, X } from "lucide-react";
 import Monogram from "./Monogram.jsx";
 import { sections, sectionIds } from "../data/navigation.js";
 import { profile } from "../data/profile.js";
 import { useScrollSpy } from "../hooks/useScrollSpy.js";
+import { assetUrl } from "../lib/assetUrl.js";
 import { cn } from "../lib/cn.js";
+import { Link } from "../lib/router.jsx";
 
 const MOBILE_MENU_ID = "mobile-menu";
 
-/** Sticky glass navigation bar with scroll-spy and a mobile menu. */
-export default function Header() {
-  const activeId = useScrollSpy(sectionIds);
+/**
+ * Sticky glass navigation bar.
+ * - On the home page, links scroll to each section and the one in view is
+ *   highlighted (scroll-spy).
+ * - On a project page, the same links lead back to the home page sections,
+ *   and "Projects" is highlighted.
+ * - A Resume button is always one click away.
+ */
+export default function Header({ route }) {
+  const onHome = route.name === "home";
+  const spiedId = useScrollSpy(onHome ? sectionIds : []);
+  const activeId = onHome ? spiedId : route.name === "project" ? "projects" : null;
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const toggleRef = useRef(null);
   const headerRef = useRef(null);
+  const primaryResume = profile.resumes.find((resume) => resume.primary) ?? profile.resumes[0];
 
   const closeMenu = useCallback((restoreFocus) => {
     setMenuOpen(false);
@@ -67,52 +79,65 @@ export default function Header() {
       ref={headerRef}
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300",
-        scrolled || menuOpen
-          ? "border-b border-electric-soft/10 bg-void/70 backdrop-blur-xl"
+        scrolled || menuOpen || !onHome
+          ? "border-b border-electric-soft/10 bg-void/75 backdrop-blur-xl"
           : "border-b border-transparent",
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <a
-          href="#home"
-          className="group flex items-center gap-2.5 rounded-md"
+        <Link
+          to="/#home"
+          className="group flex min-h-11 items-center gap-2.5 rounded-md"
           onClick={() => closeMenu(false)}
         >
           <Monogram className="size-8 transition-transform duration-300 motion-safe:group-hover:rotate-[30deg]" />
-          <span className="font-display text-sm font-bold tracking-[0.12em] text-white uppercase">
-            {profile.name}
-          </span>
-        </a>
+          <span className="font-display text-sm font-bold tracking-[0.12em] text-white uppercase">{profile.name}</span>
+        </Link>
 
-        <nav aria-label="Primary" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
-            {sections.map((section) => {
-              const isActive = activeId === section.id;
-              return (
-                <li key={section.id}>
-                  <a
-                    href={`#${section.id}`}
-                    aria-current={isActive ? "true" : undefined}
-                    className={cn(
-                      "relative block rounded-md px-3 py-2 font-mono text-xs tracking-[0.12em] uppercase transition-colors",
-                      isActive ? "text-cyan-soft" : "text-ink-muted hover:text-white",
-                    )}
-                  >
-                    {section.label}
-                    {/* Glowing underline: grows in on the active link (pure CSS). */}
-                    <span
-                      aria-hidden="true"
+        <div className="hidden items-center gap-2 lg:flex">
+          <nav aria-label="Primary">
+            <ul className="flex items-center gap-1">
+              {sections.map((section) => {
+                const isActive = activeId === section.id;
+                return (
+                  <li key={section.id}>
+                    <Link
+                      to={`/#${section.id}`}
+                      aria-current={isActive ? (onHome ? "true" : "page") : undefined}
                       className={cn(
-                        "absolute inset-x-3 -bottom-px h-0.5 origin-center rounded-full bg-cyan shadow-[0_0_10px_rgb(34_227_245/0.9)] transition-[transform,opacity] duration-300",
-                        isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0",
+                        "relative block rounded-md px-3 py-2 font-mono text-xs tracking-[0.12em] uppercase transition-colors",
+                        isActive ? "text-cyan-soft" : "text-ink-muted hover:text-white",
                       )}
-                    />
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                    >
+                      {section.label}
+                      {/* Glowing underline: grows in on the active link (pure CSS). */}
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          "absolute inset-x-3 -bottom-px h-0.5 origin-center rounded-full bg-cyan shadow-[0_0_10px_rgb(34_227_245/0.9)] transition-[transform,opacity] duration-300",
+                          isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0",
+                        )}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          {primaryResume ? (
+            <a
+              href={assetUrl(primaryResume.file)}
+              download
+              target="_blank"
+              rel="noopener"
+              className="ml-1 inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-cyan/40 bg-cyan/10 px-3.5 font-mono text-xs tracking-[0.12em] text-cyan-soft uppercase transition-colors hover:border-cyan/80 hover:text-white"
+            >
+              <Download aria-hidden="true" className="size-3.5" />
+              Resume{" "}
+              <span className="sr-only">(PDF download)</span>
+            </a>
+          ) : null}
+        </div>
 
         <button
           ref={toggleRef}
@@ -130,23 +155,23 @@ export default function Header() {
       <div id={MOBILE_MENU_ID} className="lg:hidden">
         <AnimatePresence initial={false}>
           {menuOpen ? (
-            <m.nav
-              key="mobile-nav"
-              aria-label="Mobile"
+            <m.div
+              key="mobile-menu-panel"
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18 }}
-              className="border-t border-electric-soft/10 bg-void/95 px-4 pt-2 pb-5 backdrop-blur-xl sm:px-6"
+              className="max-h-[calc(100svh-4rem)] overflow-y-auto border-t border-electric-soft/10 bg-void/95 px-4 pt-2 pb-5 backdrop-blur-xl sm:px-6"
             >
+              <nav aria-label="Mobile">
               <ul className="mx-auto grid max-w-6xl gap-1">
                 {sections.map((section, index) => {
                   const isActive = activeId === section.id;
                   return (
                     <li key={section.id}>
-                      <a
-                        href={`#${section.id}`}
-                        aria-current={isActive ? "true" : undefined}
+                      <Link
+                        to={`/#${section.id}`}
+                        aria-current={isActive ? (onHome ? "true" : "page") : undefined}
                         onClick={() => closeMenu(false)}
                         className={cn(
                           "flex min-h-11 items-center gap-3 rounded-md px-3 font-mono text-sm tracking-[0.12em] uppercase",
@@ -157,12 +182,27 @@ export default function Header() {
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         {section.label}
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
               </ul>
-            </m.nav>
+              </nav>
+              {primaryResume ? (
+                <a
+                  href={assetUrl(primaryResume.file)}
+                  download
+                  target="_blank"
+                  rel="noopener"
+                  onClick={() => closeMenu(false)}
+                  className="mx-auto mt-3 flex min-h-11 max-w-6xl items-center justify-center gap-2 rounded-lg border border-cyan/40 bg-cyan/10 font-mono text-sm tracking-[0.12em] text-cyan-soft uppercase"
+                >
+                  <Download aria-hidden="true" className="size-4" />
+                  Download resume{" "}
+                  <span className="sr-only">(PDF)</span>
+                </a>
+              ) : null}
+            </m.div>
           ) : null}
         </AnimatePresence>
       </div>

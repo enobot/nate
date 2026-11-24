@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { m } from "motion/react";
 import ProjectCard from "../components/ProjectCard.jsx";
+import Reveal from "../components/Reveal.jsx";
 import Section from "../components/Section.jsx";
 import { PROJECT_STATUSES, projects } from "../data/projects.js";
 import { cn } from "../lib/cn.js";
@@ -21,7 +21,7 @@ export default function Projects() {
       index="04"
       kicker="Quest board"
       title="Projects"
-      intro="Completed academic work, plus projects currently in development. Expand a card for details."
+      intro="Completed academic work and projects in development. Open any project for the full write-up: the problem, the approach, how it was tested, and links where they exist."
     >
       <div role="group" aria-label="Filter projects by status" className="mb-8 flex flex-wrap gap-2">
         {FILTERS.map((value) => {
@@ -54,15 +54,11 @@ export default function Projects() {
 
       <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {visible.map((project, index) => (
-          <m.li
-            key={project.id}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.45, delay: (index % 3) * 0.07, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <ProjectCard project={project} />
-          </m.li>
+          <li key={project.id}>
+            <Reveal delay={(index % 3) * 0.07} className="h-full">
+              <ProjectCard project={project} />
+            </Reveal>
+          </li>
         ))}
       </ul>
     </Section>

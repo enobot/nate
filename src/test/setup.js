@@ -65,6 +65,17 @@ if (!window.ResizeObserver) {
 // clicked (it has no layout to scroll). A silent no-op keeps test output clean.
 window.scrollTo = () => {};
 
+// element.scrollIntoView: used by the router to jump to a #section. jsdom
+// doesn't implement it at all (it has no layout), so it's a no-op here.
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = function scrollIntoView() {};
+}
+
+// Each test starts on the home page, whatever the previous test navigated to.
+afterEach(() => {
+  window.history.replaceState(null, "", "/");
+});
+
 // Canvas 2D context: jsdom has no drawing support. This stand-in accepts any
 // drawing call and property so the canvas code still runs end to end.
 function createFake2dContext(canvas) {
