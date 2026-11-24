@@ -1,0 +1,88 @@
+name: Asset tracker CI
+
+# Builds and tests the IT Asset & Service Request Tracker's API and React client, then checks
+# that its Docker image builds. Runs only when the app's folder (or this file) changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/it-asset-service-request-tracker/**"
+      - ".github/workflows/asset-tracker.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/it-asset-service-request-tracker/**"
+      - ".github/workflows/asset-tracker.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (.NET build and tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/it-asset-service-request-tracker
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore ItAssetTracker.slnx
+
+      - name: Build
+        run: dotnet build ItAssetTracker.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ItAssetTracker.slnx --configuration Release --no-build --verbosity normal
+
+  frontend:
+    name: Frontend (typecheck, lint, tests, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/it-asset-service-request-tracker/client
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26.13.0
+          cache: npm
+          cache-dependency-path: apps/it-asset-service-request-tracker/client/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and component tests
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+  docker:
+    name: Docker image builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [backend, frontend]
+    defaults:
+      run:
+        working-directory: apps/it-asset-service-request-tracker
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build image (not pushed)
+        run: docker build --tag it-asset-tracker:ci .

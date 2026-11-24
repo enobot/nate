@@ -1,0 +1,33 @@
+# .NET build output
+bin/
+obj/
+artifacts/
+TestResults/
+*.user
+*.suo
+.vs/
+
+# Node / Vite
+node_modules/
+dist/
+client/coverage/
+*.log
+
+# "npm run build" writes the React build into the API's wwwroot
+src/ItAssetTracker.Api/wwwroot/
+
+# Local SQLite database (recreated and reseeded automatically)
+App_Data/
+*.db
+*.db-shm
+*.db-wal
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local secrets, never committed
+.env
+.env.*

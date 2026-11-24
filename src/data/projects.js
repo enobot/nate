@@ -203,29 +203,100 @@ export const projects = [
       docs: "https://github.com/enobot/nate/blob/main/apps/network-diagnostics-toolkit/docs/WALKTHROUGH.md",
     },
   },
-
-  // ---------------------------------------------------------------------------
-  // IMPORTANT, NATE: The "In Development" project below is still being built.
-  // Before you share this site with recruiters, edit or delete any project you
-  // are not actually working on. Interviewers may ask about anything listed.
-  // When one is finished and verified: change status to "Completed", rewrite the
-  // text in the past tense, and add its links, images, and test results.
-  // ---------------------------------------------------------------------------
   {
     id: "it-asset-tracker",
     title: "IT Asset & Service Request Tracker",
-    status: "In Development",
+    status: "Completed",
     category: "Personal project",
     summary:
-      "Building a web application with a SQL database for tracking equipment, network jack and switch port assignments, and service requests.",
-    tech: ["C#", "ASP.NET Core", "Entity Framework Core", "SQL", "React"],
+      "A full-stack IT management app for a fictional college that tracks equipment, network jacks and switch ports, and service requests from intake to resolution.",
+    tech: [
+      "C#",
+      "ASP.NET Core",
+      "Entity Framework Core",
+      "SQLite",
+      "SQL",
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "xUnit",
+      "Vitest",
+      "GitHub Actions",
+      "Docker",
+    ],
     icon: "clipboard",
     overview:
-      "A planned IT management web application for a fictional organization, modeled on the kind of equipment and jack records kept by a campus telecommunications team.",
+      "A web app for the IT department of a fictional school, Alder Creek College (all names, rooms, and devices are invented). It keeps equipment inventory, network jack and switch port patching, and service requests in one database, modeled on the records a campus telecom team keeps.",
+    problem:
+      "Campus IT teams often track equipment, jack-to-port patching, and service tickets in separate places, which leads to double-patched ports and lost ticket history.",
+    solution:
+      "An ASP.NET Core Web API with Entity Framework Core and SQLite that enforces the rules on the server: unique asset tags and serial numbers, one jack per switch port, no jacks on uplink ports, only the allowed ticket status changes, and VLANs from 1 to 4094. A React and TypeScript front end shows dashboards and reports where every number comes from a parameterized SQL query.",
     details: [
-      "Will track equipment, jack and port assignments, and service requests in one database.",
-      "Will include SQL reporting queries over that data.",
+      "Modeled switches, ports (access and uplink), wall jacks, and VLANs the way a campus telecom team works with them, including patching and activating a jack.",
+      "Kept jacks off switch uplink ports: the API refuses with a 409 Conflict, and the patch dialog only offers free access ports.",
+      "Built 8 parameterized SQL reports, such as warranty expirations, ticket aging, time to resolve, and jack utilization, each with CSV export.",
+      "Enforced the ticket workflow and assignment history on the server, with optimistic concurrency that returns 409 Conflict on stale edits.",
     ],
+    architecture: [
+      "src/ItAssetTracker.Api/: thin controllers, services with the business logic and the report SQL, domain rule classes, request and response contracts, and EF Core migrations.",
+      "client/: React, TypeScript, Vite, and Tailwind CSS. Its production build is served by the API, so the whole app runs as one service.",
+      "One Docker image (Node build stage, .NET publish stage, small non-root runtime) that reads the port from the PORT variable and has a /api/health check.",
+      "No sign-in yet: the demo's \"Working as\" technician picker is not authenticated, and the README says so.",
+    ],
+    testing: [
+      "191 xUnit tests: unit tests for every ticket status change (36 combinations), the asset and network rules, and VLAN range edges, plus integration tests that run the real API against real SQLite files.",
+      "40 Vitest component tests for the React pages, plus TypeScript type-checking and linting.",
+      "Checked by hand in the browser on desktop and mobile: creating an asset (including validation errors), moving a ticket through its workflow with its history, patching and activating jacks, and the reports.",
+    ],
+    images: [
+      {
+        src: "projects/it-asset-tracker/dashboard.jpg",
+        alt: "Dashboard with counts of assets, open requests, warranty expirations, and network jacks, plus the newest service requests.",
+        width: 800,
+        height: 474,
+        caption: "Dashboard with live counts from the database: assets, open requests, warranty expirations, and jack utilization.",
+      },
+      {
+        src: "projects/it-asset-tracker/service-request.jpg",
+        alt: "Service request SR000083, Activate jack 2-211A for office move, with its workflow, assignment controls, and history.",
+        width: 800,
+        height: 474,
+        caption: "A service request with its workflow actions, assignment controls, and history.",
+      },
+      {
+        src: "projects/it-asset-tracker/network-switches.jpg",
+        alt: "Network page listing six closet switches with their access ports, patched ports, active jacks, and utilization bars.",
+        width: 800,
+        height: 469,
+        caption: "Network switches with access-port utilization. Each switch's uplink is left out of the count.",
+      },
+      {
+        src: "projects/it-asset-tracker/jack-dialog-no-free-ports.jpg",
+        alt: "Patch and activate dialog for jack 1-113A warning that ADM-IDF1-SW01 has no free access ports, with the patch buttons disabled.",
+        width: 800,
+        height: 474,
+        caption: "The patch dialog never offers a switch's uplink port. Here the switch has no free access ports left.",
+      },
+      {
+        src: "projects/it-asset-tracker/reports.jpg",
+        alt: "Reports page showing assets by status and assets by building, each with Show SQL and Export CSV buttons.",
+        width: 800,
+        height: 474,
+        caption: "Each report is a parameterized SQL query, with Show SQL and Export CSV.",
+      },
+      {
+        src: "projects/it-asset-tracker/assets.jpg",
+        alt: "Equipment inventory table of laptops with asset tags, models, status, location, assignee, and warranty end dates, with search and filters.",
+        width: 800,
+        height: 474,
+        caption: "Equipment inventory with search and filters by status, type, and building.",
+      },
+    ],
+    links: {
+      source: "https://github.com/enobot/nate/tree/main/apps/it-asset-service-request-tracker",
+      docs: "https://github.com/enobot/nate/blob/main/apps/it-asset-service-request-tracker/docs/WALKTHROUGH.md",
+    },
   },
 ];
 

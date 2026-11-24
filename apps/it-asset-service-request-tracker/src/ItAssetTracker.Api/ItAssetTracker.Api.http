@@ -1,0 +1,31 @@
+# Sample requests for the VS Code REST Client or Visual Studio .http support.
+@host = http://localhost:5201
+
+GET {{host}}/api/health
+
+###
+GET {{host}}/api/dashboard
+
+###
+GET {{host}}/api/assets?search=latitude&status=Deployed&page=1&pageSize=10
+
+###
+POST {{host}}/api/assets
+Content-Type: application/json
+
+{
+  "assetTag": "ACC-900001",
+  "type": "Laptop",
+  "manufacturer": "Dell",
+  "model": "Latitude 5450",
+  "serialNumber": "LTDEMO0001",
+  "status": "InStock",
+  "purchaseDate": "2026-09-01",
+  "warrantyEndDate": "2029-09-01"
+}
+
+###
+GET {{host}}/api/reports/warranty-expiring?days=90
+
+###
+GET {{host}}/api/reports/definitions

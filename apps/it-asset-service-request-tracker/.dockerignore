@@ -1,0 +1,22 @@
+# Keep the build context small and free of local state.
+**/bin/
+**/obj/
+**/node_modules/
+client/dist/
+src/ItAssetTracker.Api/wwwroot/
+src/ItAssetTracker.Api/App_Data/
+**/*.db
+**/*.db-shm
+**/*.db-wal
+artifacts/
+tests/
+docs/
+.github/
+.vs/
+.vscode/
+.idea/
+**/*.user
+**/.env
+**/.env.*
+Dockerfile
+.dockerignore
