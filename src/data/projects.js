@@ -74,6 +74,93 @@ export const PROJECT_STATUSES = /** @type {const} */ (["Completed", "In Developm
 /** @type {Project[]} */
 export const projects = [
   {
+    id: "network-diagnostics-toolkit",
+    title: "Network Diagnostics Toolkit",
+    status: "Completed",
+    featured: true,
+    category: "Portfolio project",
+    summary:
+      "A read-only PowerShell module and interactive menu for help desk and network technicians. It runs ping, traceroute, IP configuration, DNS, adapter, and TCP port checks, then saves the results as timestamped CSV and text reports plus paste-ready ticket notes.",
+    tech: ["PowerShell", ".NET (Ping, TcpClient)", "NetTCPIP / DnsClient / NetAdapter", "tracert", "Pester", "PSScriptAnalyzer", "GitHub Actions"],
+    icon: "terminal",
+    overview:
+      "A PowerShell module for the first round of network troubleshooting on a Windows PC. Every check prints a clear [PASS], [FAIL], [WARN], or [INFO] line with a plain-language explanation, and the results can be saved as a report or turned into notes for a help desk ticket.",
+    problem:
+      "Help desk technicians repeat the same connectivity checks for every ticket, then retype the results into the ticket notes by hand.",
+    solution:
+      "Eleven module commands and a numbered menu. Every check returns the same result shape, so ping, DNS, and port results all feed one CSV file, one text report, and one block of ticket notes. Input is validated before anything is sent: explicit targets only, no address ranges or scans, at most 10 targets and 20 TCP checks per run, and no command that changes settings.",
+    details: [
+      "11 commands with comment-based help, plus an interactive numbered menu with [PASS]/[FAIL] output.",
+      "Ping and port checks use .NET Ping and TcpClient with timeouts instead of Test-NetConnection, which took 8.9 s to report a closed port on the development PC, compared with 2.1 s for TcpClient.",
+      "Reports are UTF-8 CSV and text files that never overwrite an existing file and neutralize spreadsheet-formula cells.",
+    ],
+    architecture: [
+      "src/NetworkDiagnostics/: the module, with one file per exported command in Public/ and the shared logic in Private/.",
+      "Each check has three steps: validate the input, collect data through small network wrapper functions, and interpret the result as PASS, FAIL, WARN, or INFO.",
+      "Only the wrapper functions touch the network, so unit tests can replace them with mocks. Reports and ticket notes are built from the same result objects.",
+    ],
+    testing: [
+      "271 Pester tests: 260 unit tests with mocked Windows network calls and 11 integration tests against localhost and a TCP listener the tests open, including an end-to-end menu run in a separate PowerShell process.",
+      "94.3% code coverage of the module on Windows PowerShell 5.1.",
+      "GitHub Actions runs the same tests on Windows PowerShell 5.1 and PowerShell 7, plus PSScriptAnalyzer, which fails the build on any warning. All three passed on the first run.",
+    ],
+    images: [
+      {
+        src: "projects/network-diagnostics-toolkit/console-output.svg",
+        alt: "Toolkit console output: a passing ping of 127.0.0.1, a ticket note with three passing checks, and a refused request for 21 ports.",
+        width: 1352,
+        height: 609,
+        caption: "Real console output from docs/examples/cmdlet-usage.txt (captured 2026-11-23, Windows PowerShell 5.1), drawn as an image with the long prompt shortened to PS>. Not a screenshot.",
+      },
+    ],
+    sampleOutput: {
+      caption: "Real console output, captured with tools/New-ExampleTranscript.ps1 on 2026-11-23 on Windows PowerShell 5.1. The computer name, MAC addresses, and network details were replaced with documentation values.",
+      text: `PS> Test-NdtPing -Target 127.0.0.1 -Count 2 | Show-NdtResult
+[PASS] Ping 127.0.0.1 - 2/2 replies, 0% loss, min/avg/max 0/0/0 ms
+       Reply 1: Success from 127.0.0.1 time=0 ms TTL=128
+       Reply 2: Success from 127.0.0.1 time=0 ms TTL=128
+
+PS> Get-NdtAdapter | Show-NdtResult -NoDetails
+[PASS] Adapter Ethernet - Up at 1 Gbps, MAC 00-00-5E-00-53-10
+[WARN] Adapter Wi-Fi - Media disconnected: no link detected, MAC 00-00-5E-00-53-11. Check the cable and wall jack, or that Wi-Fi is connected.
+
+PS> Invoke-NdtQuickCheck -Target localhost -Port $openPort -Count 1 | New-NdtTicketNote -Title 'INC0000000 example'
+INC0000000 example
+Run: 2026-11-23T22:32:35-08:00 from HELPDESK-PC01
+Tool: Network Diagnostics Toolkit 1.0.0 (read-only checks; only the targets listed were contacted)
+
+[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 0 ms: A 127.0.0.1 (TTL 1200s)
+[PASS] Ping localhost - 1/1 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
+[PASS] TcpPort localhost - TCP port 55732 is open on localhost (127.0.0.1) (connected in 0 ms).
+
+Totals: 3 check(s) - 3 PASS, 0 FAIL, 0 WARN, 0 INFO
+
+PS> Test-NdtPort -Target 127.0.0.1 -Port (1..21)
+Error: Too many ports (21). The limit is 20 per run. Port scanning is not supported.`,
+    },
+    limitations: [
+      "Windows only: it needs Windows 10, Windows 11, or Windows Server with Windows PowerShell 5.1 or PowerShell 7, because it uses tracert and the Windows networking modules.",
+      "Read-only by design: it never changes network settings, never scans address ranges, and stops at 10 targets and 20 TCP checks per run.",
+      "PowerShell 7 is tested in GitHub Actions only, not on the development PC. The timings above are single measurements on one PC, not benchmarks.",
+      "Not on the PowerShell Gallery: publishing needs a Gallery API key, so it's installed from the repository or the release ZIP.",
+    ],
+    install: [
+      { step: "Needs Windows 10, Windows 11, or Windows Server with Windows PowerShell 5.1 (built in) or PowerShell 7. No administrator rights needed." },
+      { step: "Download NetworkDiagnosticsToolkit-1.0.0.zip from the release and extract it, or clone the repository and open apps\\network-diagnostics-toolkit.", code: "git clone https://github.com/enobot/nate.git\ncd nate\\apps\\network-diagnostics-toolkit" },
+      { step: "Start the interactive menu.", code: "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\Start-NetworkToolkit.ps1" },
+      { step: "Or import the module and run the commands directly.", code: "Import-Module .\\src\\NetworkDiagnostics\\NetworkDiagnostics.psd1" },
+    ],
+    contributions: [
+      "Portfolio project built by Nathanael Haig.",
+      "The checks mirror the ping, tracert, and ipconfig troubleshooting in Nathanael's CSUF IT Telecommunications job.",
+    ],
+    links: {
+      release: "https://github.com/enobot/nate/releases/tag/toolkit-v1.0.0",
+      source: "https://github.com/enobot/nate/tree/main/apps/network-diagnostics-toolkit",
+      docs: "https://github.com/enobot/nate/blob/main/apps/network-diagnostics-toolkit/docs/WALKTHROUGH.md",
+    },
+  },
+  {
     id: "it-asset-tracker",
     title: "IT Asset & Service Request Tracker",
     status: "Completed",
@@ -178,7 +265,7 @@ export const projects = [
       { step: "Full setup, test commands, and Docker instructions are in the README." },
     ],
     contributions: [
-      "Portfolio project built by Tracy Tran and Nathanael Haig.",
+      "Portfolio project built by Nathanael Haig.",
       "The data model is based on the jack, switch port, and ServiceNow ticket work in Nathanael's CSUF IT Telecommunications job.",
     ],
     links: {
@@ -187,91 +274,124 @@ export const projects = [
       docs: "https://github.com/enobot/nate/blob/main/apps/it-asset-service-request-tracker/docs/WALKTHROUGH.md",
     },
   },
+  // Campus Network Lab moves to the top only after its Packet Tracer build is verified.
   {
-    id: "network-diagnostics-toolkit",
-    title: "Network Diagnostics Toolkit",
-    status: "Completed",
-    featured: true,
+    id: "campus-network-lab",
+    title: "Campus Network Lab",
+    status: "In Development",
     category: "Portfolio project",
     summary:
-      "A read-only PowerShell module and interactive menu for help desk and network technicians. It runs ping, traceroute, IP configuration, DNS, adapter, and TCP port checks, then saves the results as timestamped CSV and text reports plus paste-ready ticket notes.",
-    tech: ["PowerShell", ".NET (Ping, TcpClient)", "NetTCPIP / DnsClient / NetAdapter", "tracert", "Pester", "PSScriptAnalyzer", "GitHub Actions"],
-    icon: "terminal",
+      "A Cisco Packet Tracer lab of a fictional university network. The design, device configs, and automated checks are done; the Packet Tracer build and hands-on testing are in progress.",
+    tech: ["Cisco Packet Tracer", "VLANs", "802.1Q trunking", "Inter-VLAN routing", "DHCP", "ACLs", "SSH", "Python (pytest)", "JavaScript"],
+    icon: "network",
+    interactive: "campus-policy-explorer",
     overview:
-      "A PowerShell module for the first round of network troubleshooting on a Windows PC. Every check prints a clear [PASS], [FAIL], [WARN], or [INFO] line with a plain-language explanation, and the results can be saved as a report or turned into notes for a help desk ticket.",
+      "A campus network for a fictional school, Halcyon Ridge University, designed for Cisco Packet Tracer: five VLANs trunked over 802.1Q, inter-VLAN routing on a router-on-a-stick, DHCP with exclusions, a voice VLAN for IP phones, ACLs that control who can reach what, and SSH-only device management.",
     problem:
-      "Help desk technicians repeat the same connectivity checks for every ticket, then retype the results into the ticket notes by hand.",
+      "A campus network has to keep groups like faculty, students, servers, and phones on separate networks while still letting each one reach the services it needs, and only IT should be able to manage the network devices.",
     solution:
-      "Eleven module commands and a numbered menu. Every check returns the same result shape, so ping, DNS, and port results all feed one CSV file, one text report, and one block of ticket notes. Input is validated before anything is sent: explicit targets only, no address ranges or scans, at most 10 targets and 20 TCP checks per run, and no command that changes settings.",
+      "Each group gets its own VLAN and subnet. One router routes between them and hands out addresses with DHCP. Two extended ACLs decide which traffic is allowed, and the switches and router only accept SSH from the management VLAN.",
     details: [
-      "11 commands with comment-based help, plus an interactive numbered menu with [PASS]/[FAIL] output.",
-      "Ping and port checks use .NET Ping and TcpClient with timeouts instead of Test-NetConnection, which took 8.9 s to report a closed port on the development PC, compared with 2.1 s for TcpClient.",
-      "Reports are UTF-8 CSV and text files that never overwrite an existing file and neutralize spreadsheet-formula cells.",
+      "Will build the network in Packet Tracer by following the lab's build guide and pasting in the finished configs.",
+      "Will run the 32 end-to-end allowed/blocked traffic tests from the verification checklist and record the results.",
+      "Will add real Packet Tracer screenshots and the saved .pkt file once the build is verified.",
     ],
     architecture: [
-      "src/NetworkDiagnostics/: the module, with one file per exported command in Public/ and the shared logic in Private/.",
-      "Each check has three steps: validate the input, collect data through small network wrapper functions, and interpret the result as PASS, FAIL, WARN, or INFO.",
-      "Only the wrapper functions touch the network, so unit tests can replace them with mocks. Reports and ticket notes are built from the same result objects.",
+      "R1 (ISR4331): router-on-a-stick with one subinterface per VLAN, the DHCP server, and the ACLs.",
+      "CORE-SW1 plus two access switches (Cisco 2960s), connected by 802.1Q trunks with a dedicated native VLAN.",
+      "VLANs 10 Faculty, 20 Students, 30 Servers, 50 Voice, and 99 Management, on 10.10.x.0/24 subnets.",
+      "Students are blocked from internal networks except the campus web and DNS server, and the server VLAN only allows the services it offers.",
     ],
     testing: [
-      "271 Pester tests: 260 unit tests with mocked Windows network calls and 11 integration tests against localhost and a TCP listener the tests open, including an end-to-end menu run in a separate PowerShell process.",
-      "94.3% code coverage of the module on Windows PowerShell 5.1.",
-      "GitHub Actions runs the same tests on Windows PowerShell 5.1 and PowerShell 7, plus PSScriptAnalyzer, which fails the build on any warning. All three passed on the first run.",
+      "Automated design checks (pytest) read the config files and verify the addressing plan, VLANs and trunks, DHCP pools, SSH settings, and 32 allowed/blocked ACL traffic cases. They run on GitHub Actions and are currently passing.",
+      "The policy explorer on this page is a JavaScript port of the Python ACL checker that runs on the real config files in the browser. For all 32 cases it gives the same result and the same reasoning as the Python version, and its own tests check that every line of R1's two ACLs decides at least one case.",
+      "Not yet tested in Packet Tracer: pasting the configs into Packet Tracer and checking end-to-end connectivity is the next step.",
     ],
     images: [
       {
-        src: "projects/network-diagnostics-toolkit/console-output.svg",
-        alt: "Toolkit console output: a passing ping of 127.0.0.1, a ticket note with three passing checks, and a refused request for 21 ports.",
-        width: 1352,
-        height: 609,
-        caption: "Real console output from docs/examples/cmdlet-usage.txt (captured 2026-11-23, Windows PowerShell 5.1), drawn as an image with the long prompt shortened to PS>. Not a screenshot.",
+        src: "projects/campus-network-lab/topology.svg",
+        alt: "Topology diagram: router R1 trunks to core switch CORE-SW1, which connects the web and DNS server and trunks to two access switches serving faculty, students, phones, and IT.",
+        width: 1200,
+        height: 840,
+        caption: "Topology diagram from the lab's design docs. This is a design drawing, not a Packet Tracer screenshot.",
       },
     ],
-    sampleOutput: {
-      caption: "Real console output, captured with tools/New-ExampleTranscript.ps1 on 2026-11-23 on Windows PowerShell 5.1. The computer name, MAC addresses, and network details were replaced with documentation values.",
-      text: `PS> Test-NdtPing -Target 127.0.0.1 -Count 2 | Show-NdtResult
-[PASS] Ping 127.0.0.1 - 2/2 replies, 0% loss, min/avg/max 0/0/0 ms
-       Reply 1: Success from 127.0.0.1 time=0 ms TTL=128
-       Reply 2: Success from 127.0.0.1 time=0 ms TTL=128
-
-PS> Get-NdtAdapter | Show-NdtResult -NoDetails
-[PASS] Adapter Ethernet - Up at 1 Gbps, MAC 00-00-5E-00-53-10
-[WARN] Adapter Wi-Fi - Media disconnected: no link detected, MAC 00-00-5E-00-53-11. Check the cable and wall jack, or that Wi-Fi is connected.
-
-PS> Invoke-NdtQuickCheck -Target localhost -Port $openPort -Count 1 | New-NdtTicketNote -Title 'INC0000000 example'
-INC0000000 example
-Run: 2026-11-23T22:32:35-08:00 from HELPDESK-PC01
-Tool: Network Diagnostics Toolkit 1.0.0 (read-only checks; only the targets listed were contacted)
-
-[PASS] DNS localhost - A lookup for localhost returned 1 record(s) in 0 ms: A 127.0.0.1 (TTL 1200s)
-[PASS] Ping localhost - 1/1 replies (resolved to 127.0.0.1), 0% loss, min/avg/max 0/0/0 ms
-[PASS] TcpPort localhost - TCP port 55732 is open on localhost (127.0.0.1) (connected in 0 ms).
-
-Totals: 3 check(s) - 3 PASS, 0 FAIL, 0 WARN, 0 INFO
-
-PS> Test-NdtPort -Target 127.0.0.1 -Port (1..21)
-Error: Too many ports (21). The limit is 20 per run. Port scanning is not supported.`,
-    },
     limitations: [
-      "Windows only: it needs Windows 10, Windows 11, or Windows Server with Windows PowerShell 5.1 or PowerShell 7, because it uses tracert and the Windows networking modules.",
-      "Read-only by design: it never changes network settings, never scans address ranges, and stops at 10 targets and 20 TCP checks per run.",
-      "PowerShell 7 is tested in GitHub Actions only, not on the development PC. The timings above are single measurements on one PC, not benchmarks.",
-      "Not on the PowerShell Gallery: publishing needs a Gallery API key, so it's installed from the repository or the release ZIP.",
-    ],
-    install: [
-      { step: "Needs Windows 10, Windows 11, or Windows Server with Windows PowerShell 5.1 (built in) or PowerShell 7. No administrator rights needed." },
-      { step: "Download NetworkDiagnosticsToolkit-1.0.0.zip from the release and extract it, or clone the repository and open apps\\network-diagnostics-toolkit.", code: "git clone https://github.com/enobot/nate.git\ncd nate\\apps\\network-diagnostics-toolkit" },
-      { step: "Start the interactive menu.", code: "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\Start-NetworkToolkit.ps1" },
-      { step: "Or import the module and run the commands directly.", code: "Import-Module .\\src\\NetworkDiagnostics\\NetworkDiagnostics.psd1" },
+      "Not yet built or tested in Packet Tracer, so there is no .pkt file and no Packet Tracer screenshot.",
+      "The automated checks read the config files; they don't prove the configs behave the same on Packet Tracer's simulated devices.",
     ],
     contributions: [
-      "Portfolio project built by Tracy Tran and Nathanael Haig.",
-      "The checks mirror the ping, tracert, and ipconfig troubleshooting in Nathanael's CSUF IT Telecommunications job.",
+      "Portfolio project designed by Nathanael Haig.",
     ],
     links: {
-      release: "https://github.com/enobot/nate/releases/tag/toolkit-v1.0.0",
-      source: "https://github.com/enobot/nate/tree/main/apps/network-diagnostics-toolkit",
-      docs: "https://github.com/enobot/nate/blob/main/apps/network-diagnostics-toolkit/docs/WALKTHROUGH.md",
+      source: "https://github.com/enobot/campus-network-lab",
+      docs: "https://github.com/enobot/campus-network-lab/tree/main/docs",
+    },
+  },
+  {
+    id: "operations-optimization",
+    title: "Operations & Optimization Analysis",
+    status: "Completed",
+    category: "Expanded rebuild of coursework",
+    summary:
+      "A Streamlit app that solves a product-mix linear program with SciPy's HiGHS solver, with shadow prices, sensitivity sweeps, Goal Seek, and saved SQLite scenarios. An expanded rebuild of an Excel coursework project.",
+    tech: ["Python", "SciPy (HiGHS)", "pandas", "SQL / SQLite", "Plotly", "Streamlit", "Excel (openpyxl)", "pytest", "GitHub Actions"],
+    icon: "calculator",
+    overview:
+      "An interactive web app for a fictional furniture maker, Juniper Oak Furniture Co. (all data is synthetic and labeled as such). It rebuilds Nate's Excel linear-programming coursework as a full application: change the inputs, re-solve, and see what limits profit and why.",
+    problem:
+      "A manufacturer with limited labor hours, machine hours, and material budget has to decide how many of each product to build to earn the most profit contribution.",
+    solution:
+      "A linear-programming model solved with HiGHS through SciPy's linprog. The solver's dual values become shadow prices, each checked against a re-solve with one more unit. Sensitivity ranges and Goal Seek come from repeated re-solves, scenarios are saved in SQLite, and CSV and Excel files can be imported and exported.",
+    details: [
+      "A product-mix linear program whose dual values become shadow prices, with plain-English bottleneck explanations.",
+      "Excel-style allowable ranges and Goal Seek, recovered with bisection and Brent's method over repeated solves.",
+      "Datasets, scenarios, and solver runs are stored in SQLite with parameterized reporting queries, and uploads are validated (size limits, spreadsheet-formula neutralization).",
+    ],
+    architecture: [
+      "optimizer/: the model, solver, sensitivity, and Goal Seek as plain Python with no Streamlit code, so it can be tested on its own.",
+      "data/: SQLite storage (datasets, scenarios, solver runs) and CSV/Excel import and export.",
+      "app_pages/ and ui/: eight Streamlit pages (Dashboard, Optimizer, Sensitivity, Scenarios, Goal Seek, Data & Files, SQL Reports, About) with Plotly charts.",
+      "Hosted free on Streamlit Community Cloud from this site's repository.",
+    ],
+    testing: [
+      "127 automated tests (pytest and Streamlit AppTest): hand-solved textbook problems, infeasible and unbounded cases, shadow-price sign checks, Goal Seek accuracy, upload validation, SQLite round trips, and CSV/Excel round trips.",
+      "Checked by hand in the browser: raising labor hours from 2,800 to 3,000 raised profit from $134,524 to $138,844, exactly the 200 × $21.60 the app's shadow price predicts.",
+      "The hosted app shows the same $134,524 optimal plan as the local one.",
+    ],
+    images: [
+      {
+        src: "projects/operations-optimization/dashboard.png",
+        alt: "Dashboard of the Operations and Optimization app showing an optimal profit contribution of $134,524, a recommended production plan chart, and resource utilization.",
+        width: 1366,
+        height: 860,
+        caption: "Dashboard of the live app (screenshot taken 2026-11-24): the optimal plan, its gain over the recent mix, and which resources are binding. The Fork button and badge are Streamlit's own.",
+      },
+      {
+        src: "projects/operations-optimization/optimizer.png",
+        alt: "Optimizer page with editable labor hours, machine hours, material budget, rates, and a product table.",
+        width: 1366,
+        height: 860,
+        caption: "Optimizer page of the live app (screenshot taken 2026-11-24): editable resources, costs, and products, with synthetic data labeled as such.",
+      },
+    ],
+    limitations: [
+      "All data is synthetic (a fictional furniture maker), and the app labels it that way.",
+      "Streamlit Community Cloud puts the app to sleep when nobody has used it for a while, so the first visit may need a click to wake it, and anything a visitor saves resets when it restarts.",
+      "Tested on Python 3.13 only.",
+    ],
+    install: [
+      { step: "Try the live demo: no install needed." },
+      { step: "Run it locally with Python 3.13, from the root of the repository (Windows PowerShell shown).", code: "python -m venv apps\\operations-optimization-analysis\\.venv\n.\\apps\\operations-optimization-analysis\\.venv\\Scripts\\Activate.ps1\npython -m pip install -r apps\\operations-optimization-analysis\\requirements.txt\nstreamlit run apps/operations-optimization-analysis/app.py" },
+    ],
+    contributions: [
+      "Original coursework: Nathanael Haig built the original Excel linear-programming model for a class.",
+      "This web rebuild: a portfolio project built by Nathanael Haig.",
+    ],
+    links: {
+      demo: "https://nate-operations-optimization.streamlit.app",
+      source: "https://github.com/enobot/nate/tree/main/apps/operations-optimization-analysis",
+      docs: "https://github.com/enobot/nate/blob/main/apps/operations-optimization-analysis/docs/WALKTHROUGH.md",
     },
   },
   {
@@ -383,133 +503,12 @@ Error: Too many ports (21). The limit is 20 per run. Port scanning is not suppor
     ],
     contributions: [
       "Original coursework: Nathanael Haig built the original C# desktop ticketing app for a class. That version isn't included here.",
-      "This web rebuild: a portfolio project built by Tracy Tran and Nathanael Haig, reusing the original's pricing rules.",
+      "This web rebuild: a portfolio project built by Nathanael Haig, reusing the original's pricing rules.",
     ],
     links: {
       demo: "https://movie-theater-ticket-system.onrender.com",
       source: "https://github.com/enobot/nate/tree/main/apps/movie-theater-ticket-system",
       docs: "https://github.com/enobot/nate/blob/main/apps/movie-theater-ticket-system/docs/WALKTHROUGH.md",
-    },
-  },
-  {
-    id: "operations-optimization",
-    title: "Operations & Optimization Analysis",
-    status: "Completed",
-    category: "Expanded rebuild of coursework",
-    summary:
-      "A Streamlit app that solves a product-mix linear program with SciPy's HiGHS solver, with shadow prices, sensitivity sweeps, Goal Seek, and saved SQLite scenarios. An expanded rebuild of an Excel coursework project.",
-    tech: ["Python", "SciPy (HiGHS)", "pandas", "SQL / SQLite", "Plotly", "Streamlit", "Excel (openpyxl)", "pytest", "GitHub Actions"],
-    icon: "calculator",
-    overview:
-      "An interactive web app for a fictional furniture maker, Juniper Oak Furniture Co. (all data is synthetic and labeled as such). It rebuilds Nate's Excel linear-programming coursework as a full application: change the inputs, re-solve, and see what limits profit and why.",
-    problem:
-      "A manufacturer with limited labor hours, machine hours, and material budget has to decide how many of each product to build to earn the most profit contribution.",
-    solution:
-      "A linear-programming model solved with HiGHS through SciPy's linprog. The solver's dual values become shadow prices, each checked against a re-solve with one more unit. Sensitivity ranges and Goal Seek come from repeated re-solves, scenarios are saved in SQLite, and CSV and Excel files can be imported and exported.",
-    details: [
-      "A product-mix linear program whose dual values become shadow prices, with plain-English bottleneck explanations.",
-      "Excel-style allowable ranges and Goal Seek, recovered with bisection and Brent's method over repeated solves.",
-      "Datasets, scenarios, and solver runs are stored in SQLite with parameterized reporting queries, and uploads are validated (size limits, spreadsheet-formula neutralization).",
-    ],
-    architecture: [
-      "optimizer/: the model, solver, sensitivity, and Goal Seek as plain Python with no Streamlit code, so it can be tested on its own.",
-      "data/: SQLite storage (datasets, scenarios, solver runs) and CSV/Excel import and export.",
-      "app_pages/ and ui/: eight Streamlit pages (Dashboard, Optimizer, Sensitivity, Scenarios, Goal Seek, Data & Files, SQL Reports, About) with Plotly charts.",
-      "Hosted free on Streamlit Community Cloud from this site's repository.",
-    ],
-    testing: [
-      "127 automated tests (pytest and Streamlit AppTest): hand-solved textbook problems, infeasible and unbounded cases, shadow-price sign checks, Goal Seek accuracy, upload validation, SQLite round trips, and CSV/Excel round trips.",
-      "Checked by hand in the browser: raising labor hours from 2,800 to 3,000 raised profit from $134,524 to $138,844, exactly the 200 × $21.60 the app's shadow price predicts.",
-      "The hosted app shows the same $134,524 optimal plan as the local one.",
-    ],
-    images: [
-      {
-        src: "projects/operations-optimization/dashboard.png",
-        alt: "Dashboard of the Operations and Optimization app showing an optimal profit contribution of $134,524, a recommended production plan chart, and resource utilization.",
-        width: 1366,
-        height: 860,
-        caption: "Dashboard of the live app (screenshot taken 2026-11-24): the optimal plan, its gain over the recent mix, and which resources are binding. The Fork button and badge are Streamlit's own.",
-      },
-      {
-        src: "projects/operations-optimization/optimizer.png",
-        alt: "Optimizer page with editable labor hours, machine hours, material budget, rates, and a product table.",
-        width: 1366,
-        height: 860,
-        caption: "Optimizer page of the live app (screenshot taken 2026-11-24): editable resources, costs, and products, with synthetic data labeled as such.",
-      },
-    ],
-    limitations: [
-      "All data is synthetic (a fictional furniture maker), and the app labels it that way.",
-      "Streamlit Community Cloud puts the app to sleep when nobody has used it for a while, so the first visit may need a click to wake it, and anything a visitor saves resets when it restarts.",
-      "Tested on Python 3.13 only.",
-    ],
-    install: [
-      { step: "Try the live demo: no install needed." },
-      { step: "Run it locally with Python 3.13, from the root of the repository (Windows PowerShell shown).", code: "python -m venv apps\\operations-optimization-analysis\\.venv\n.\\apps\\operations-optimization-analysis\\.venv\\Scripts\\Activate.ps1\npython -m pip install -r apps\\operations-optimization-analysis\\requirements.txt\nstreamlit run apps/operations-optimization-analysis/app.py" },
-    ],
-    contributions: [
-      "Original coursework: Nathanael Haig built the original Excel linear-programming model for a class.",
-      "This web rebuild: a portfolio project built by Tracy Tran and Nathanael Haig.",
-    ],
-    links: {
-      demo: "https://nate-operations-optimization.streamlit.app",
-      source: "https://github.com/enobot/nate/tree/main/apps/operations-optimization-analysis",
-      docs: "https://github.com/enobot/nate/blob/main/apps/operations-optimization-analysis/docs/WALKTHROUGH.md",
-    },
-  },
-  // Campus Network Lab stays last until its Packet Tracer build is done and
-  // verified; then move it to the top of this list.
-  {
-    id: "campus-network-lab",
-    title: "Campus Network Lab",
-    status: "In Development",
-    category: "Portfolio project",
-    summary:
-      "A Cisco Packet Tracer lab of a fictional university network. The design, device configs, and automated checks are done; the Packet Tracer build and hands-on testing are in progress.",
-    tech: ["Cisco Packet Tracer", "VLANs", "802.1Q trunking", "Inter-VLAN routing", "DHCP", "ACLs", "SSH", "Python (pytest)", "JavaScript"],
-    icon: "network",
-    interactive: "campus-policy-explorer",
-    overview:
-      "A campus network for a fictional school, Halcyon Ridge University, designed for Cisco Packet Tracer: five VLANs trunked over 802.1Q, inter-VLAN routing on a router-on-a-stick, DHCP with exclusions, a voice VLAN for IP phones, ACLs that control who can reach what, and SSH-only device management.",
-    problem:
-      "A campus network has to keep groups like faculty, students, servers, and phones on separate networks while still letting each one reach the services it needs, and only IT should be able to manage the network devices.",
-    solution:
-      "Each group gets its own VLAN and subnet. One router routes between them and hands out addresses with DHCP. Two extended ACLs decide which traffic is allowed, and the switches and router only accept SSH from the management VLAN.",
-    details: [
-      "Will build the network in Packet Tracer by following the lab's build guide and pasting in the finished configs.",
-      "Will run the 32 end-to-end allowed/blocked traffic tests from the verification checklist and record the results.",
-      "Will add real Packet Tracer screenshots and the saved .pkt file once the build is verified.",
-    ],
-    architecture: [
-      "R1 (ISR4331): router-on-a-stick with one subinterface per VLAN, the DHCP server, and the ACLs.",
-      "CORE-SW1 plus two access switches (Cisco 2960s), connected by 802.1Q trunks with a dedicated native VLAN.",
-      "VLANs 10 Faculty, 20 Students, 30 Servers, 50 Voice, and 99 Management, on 10.10.x.0/24 subnets.",
-      "Students are blocked from internal networks except the campus web and DNS server, and the server VLAN only allows the services it offers.",
-    ],
-    testing: [
-      "Automated design checks (pytest) read the config files and verify the addressing plan, VLANs and trunks, DHCP pools, SSH settings, and 32 allowed/blocked ACL traffic cases. They run on GitHub Actions and are currently passing.",
-      "The policy explorer on this page is a JavaScript port of the Python ACL checker that runs on the real config files in the browser. For all 32 cases it gives the same result and the same reasoning as the Python version, and its own tests check that every line of R1's two ACLs decides at least one case.",
-      "Not yet tested in Packet Tracer: pasting the configs into Packet Tracer and checking end-to-end connectivity is the next step.",
-    ],
-    images: [
-      {
-        src: "projects/campus-network-lab/topology.svg",
-        alt: "Topology diagram: router R1 trunks to core switch CORE-SW1, which connects the web and DNS server and trunks to two access switches serving faculty, students, phones, and IT.",
-        width: 1200,
-        height: 840,
-        caption: "Topology diagram from the lab's design docs. This is a design drawing, not a Packet Tracer screenshot.",
-      },
-    ],
-    limitations: [
-      "Not yet built or tested in Packet Tracer, so there is no .pkt file and no Packet Tracer screenshot.",
-      "The automated checks read the config files; they don't prove the configs behave the same on Packet Tracer's simulated devices.",
-    ],
-    contributions: [
-      "Portfolio project designed by Tracy Tran and Nathanael Haig.",
-    ],
-    links: {
-      source: "https://github.com/enobot/campus-network-lab",
-      docs: "https://github.com/enobot/campus-network-lab/tree/main/docs",
     },
   },
 ];

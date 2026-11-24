@@ -8,7 +8,7 @@ export default function About() {
   const [primary, ...others] = education;
 
   return (
-    <Section id="about" index="01" kicker="Profile" title="About">
+    <Section id="about" index="01" kicker="Professional Profile" title="About">
       <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
         <Reveal className="space-y-5 text-base text-ink-muted sm:text-lg">
           {about.paragraphs.map((paragraph) => (

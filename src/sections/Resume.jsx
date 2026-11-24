@@ -11,7 +11,7 @@ export default function Resume() {
     <Section
       id="resume"
       index="05"
-      kicker="Download"
+      kicker="Résumés"
       title="Resume"
       intro="Two versions of the same experience, each tuned for a different kind of role."
     >
@@ -68,7 +68,7 @@ export default function Resume() {
 /** Shown while no resume PDFs are published (profile.resumes is empty). */
 function ResumeUnavailable() {
   return (
-    <Section id="resume" index="05" kicker="Download" title="Resume">
+    <Section id="resume" index="05" kicker="Résumés" title="Resume">
       <Reveal>
         <div className="glass flex flex-wrap items-center justify-between gap-4 rounded-2xl px-6 py-5 text-ink-muted">
           <p className="max-w-xl">
