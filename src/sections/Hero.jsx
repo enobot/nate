@@ -36,11 +36,14 @@ export default function Hero() {
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.3fr_1fr]">
         <div>
-          <p className="hero-enter hud-label flex flex-wrap items-center gap-2 text-cyan-soft">
-            <span aria-hidden="true">[</span>
+          {/* One line of inline text, so the brackets stay with the words when it wraps on phones. */}
+          <p className="hero-enter hud-label text-cyan-soft">
+            <span aria-hidden="true">[ </span>
             {hero.role}
-            <span aria-hidden="true">]</span>
-            <span aria-hidden="true" className="inline-block h-3.5 w-2 bg-cyan motion-safe:animate-blink" />
+            <span aria-hidden="true">
+              {" ]"}
+              <span className="ml-2 inline-block h-3.5 w-2 translate-y-0.5 bg-cyan motion-safe:animate-blink" />
+            </span>
           </p>
 
           <h1

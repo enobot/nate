@@ -40,26 +40,40 @@ You only need to do the setup once.
 ## 2. Add a new project
 
 Open `src/data/projects.js`. Projects are listed inside `export const projects = [ ... ];`.
+Each project gets a card on the home page **and its own page** at
+`/projects/<id>/` (for example `https://enobot.github.io/nate/projects/campus-network-lab/`).
 Copy this block, paste it inside the list (after another project's closing `},`), and fill
 it in:
 
 ```js
   {
-    id: "my-new-project",            // unique, lowercase, words joined with dashes
+    id: "my-new-project",            // unique, lowercase, words joined with dashes (also the page address)
     title: "My New Project",
     status: "In Development",        // "In Development" or "Completed" (exact spelling)
     category: "Personal project",    // or "Academic project"
-    summary: "Building a ... that will ...",
-    tech: ["PowerShell", "SQL"],     // shown as small chips
-    details: [                        // shown when someone clicks "Details"
-      "Will ...",
-      "Will ...",
-    ],
+    summary: "Building a ... that will ...",   // card + top of the project page
+    tech: ["PowerShell", "SQL"],     // shown as badges
     icon: "terminal",                 // see the list below
-    github: "",                       // full https:// link, or "" to hide the button
-    demo: "",                         // full https:// link, or "" to hide the button
+
+    // Everything below is for the project page. Each part is optional:
+    // leave it out and that section simply isn't shown.
+    overview: "What it is, in two or three sentences.",
+    problem: "The problem it solves.",
+    solution: "How it solves it.",
+    details: ["Will ...", "Will ..."], // "Goals" while in development, "What I built" when completed
+    architecture: ["How the pieces fit together ..."],
+    testing: ["What you tested, and what you haven't tested yet ..."],
+    lessons: ["Something you learned, in your own words ..."],
+    links: {
+      source: "",                     // GitHub repo, full https:// link ("" hides the button)
+      demo: "",                       // live demo
+      docs: "",                       // documentation
+      video: "",                      // demo video
+    },
   },
 ```
+
+Only add a link after you've opened it yourself and checked that it works.
 
 **Icons you can use:** `network`, `terminal`, `database`, `film`, `calculator`, `clipboard`,
 `server`, `code`, `cable`, `ticket`, `users`, `building`, `headset`, `handshake`,
@@ -69,9 +83,8 @@ it in:
 
 **Remove a project:** delete its whole `{ ... },` block.
 
-> The three "In Development" projects that came with the site are **placeholders**. Before
-> you send the link to recruiters, edit or delete any project you aren't actually building.
-> Interviewers may ask about anything listed.
+> Before you send the link to recruiters, edit or delete any "In Development" project you
+> aren't actually building. Interviewers may ask about anything listed.
 
 ## 3. Mark a project as Completed
 
@@ -82,7 +95,8 @@ When you finish a project:
    what you plan to build. For example, "Building a lab that will..." becomes
    "A Packet Tracer lab of a multi-VLAN campus network with..." and "Will configure..."
    becomes "Configured...".
-3. Add your `github` and/or `demo` links if you have them.
+3. Add its `links` (source code, demo, docs, video), real `images`, and what you
+   actually tested under `testing`.
 
 The tests check this for you: a "Completed" project can't use planning words like
 "building", "will", or "planned", and an "In Development" project must use them. That keeps
@@ -90,38 +104,47 @@ unfinished work from ever looking finished.
 
 ## 4. Add a screenshot to a project
 
-Without a screenshot, each card shows a themed graphic with the project's icon. To use a real
-screenshot instead:
+Without an image, each card shows a themed graphic with the project's icon. To add real
+screenshots or diagrams:
 
-1. Create the folder `public/projects/` (if it doesn't exist) and put your image there, e.g.
-   `public/projects/campus-network-lab.png`. Keep it under about 300 KB (PNG, JPG or WebP).
+1. Put the image in a folder for the project, e.g.
+   `public/projects/campus-network-lab/vlan-test.png`. Keep it under about 300 KB (PNG, JPG,
+   WebP or SVG).
 2. Find the image's size in pixels: on Windows, right-click the file → **Properties** →
    **Details** → *Width* and *Height*.
-3. Add an `image` entry to the project (note: **no slash** at the start of `src`):
+3. Add it to the project's `images` list (note: **no slash** at the start of `src`):
 
    ```js
-   image: {
-     src: "projects/campus-network-lab.png",
-     alt: "Packet Tracer topology with three VLANs and a router",
-     width: 1280,
-     height: 720,
-   },
+   images: [
+     {
+       src: "projects/campus-network-lab/vlan-test.png",
+       alt: "Packet Tracer ping from a student PC to the web server succeeding",
+       width: 1280,
+       height: 720,
+       caption: "Student VLAN reaching the campus web server.",
+     },
+   ],
    ```
 
-   `alt` describes what the picture shows, for people using screen readers.
+   The **first** image is also the card's preview. `alt` describes what the picture shows,
+   for people using screen readers. Only use real screenshots of your own work.
 
 ## 5. Update your info, experience and skills
 
 All in `src/data/profile.js`. Change the text between the quotes and save.
 
-- **Hero (top of the page):** `hero.role`, `hero.tagline`, and the `hero.status` rows.
+- **Hero (top of the page):** `hero.role`, `hero.headline` (the big line under your name),
+  `hero.tagline`, and the `hero.status` rows.
+- **Jack activation workflow:** the `workflow.steps` list (shown in the Experience section).
+  Correct the wording if your team's real process is different.
 - **About:** the `about.paragraphs` list and `about.targetRoles`.
 - **Education:** the `education` list. Move a course from `inProgressCoursework` to
   `completedCoursework` when you finish it.
 - **Experience:** the `experience` list, newest job first. The job with `featured: true` gets
   the big dashboard card. Each job has a `highlights` list (one bullet per line). The
   `stats` tiles on the featured job should only use numbers that are on your resume.
-- **Skills:** the `skills` list. Each category becomes a tab. Each skill looks like:
+- **Skills:** the `skills` list. Each group (Networking, IT Operations, Databases,
+  Programming, Systems) is shown as its own panel, all visible at once. Each skill looks like:
 
   ```js
   { name: "VLAN assignment", usedIn: ["csuf"] },
@@ -141,7 +164,8 @@ In `src/data/profile.js`, set:
 github: "https://github.com/your-username",
 ```
 
-A GitHub button then appears in the Contact section. (It stays hidden while this is `""`.)
+A GitHub button then appears at the top of the page and in the Contact section. (It stays
+hidden while this is `""`.)
 
 ## 7. Replace the resume PDFs
 

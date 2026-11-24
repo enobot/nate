@@ -105,7 +105,7 @@ export default function Header({ route }) {
                       to={`/#${section.id}`}
                       aria-current={isActive ? (onHome ? "true" : "page") : undefined}
                       className={cn(
-                        "relative block rounded-md px-3 py-2 font-mono text-xs tracking-[0.12em] uppercase transition-colors",
+                        "relative flex min-h-10 items-center rounded-md px-3 font-mono text-xs tracking-[0.12em] uppercase transition-colors",
                         isActive ? "text-cyan-soft" : "text-ink-muted hover:text-white",
                       )}
                     >

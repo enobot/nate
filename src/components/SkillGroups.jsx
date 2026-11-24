@@ -27,24 +27,26 @@ function EvidenceTag({ label, kind }) {
  * Every skill group visible at once (no tabs to click through), so a hiring
  * manager can scan the whole list in a few seconds. Each skill is tagged with
  * where it was used: on the job, in coursework, or in a project.
- * The first group (Networking) is the widest, since it's Nate's core work.
+ * The first group (Networking) spans the full width, since it's Nate's core
+ * work; the rest sit two per row (ordered in profile.js so each row's pair is
+ * a similar height).
  */
 export default function SkillGroups({ groups, evidence }) {
   const usedKeys = new Set(groups.flatMap((group) => group.items.flatMap((item) => item.usedIn)));
 
   return (
     <div>
-      <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid items-start gap-5 md:grid-cols-2">
         {groups.map((group, index) => {
           const Icon = getIcon(group.icon);
           const headingId = `skills-group-${group.id}`;
           return (
-            <li key={group.id} className={cn(index === 0 && "lg:col-span-2 lg:row-span-1")}>
+            <li key={group.id} className={cn(index === 0 && "md:col-span-2")}>
               <Reveal
                 as="section"
                 aria-labelledby={headingId}
                 delay={(index % 3) * 0.06}
-                className="glass glow-frame relative h-full rounded-2xl p-5 sm:p-6"
+                className="glass glow-frame relative rounded-2xl p-5 sm:p-6"
               >
                 <div className="flex items-start gap-3">
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-cyan/25 bg-navy-900/80 shadow-[0_0_20px_-8px_rgb(34_227_245/0.8)]">
@@ -57,7 +59,7 @@ export default function SkillGroups({ groups, evidence }) {
                     <p className="mt-1 text-sm text-ink-muted">{group.blurb}</p>
                   </div>
                 </div>
-                <ul className={cn("mt-5 grid gap-2.5", index === 0 && "sm:grid-cols-2")}>
+                <ul className={cn("mt-5 grid gap-2.5", index === 0 && "sm:grid-cols-2 lg:grid-cols-3")}>
                   {group.items.map((item) => (
                     <li
                       key={item.name}

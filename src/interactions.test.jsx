@@ -82,7 +82,7 @@ describe("skills", () => {
     render(<App />);
     const skills = document.getElementById("skills");
     const groupHeadings = within(skills).getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent);
-    expect(groupHeadings).toEqual(["Networking", "IT Operations", "Programming", "Databases", "Systems"]);
+    expect(groupHeadings).toEqual(["Networking", "IT Operations", "Databases", "Programming", "Systems"]);
 
     // No tabs: nothing is hidden behind a click.
     expect(within(skills).queryByRole("tablist")).toBeNull();

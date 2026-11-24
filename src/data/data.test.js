@@ -109,11 +109,12 @@ describe("profile data", () => {
   });
 
   it("groups skills into the five requested areas", () => {
+    // Order is chosen so each two-column row pairs groups of similar height.
     expect(profile.skills.map((group) => group.label)).toEqual([
       "Networking",
       "IT Operations",
-      "Programming",
       "Databases",
+      "Programming",
       "Systems",
     ]);
   });

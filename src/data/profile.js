@@ -179,17 +179,6 @@ export const profile = {
       ],
     },
     {
-      id: "programming",
-      label: "Programming",
-      icon: "code",
-      blurb: "Application logic and user interface flow from academic work.",
-      items: [
-        { name: "C#", usedIn: ["project"] },
-        { name: "Desktop application UI flow", usedIn: ["project"] },
-        { name: "Pricing & business logic", usedIn: ["project"] },
-      ],
-    },
-    {
       id: "databases",
       label: "Databases",
       icon: "database",
@@ -201,6 +190,17 @@ export const profile = {
         { name: "Microsoft Excel (pivot tables, Goal Seek, linear programming)", usedIn: ["project"] },
         { name: "Data visualization", usedIn: ["coursework"] },
         { name: "Statistical analysis", usedIn: ["coursework"] },
+      ],
+    },
+    {
+      id: "programming",
+      label: "Programming",
+      icon: "code",
+      blurb: "Application logic and user interface flow from academic work.",
+      items: [
+        { name: "C#", usedIn: ["project"] },
+        { name: "Desktop application UI flow", usedIn: ["project"] },
+        { name: "Pricing & business logic", usedIn: ["project"] },
       ],
     },
     {

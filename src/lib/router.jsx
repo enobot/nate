@@ -67,6 +67,12 @@ function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 }
 
+// Jump (don't glide) to a position. The site's CSS turns on smooth scrolling
+// for in-page links; a new page should still start at the top immediately.
+function jumpTo(top) {
+  window.scrollTo({ top, left: 0, behavior: "instant" });
+}
+
 function readBrowserLocation(action, key) {
   return {
     path: normalizePath(stripBase(window.location.pathname)),
@@ -102,7 +108,7 @@ export function RouterProvider({ url, children }) {
       scrollPositions.current.set(currentKey.current, window.scrollY);
       const key = event.state?.key ?? "initial";
       currentKey.current = key;
-      setLocation(readBrowserLocation("pop", key));
+      setLocation((previous) => ({ ...readBrowserLocation("pop", key), previousPath: previous.path }));
     }
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
@@ -115,7 +121,7 @@ export function RouterProvider({ url, children }) {
     const key = Math.random().toString(36).slice(2, 10);
     currentKey.current = key;
     window.history.pushState({ key }, "", `${withBase(nextPath)}${hash}`);
-    setLocation({ path: nextPath, hash, action: "push", key });
+    setLocation((previous) => ({ path: nextPath, hash, action: "push", key, previousPath: previous.path }));
   }, []);
 
   // After each in-app navigation: restore the old position on Back/Forward,
@@ -125,24 +131,26 @@ export function RouterProvider({ url, children }) {
     if (location.action === "pop") {
       const saved = scrollPositions.current.get(location.key);
       if (saved != null) {
-        window.scrollTo(0, saved);
+        jumpTo(saved);
         return;
       }
     }
     if (location.hash) {
       const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
       if (target) {
-        target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+        // Smooth within the same page; instant when arriving from another page.
+        const samePage = location.previousPath === location.path;
+        target.scrollIntoView({ behavior: samePage && !prefersReducedMotion() ? "smooth" : "instant", block: "start" });
         return;
       }
     }
-    window.scrollTo(0, 0);
+    jumpTo(0);
   }, [location]);
 
   return <RouterContext.Provider value={{ location, navigate }}>{children}</RouterContext.Provider>;
 }
 
-/** @returns {{ location: { path: string, hash: string, action: string, key: string }, navigate: (to: string) => void }} */
+/** @returns {{ location: { path: string, hash: string, action: string, key: string, previousPath?: string }, navigate: (to: string) => void }} */
 export function useRouter() {
   const context = useContext(RouterContext);
   if (!context) throw new Error("useRouter must be used inside <RouterProvider>.");
