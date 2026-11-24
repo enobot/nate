@@ -14,7 +14,7 @@ function EvidenceTag({ label, kind }) {
   return (
     <span
       className={cn(
-        "rounded border px-1.5 py-0.5 font-mono text-[0.68rem] leading-tight tracking-wide whitespace-nowrap",
+        "rounded border px-1.5 py-0.5 font-mono text-xs leading-tight tracking-wide whitespace-nowrap",
         EVIDENCE_STYLES[kind] ?? NEUTRAL_EVIDENCE,
       )}
     >

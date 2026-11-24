@@ -35,12 +35,12 @@ export default function ProjectCard({ project, featured = false }) {
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={project.status} />
           {featured ? (
-            <span className="hud-label inline-flex items-center gap-1 text-[0.68rem] text-amber">
+            <span className="hud-label inline-flex items-center gap-1 text-xs text-amber">
               <Star aria-hidden="true" className="size-3" />
               Featured
             </span>
           ) : null}
-          <span className="hud-label text-[0.68rem] text-ink-dim">{project.category}</span>
+          <span className="hud-label text-xs text-ink-dim">{project.category}</span>
         </div>
 
         <h3 id={titleId} className="mt-3 font-display text-lg font-bold tracking-wide text-white">
