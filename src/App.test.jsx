@@ -12,9 +12,9 @@ describe("App rendering", () => {
     expect(sections.map((section) => section.id)).toEqual([
       "home",
       "about",
-      "skills",
       "experience",
       "projects",
+      "skills",
       "resume",
       "contact",
     ]);
@@ -125,7 +125,7 @@ describe("App rendering", () => {
 
   it("only links to GitHub URLs that are listed in the data", () => {
     render(<App />);
-    const allowed = new Set([profile.github, ...projects.flatMap((project) => Object.values(project.links ?? {}))]);
+    const allowed = new Set([profile.github, profile.projectRepo, ...projects.flatMap((project) => Object.values(project.links ?? {}))]);
     for (const link of document.querySelectorAll('a[href*="github.com"]')) {
       expect(allowed.has(link.getAttribute("href")), link.getAttribute("href")).toBe(true);
     }

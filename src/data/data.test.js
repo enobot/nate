@@ -57,6 +57,30 @@ describe("projects data", () => {
     if (project.interactive !== undefined) expect(Object.keys(INTERACTIVES)).toContain(project.interactive);
   });
 
+  it.each(projects)("$title states its limitations and who did what", (project) => {
+    expect(project.limitations?.length, `${project.id}.limitations`).toBeGreaterThan(0);
+    expect(project.contributions?.length, `${project.id}.contributions`).toBeGreaterThan(0);
+  });
+
+  it.each(projects)("$title is labeled as AI-assisted work", (project) => {
+    expect(project.category, project.id).toMatch(/AI-assisted/);
+  });
+
+  it.each(completed)("$title has a way to try or install it", (project) => {
+    expect(project.install?.length || project.links?.demo, project.id).toBeTruthy();
+  });
+
+  it("keeps the Network Diagnostics Toolkit and IT Asset Tracker featured and first", () => {
+    const featured = projects.filter((project) => project.featured).map((project) => project.id);
+    expect(featured).toEqual(["it-asset-tracker", "network-diagnostics-toolkit"]);
+    expect(projects.slice(0, 2).map((project) => project.id).sort()).toEqual([...featured].sort());
+  });
+
+  it("only puts the Campus Network Lab first once it is Completed", () => {
+    const lab = projects.find((project) => project.id === "campus-network-lab");
+    if (projects[0] === lab) expect(lab.status).toBe("Completed");
+  });
+
   it("only marks a project Completed without goal wording on its page either", () => {
     for (const project of completed) {
       for (const field of ["overview", "solution"]) {

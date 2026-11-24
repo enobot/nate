@@ -50,6 +50,35 @@ function homeHeadTags(siteUrl) {
   };
 }
 
+/**
+ * Preloads the three fonts every page uses (Orbitron headings, Inter text,
+ * JetBrains Mono labels) so the text doesn't reflow when they arrive.
+ * @returns {import("vite").Plugin}
+ */
+function preloadFonts() {
+  const wanted = /(orbitron-latin-700-normal|inter-latin-wght-normal|jetbrains-mono-latin-wght-normal)/;
+  let base = "/";
+  return {
+    name: "preload-fonts",
+    apply: (_config, env) => env.command === "build" && !env.isSsrBuild,
+    configResolved(config) {
+      base = config.base;
+    },
+    transformIndexHtml: {
+      order: "post",
+      handler(_html, ctx) {
+        return Object.keys(ctx.bundle ?? {})
+          .filter((file) => wanted.test(file) && file.endsWith(".woff2"))
+          .map((file) => ({
+            tag: "link",
+            attrs: { rel: "preload", as: "font", type: "font/woff2", crossorigin: "", href: `${base}${file}` },
+            injectTo: "head",
+          }));
+      },
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   // Values from .env, overridden by real environment variables (the CI workflow sets them).
   const env = loadEnv(mode, projectRoot, "VITE_");
@@ -59,7 +88,7 @@ export default defineConfig(({ mode }) => {
     // "/" for local development. The deploy workflow sets BASE_PATH from GitHub
     // Pages: "/" on the custom domain, or "/<repository>/" on a github.io address.
     base: normalizeBasePath(process.env.BASE_PATH || "/"),
-    plugins: [react(), tailwindcss(), seoFiles(siteUrl), homeHeadTags(siteUrl)],
+    plugins: [react(), tailwindcss(), seoFiles(siteUrl), homeHeadTags(siteUrl), preloadFonts()],
     build: {
       // Writes the licenses of every bundled package (React, Motion, Lucide,
       // fonts, ...) to dist/third-party-licenses.txt, linked from the footer.

@@ -50,7 +50,8 @@ it in:
     id: "my-new-project",            // unique, lowercase, words joined with dashes (also the page address)
     title: "My New Project",
     status: "In Development",        // "In Development" or "Completed" (exact spelling)
-    category: "Personal project",    // or "Academic project"
+    category: "AI-assisted portfolio project",  // must say "AI-assisted" if AI tools helped build it; or "Academic project" for coursework you built yourself
+    featured: false,                 // true = large card at the top of the Projects section
     summary: "Building a ... that will ...",   // card + top of the project page
     tech: ["PowerShell", "SQL"],     // shown as badges
     icon: "terminal",                 // see the list below
@@ -60,9 +61,16 @@ it in:
     overview: "What it is, in two or three sentences.",
     problem: "The problem it solves.",
     solution: "How it solves it.",
-    details: ["Will ...", "Will ..."], // "Goals" while in development, "What I built" when completed
+    details: ["Will ...", "Will ..."], // "Goals" while in development, "Key features" when completed
     architecture: ["How the pieces fit together ..."],
+    install: [                        // "Try it or install it": steps, each with optional commands
+      { step: "Run it locally.", code: "git clone ...
+cd ..." },
+    ],
+    sampleOutput: { caption: "Where this real output came from.", text: "pasted real output" },
     testing: ["What you tested, and what you haven't tested yet ..."],
+    limitations: ["What it can't do yet, stated plainly ..."],       // required by the tests
+    contributions: ["Who did what: original coursework vs. this version ..."], // required by the tests
     lessons: ["Something you learned, in your own words ..."],
     links: {
       source: "",                     // GitHub repo, full https:// link ("" hides the button)
@@ -74,6 +82,12 @@ it in:
 ```
 
 Only add a link after you've opened it yourself and checked that it works.
+
+The tests also require every project to have `limitations` and `contributions`, to say
+"AI-assisted" in its `category`, and (when completed) to have install steps or a live demo.
+Put the toolkit and the asset tracker first: the tests check that the two `featured` projects
+are the first two cards. The Campus Network Lab stays last until its Packet Tracer build is
+done and verified; the tests refuse to let it go first while it is "In Development".
 
 **Icons you can use:** `network`, `terminal`, `database`, `film`, `calculator`, `clipboard`,
 `server`, `code`, `cable`, `ticket`, `users`, `building`, `headset`, `handshake`,
@@ -169,22 +183,21 @@ In `src/data/profile.js`, set:
 github: "https://github.com/your-username",
 ```
 
-A GitHub button then appears at the top of the page and in the Contact section. (It stays
-hidden while this is `""`.)
+Your profile button then replaces the "Project code on GitHub" button at the top of the page
+and in the Contact section. That button points at `projectRepo` (the repository that holds the
+project code) and is labeled so it isn't mistaken for a personal profile.
 
 ## 7. Replace the resume PDFs
 
-The downloadable resumes are in `public/resume/`:
+The downloadable resumes go in `public/resume/` and are listed in the `resumes` list at the
+bottom of `src/data/profile.js` (`label`, `description`, `file`). Exactly one should have
+`primary: true`; that's the one the big "Download Resume" button at the top uses.
 
-- `Nathanael_Haig_Resume_Network.pdf`
-- `Nathanael_Haig_Resume_IT_Support.pdf`
-
-**Easiest:** save your new PDF over the old one using **exactly the same file name**.
-
-**Different name or a third resume:** put the file in `public/resume/` and update the
-`resumes` list at the bottom of `src/data/profile.js` (`label`, `description`, `file`).
-Exactly one resume should have `primary: true`; that's the one the big "Download Resume"
-button at the top uses.
+**The list is empty right now on purpose.** The earlier PDFs showed a phone number, so they
+were removed. While the list is empty, the Resume section points visitors to LinkedIn and
+email, and the download buttons are hidden. To publish a resume: export a PDF **without your
+phone number**, check it is one page, put it in `public/resume/`, and add it to the list.
+The tests fail if a PDF sits in `public/resume/` without being listed.
 
 ## 8. Check your work before publishing
 

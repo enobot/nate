@@ -24,6 +24,19 @@ function Block({ id, title, children }) {
   );
 }
 
+/** A scrollable, keyboard-focusable block of code or console output. */
+function CodeBlock({ children, label }) {
+  return (
+    <pre
+      tabIndex={0}
+      aria-label={label}
+      className="mt-2 overflow-x-auto rounded-lg border border-electric-soft/12 bg-navy-950 p-3 font-mono text-[0.8rem] leading-relaxed text-ink"
+    >
+      <code>{children}</code>
+    </pre>
+  );
+}
+
 function Bullets({ items }) {
   return (
     <ul className="space-y-2.5">
@@ -148,7 +161,7 @@ export default function ProjectPage({ project, navigated }) {
           ) : null}
 
           {has(project.details) ? (
-            <Block id={`${prefix}-details`} title={completed ? "What I built" : "Goals"}>
+            <Block id={`${prefix}-details`} title={completed ? "Key features" : "Goals"}>
               <Bullets items={project.details} />
             </Block>
           ) : null}
@@ -156,6 +169,31 @@ export default function ProjectPage({ project, navigated }) {
           {has(project.architecture) ? (
             <Block id={`${prefix}-architecture`} title="Architecture">
               <Bullets items={project.architecture} />
+            </Block>
+          ) : null}
+
+          {has(project.install) ? (
+            <Block id={`${prefix}-install`} title="Try it or install it">
+              <ol className="space-y-4">
+                {project.install.map((item, index) => (
+                  <li key={item.step} className="flex gap-3">
+                    <span aria-hidden="true" className="hud-label mt-0.5 shrink-0 text-cyan-soft">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p>{item.step}</p>
+                      {item.code ? <CodeBlock label={`Commands for step ${index + 1}`}>{item.code}</CodeBlock> : null}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </Block>
+          ) : null}
+
+          {project.sampleOutput ? (
+            <Block id={`${prefix}-output`} title="Example output">
+              <p className="text-sm">{project.sampleOutput.caption}</p>
+              <CodeBlock label="Example console output">{project.sampleOutput.text}</CodeBlock>
             </Block>
           ) : null}
 
@@ -190,6 +228,18 @@ export default function ProjectPage({ project, navigated }) {
                   </figure>
                 ))}
               </div>
+            </Block>
+          ) : null}
+
+          {has(project.limitations) ? (
+            <Block id={`${prefix}-limitations`} title="Limitations">
+              <Bullets items={project.limitations} />
+            </Block>
+          ) : null}
+
+          {has(project.contributions) ? (
+            <Block id={`${prefix}-contributions`} title="Who did what">
+              <Bullets items={project.contributions} />
             </Block>
           ) : null}
 

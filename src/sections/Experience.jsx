@@ -144,8 +144,8 @@ export default function Experience() {
   return (
     <Section
       id="experience"
-      index="03"
-      kicker="Mission log"
+      index="02"
+      kicker="Work experience"
       title="Experience"
       intro="Hands-on campus network support at Cal State Fullerton, backed by earlier leadership experience."
     >
