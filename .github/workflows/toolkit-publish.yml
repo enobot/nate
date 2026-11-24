@@ -1,0 +1,64 @@
+name: Publish network toolkit to the PowerShell Gallery
+
+# Manual only: Actions tab > "Publish network toolkit to the PowerShell Gallery" > Run workflow.
+# Needs a repository secret named PSGALLERY_API_KEY (a PowerShell Gallery API key scoped to
+# push the NetworkDiagnostics package). The tests run again first; nothing is published if
+# they fail. The Gallery refuses a version that is already published, so bump ModuleVersion
+# in NetworkDiagnostics.psd1 before publishing an update.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: toolkit-publish
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: apps/network-diagnostics-toolkit
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check that the API key secret is set
+        shell: pwsh
+        env:
+          PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:PSGALLERY_API_KEY)) {
+            throw 'The PSGALLERY_API_KEY repository secret is not set. Add it under Settings > Secrets and variables > Actions.'
+          }
+
+      - name: Install Pester 6.2.0
+        shell: powershell
+        run: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Scope CurrentUser -Force | Out-Null
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module -Name Pester -RequiredVersion 6.2.0 -Scope CurrentUser -Force -SkipPublisherCheck -AllowClobber
+
+      - name: Run the tests on Windows PowerShell 5.1
+        shell: powershell
+        run: ./tools/Invoke-Tests.ps1 -CI
+
+      - name: Validate the module manifest
+        shell: pwsh
+        run: |
+          $manifest = Test-ModuleManifest -Path ./src/NetworkDiagnostics/NetworkDiagnostics.psd1
+          "Publishing $($manifest.Name) $($manifest.Version)"
+
+      - name: Publish to the PowerShell Gallery
+        shell: pwsh
+        env:
+          PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
+        run: |
+          if (-not (Get-Module -ListAvailable -Name Microsoft.PowerShell.PSResourceGet)) {
+            Install-Module -Name Microsoft.PowerShell.PSResourceGet -Scope CurrentUser -Force
+          }
+          Publish-PSResource -Path ./src/NetworkDiagnostics -Repository PSGallery -ApiKey $env:PSGALLERY_API_KEY

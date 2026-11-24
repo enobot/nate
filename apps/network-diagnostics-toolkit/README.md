@@ -376,7 +376,7 @@ Ideas that are not implemented yet:
 - Optional JSON export for other tools.
 - Run the tracert parser tests against output captured on a non-English Windows install.
 - Sign the scripts (Authenticode) so they can run where the execution policy is `AllSigned`.
-- Publish the module to the PowerShell Gallery.
+- Publish the module to the PowerShell Gallery. A manual workflow for it is ready ([toolkit-publish.yml](../../.github/workflows/toolkit-publish.yml)); it needs a Gallery account and an API key saved as the `PSGALLERY_API_KEY` repository secret.
 - Add real screenshots (see [docs/screenshots/README.md](docs/screenshots/README.md)).
 
 ## Credits and license
