@@ -1,14 +1,14 @@
 // Small helpers used by vite.config.js at build time.
 // They live in their own file so they can be unit tested.
 
-export const DEFAULT_SITE_URL = "https://enobot.github.io/nate";
+export const DEFAULT_SITE_URL = "https://nathanaelhaig.com";
 
 /**
  * Clean up the public site URL: trim spaces and remove trailing slashes.
  * Throws a clear error if the value is not an http(s) URL, so a typo in
  * .env or the workflow fails the build instead of shipping broken tags.
  * @param {string | undefined} value
- * @returns {string} e.g. "https://enobot.github.io/nate"
+ * @returns {string} e.g. "https://nathanaelhaig.com"
  */
 export function normalizeSiteUrl(value) {
   const url = (value || DEFAULT_SITE_URL).trim().replace(/\/+$/, "");

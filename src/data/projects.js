@@ -151,13 +151,14 @@ export const projects = [
       "src/MovieTheater.Api/: ASP.NET Core with thin controllers, services for booking, seat holds, orders, and reports, a PriceCalculator, EF Core migrations, and a SignalR hub for seat updates.",
       "client/: React, TypeScript, Vite, and Tailwind CSS. Its production build is served by the API, so the whole app runs as one service.",
       "Checkout is simulated and never asks for card details. The admin area uses a cookie sign-in with a rate-limited login.",
-      "One Docker image for hosting on Render, with a /healthz health check. It hasn't been built or deployed yet.",
+      "One Docker image, hosted free on Render with a /healthz health check. Render's free plan puts it to sleep after 15 minutes idle, so the first visit after that takes about 50 seconds, and the demo data resets on every restart.",
     ],
     testing: [
       "136 xUnit tests: 46 unit tests (25 of them for ticket and concession pricing) and 90 integration tests that run the real API against real SQLite files.",
       "A concurrency test sends 12 booking requests for the same seat at the same moment, and exactly one succeeds.",
       "48 Vitest tests for the React client, plus linting and TypeScript type-checking.",
       "Checked by hand in the browser: live seat updates between two customers in separate browsers, cart totals matching the server, simulated checkout, order lookup and cancellation, the admin dashboard, and the seat map on a phone.",
+      "On the hosted app, holding a seat from a second cart changed it to \"held by another customer\" on an open seat map without a reload.",
     ],
     images: [
       {
@@ -211,6 +212,7 @@ export const projects = [
       },
     ],
     links: {
+      demo: "https://movie-theater-ticket-system.onrender.com",
       source: "https://github.com/enobot/nate/tree/main/apps/movie-theater-ticket-system",
       docs: "https://github.com/enobot/nate/blob/main/apps/movie-theater-ticket-system/docs/WALKTHROUGH.md",
     },
@@ -325,13 +327,14 @@ export const projects = [
     architecture: [
       "src/ItAssetTracker.Api/: thin controllers, services with the business logic and the report SQL, domain rule classes, request and response contracts, and EF Core migrations.",
       "client/: React, TypeScript, Vite, and Tailwind CSS. Its production build is served by the API, so the whole app runs as one service.",
-      "One Docker image (Node build stage, .NET publish stage, small non-root runtime) that reads the port from the PORT variable and has a /api/health check.",
+      "One Docker image (Node build stage, .NET publish stage, small non-root runtime) that reads the port from the PORT variable and has a /api/health check. It's hosted free on Render, whose free plan puts it to sleep after 15 minutes idle, so the first visit after that takes about 50 seconds, and the demo data resets on every restart.",
       "No sign-in yet: the demo's \"Working as\" technician picker is not authenticated, and the README says so.",
     ],
     testing: [
       "191 xUnit tests: unit tests for every ticket status change (36 combinations), the asset and network rules, and VLAN range edges, plus integration tests that run the real API against real SQLite files.",
       "40 Vitest component tests for the React pages, plus TypeScript type-checking and linting.",
       "GitHub Actions runs the backend tests, the client checks, and a Docker image build whenever the app changes. All three jobs passed on the first run.",
+      "The hosted app on Render passes its /api/health check and returns the same report numbers as the local build.",
       "Checked by hand in the browser on desktop and mobile: creating an asset (including validation errors), moving a ticket through its workflow with its history, patching and activating jacks, and the reports.",
     ],
     images: [
@@ -379,6 +382,7 @@ export const projects = [
       },
     ],
     links: {
+      demo: "https://it-asset-service-request-tracker.onrender.com",
       source: "https://github.com/enobot/nate/tree/main/apps/it-asset-service-request-tracker",
       docs: "https://github.com/enobot/nate/blob/main/apps/it-asset-service-request-tracker/docs/WALKTHROUGH.md",
     },

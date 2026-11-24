@@ -41,7 +41,7 @@ You only need to do the setup once.
 
 Open `src/data/projects.js`. Projects are listed inside `export const projects = [ ... ];`.
 Each project gets a card on the home page **and its own page** at
-`/projects/<id>/` (for example `https://enobot.github.io/nate/projects/campus-network-lab/`).
+`/projects/<id>/` (for example `https://nathanaelhaig.com/projects/campus-network-lab/`).
 Copy this block, paste it inside the list (after another project's closing `},`), and fill
 it in:
 
