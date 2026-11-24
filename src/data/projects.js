@@ -196,7 +196,7 @@ export const projects = [
     testing: [
       "271 Pester tests: 260 unit tests with mocked Windows network calls and 11 integration tests against localhost and a TCP listener the tests open, including an end-to-end menu run in a separate PowerShell process.",
       "94.3% code coverage of the module on Windows PowerShell 5.1.",
-      "PowerShell 7 support pending CI: the same tests run on PowerShell 7 in GitHub Actions, along with PSScriptAnalyzer.",
+      "GitHub Actions runs the same tests on Windows PowerShell 5.1 and PowerShell 7, plus PSScriptAnalyzer, which fails the build on any warning. All three passed on the first run.",
     ],
     links: {
       source: "https://github.com/enobot/nate/tree/main/apps/network-diagnostics-toolkit",
